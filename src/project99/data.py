@@ -3,6 +3,7 @@ from pathlib import Path
 import typer
 from torch.utils.data import Dataset
 
+tournaments: List[str] = ["2024-wimbledon"]
 
 class MyDataset(Dataset):
     """My custom dataset."""
