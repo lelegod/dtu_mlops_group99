@@ -1,5 +1,6 @@
-from project99.model import Model
 from project99.data import MyDataset
+from project99.model import Model
+
 
 def train():
     dataset = MyDataset("data/raw")
