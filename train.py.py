@@ -14,7 +14,7 @@ import os
 @hydra.main(version_base=None,config_path=".", config_name="config")
 def main(cfg: DictConfig):
       print("Started")
-      df = pd.read_csv(r"C:\Users\akash\Downloads\train_set.csv")
+      df = pd.read_csv("train_set.csv")
       df.head()
       raw_data = df.to_numpy()
       headers = df.columns.tolist()
