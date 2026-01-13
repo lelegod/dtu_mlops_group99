@@ -1,0 +1,5 @@
+*.csv
+outputs/
+multirun/
+__pycache__/
+.ipynb_checkpoints/
