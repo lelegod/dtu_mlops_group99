@@ -1,7 +1,5 @@
-# macOS
-.DS_Store
-**/.DS_Store
-
+*.csv
+outputs/
+multirun/
 __pycache__/
-
-*.egg-info/
+.ipynb_checkpoints/
