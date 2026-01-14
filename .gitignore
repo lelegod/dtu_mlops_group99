@@ -3,3 +3,9 @@ outputs/
 multirun/
 __pycache__/
 .ipynb_checkpoints/
+
+# Models
+models/*.json
+
+# Egg info
+*.egg-info/

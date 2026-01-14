@@ -4,5 +4,5 @@ COPY models/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY ["data/processed/train_set.csv", "./data/processed/"]
 COPY configs/config.yaml .
-COPY models/train.py.py ./train.py
+COPY src/project99/train.py ./train.py
 CMD ["python", "train.py"]

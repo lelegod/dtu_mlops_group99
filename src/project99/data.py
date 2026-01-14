@@ -104,13 +104,13 @@ class TennisDataProcessor:
         # Break point situation (receiver has advantage)
         df['IsBreakPoint'] = ((df['ReceiverScore'] >= 3) &
                                 (df['ReceiverScore'] > df['ServerScore'])).astype(int)
-        
+
         # Set pressure (proximity to winning the set at 6 games)
         max_games = np.maximum(df['ServerGamesWon'], df['ReceiverGamesWon'])
         df['SetPressure'] = 6 - max_games
-        
+
         df['IsSecondServe'] = (df['ServeIndicator'] == 2).astype(int)
-        
+
         return df
 
     def _process_single_tournament(self, match_file: Path) -> tuple[pd.DataFrame, str]:
@@ -154,7 +154,7 @@ class TennisDataProcessor:
 
         return final_df, tournament_name
 
-    def preprocess(self, output_folder: Path) -> None:
+    def preprocess(self, output_folder: Path, test_size: float = 0.2, random_state: int = 42) -> None:
         """Preprocess the raw data and save it to the output folder."""
         output_folder.mkdir(parents=True, exist_ok=True)
 
@@ -186,8 +186,8 @@ class TennisDataProcessor:
         # Stratified train-test split (80/20)
         X_train, X_test, y_train, y_test = train_test_split(
             X, y,
-            test_size=0.2,
-            random_state=42,
+            test_size=test_size,
+            random_state=random_state,
             stratify=y
         )
 
