@@ -1,5 +1,6 @@
 # Core ML Libraries
 numpy
+torch
 pandas
 scikit-learn
 xgboost
