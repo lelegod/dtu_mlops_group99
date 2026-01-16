@@ -91,6 +91,28 @@ class TennisDataProcessor:
 
         return df
 
+    def _create_score_differentials(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Create score differential features."""
+        df['GameDiff'] = df['ServerGamesWon'] - df['ReceiverGamesWon']
+        df['SetDiff'] = df['ServerSetsWon'] - df['ReceiverSetsWon']
+        df['PointDiff'] = df['ServerPointsWon'] - df['ReceiverPointsWon']
+        df['MomentumDiff'] = df['ServerMomentum'] - df['ReceiverMomentum']
+        return df
+
+    def _engineer_contextual_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Create contextual features like break points and set pressure."""
+        # Break point situation (receiver has advantage)
+        df['IsBreakPoint'] = ((df['ReceiverScore'] >= 3) &
+                                (df['ReceiverScore'] > df['ServerScore'])).astype(int)
+
+        # Set pressure (proximity to winning the set at 6 games)
+        max_games = np.maximum(df['ServerGamesWon'], df['ReceiverGamesWon'])
+        df['SetPressure'] = 6 - max_games
+
+        df['IsSecondServe'] = (df['ServeIndicator'] == 2).astype(int)
+
+        return df
+
     def _process_single_tournament(self, match_file: Path) -> tuple[pd.DataFrame, str]:
         """Process a single tournament's data"""
         df_match_raw, df_point_raw, tournament_name = self._load_tournament_data(match_file)
@@ -114,18 +136,25 @@ class TennisDataProcessor:
         # Remove double fault points
         joint_df = joint_df[joint_df['ServeIndicator'].isin([1, 2])].copy()
 
+        # Create score differentials
+        joint_df = self._create_score_differentials(joint_df)
+
+        # Create contextual features
+        joint_df = self._engineer_contextual_features(joint_df)
+
         # Note: 'Server' and 'Receiver' are excluded for now
-        final_columns = ['SetNo', 'GameNo', 'ServeIndicator',
-                        'PointNumber', 'ServerGamesWon', 'ReceiverGamesWon',
+        final_columns = ['SetNo', 'GameNo', 'PointNumber', 'ServerGamesWon', 'ReceiverGamesWon',
                         'ServerScore', 'ReceiverScore', 'ServerPointsWon', 'ReceiverPointsWon',
-                        'ServerMomentum', 'ReceiverMomentum', 'ServerSetsWon', 'ReceiverSetsWon', 'ServerWon']
+                        'ServerMomentum', 'ReceiverMomentum', 'ServerSetsWon', 'ReceiverSetsWon',
+                        'GameDiff', 'SetDiff', 'PointDiff', 'MomentumDiff',
+                        'IsBreakPoint', 'SetPressure', 'IsSecondServe', 'ServerWon']
 
         # Remove NaN rows if any
         final_df = joint_df[final_columns].dropna()
 
         return final_df, tournament_name
 
-    def preprocess(self, output_folder: Path) -> None:
+    def preprocess(self, output_folder: Path, test_size: float = 0.2, random_state: int = 42) -> None:
         """Preprocess the raw data and save it to the output folder."""
         output_folder.mkdir(parents=True, exist_ok=True)
 
@@ -157,8 +186,8 @@ class TennisDataProcessor:
         # Stratified train-test split (80/20)
         X_train, X_test, y_train, y_test = train_test_split(
             X, y,
-            test_size=0.2,
-            random_state=42,
+            test_size=test_size,
+            random_state=random_state,
             stratify=y
         )
 
