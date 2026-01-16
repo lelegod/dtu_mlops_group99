@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import hydra
 import matplotlib.pyplot as plt
@@ -49,8 +50,10 @@ def train(cfg: DictConfig):
     print(f"Accuracy:    {accuracy_score(y_val, y_pred):.4f}")
 
     # Save model
-    xgb_model.save_model("models/xgboost_model.json")
-    print("\nModel saved to models/xgboost_model.json")
+    models_dir = Path("models")
+    models_dir.mkdir(parents=True, exist_ok=True)
+    xgb_model.save_model(models_dir / "xgboost_model.json")
+    print(f"\nModel saved to {models_dir / 'xgboost_model.json'}")
 
 
 if __name__ == "__main__":

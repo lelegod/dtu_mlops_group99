@@ -9,3 +9,6 @@ models/*.json
 
 # Egg info
 *.egg-info/
+
+# MacOS
+.DS_Store
