@@ -14,4 +14,3 @@ def test_missing_points_file_raises(tmp_path: Path):
     p = TennisDataProcessor(tmp_path)
     with pytest.raises(FileNotFoundError, match="Points file not found"):
         p._load_tournament_data(match_file)
-

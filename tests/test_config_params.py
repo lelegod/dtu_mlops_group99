@@ -9,4 +9,3 @@ def test_xgboost_params_convert_to_dict():
     params = OmegaConf.to_container(cfg.model.params, resolve=True)
     assert isinstance(params, dict)
     assert params["objective"] == "binary:logistic"
-

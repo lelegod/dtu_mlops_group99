@@ -17,4 +17,3 @@ def test_training_like_flow_saves_model(tmp_path):
     out = tmp_path / "xgboost_model.json"
     m.save_model(out)
     assert out.exists(), "Expected model artifact to be saved."
-

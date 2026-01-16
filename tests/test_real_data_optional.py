@@ -12,4 +12,3 @@ RAW_DIR = Path(_PATH_DATA) / "raw"
 def test_preprocessor_finds_match_files():
     p = TennisDataProcessor(RAW_DIR)
     assert len(p.match_files) > 0, "No *-matches.csv files found in data/raw."
-
