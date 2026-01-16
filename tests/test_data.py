@@ -66,4 +66,3 @@ def test_process_single_tournament_outputs_expected_columns(tmp_path: Path):
         "IsBreakPoint", "SetPressure", "IsSecondServe", "ServerWon",
     ]
     assert list(df.columns) == expected_cols
-

@@ -17,5 +17,3 @@ def test_config_composes_and_has_expected_fields():
     assert "params" in cfg.model
     assert cfg.model.params.objective == "binary:logistic"
     assert cfg.model.params.eval_metric == "logloss"
-
-
