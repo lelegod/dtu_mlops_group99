@@ -41,6 +41,11 @@ def train(ctx: Context) -> None:
     ctx.run(f"python src/{PROJECT_NAME}/train.py", echo=True, pty=not WINDOWS)
 
 @task
+def evaluate(ctx: Context, model_checkpoint: str) -> None:
+    """Evaluate model."""
+    ctx.run(f"python src/{PROJECT_NAME}/evaluate.py {model_checkpoint}", echo=True, pty=not WINDOWS)
+
+@task
 def test(ctx: Context) -> None:
     """Run tests."""
     ctx.run("coverage run -m pytest tests/", echo=True, pty=not WINDOWS)
