@@ -65,4 +65,9 @@ def test_process_single_tournament_outputs_expected_columns(tmp_path: Path):
         "GameDiff", "SetDiff", "PointDiff", "MomentumDiff",
         "IsBreakPoint", "SetPressure", "IsSecondServe", "ServerWon",
     ]
-    assert list(df.columns) == expected_cols
+
+    assert list(df.columns) == expected_cols, (
+        "Dataframe schema mismatch.\n"
+        f"Expected columns: {expected_cols}\n"
+        f"Got columns: {list(df.columns)}"
+    )

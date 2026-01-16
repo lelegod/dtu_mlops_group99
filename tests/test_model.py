@@ -11,10 +11,14 @@ def test_model_constructs_from_config():
         cfg = compose(config_name="config")
 
     m = model(cfg)
-    assert isinstance(m, xgb.XGBClassifier)
+    assert isinstance(m, xgb.XGBClassifier), (
+        f"Expected XGBClassifier, got {type(m)}"
+    )
     params = m.get_params()
 
-    assert params["max_depth"] == cfg.model.params.max_depth
+    assert params["max_depth"] == cfg.model.params.max_depth, (
+        f"max_depth mismatch: expected {cfg.model.params.max_depth}, got {params['max_depth']}"
+    )
     assert params["learning_rate"] == cfg.model.params.learning_rate
     assert params["n_estimators"] == cfg.model.params.n_estimators
 
@@ -32,4 +36,6 @@ def test_xgb_predict_proba_shape_parametrized(n_features):
 
     m.fit(X, y)
     proba = m.predict_proba(X)
-    assert proba.shape == (30, 2)
+    assert proba.shape == (30, 2), (
+        f"Expected predict_proba shape (30, 2), got {proba.shape}"
+    )
