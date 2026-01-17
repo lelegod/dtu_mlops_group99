@@ -10,16 +10,15 @@ COPY data/raw.dvc data/raw.dvc
 COPY data/processed.dvc data/processed.dvc
 COPY pyproject.toml requirements.txt ./
 
-
 RUN pip install --no-cache-dir "dvc[gs]" && \
     dvc init --no-scm -f
 
 RUN pip install -r requirements.txt --no-cache-dir
 
-COPY src src/
+COPY src/ src/
 COPY configs/ configs/
+COPY tests/ tests/
 
 RUN pip install . --no-deps --no-cache-dir
-
 
 ENTRYPOINT ["sh", "-c", "dvc pull && python -u src/project99/train.py"]

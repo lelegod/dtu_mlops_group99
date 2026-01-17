@@ -166,11 +166,9 @@ class TennisDataProcessor:
         test_file = output_folder/'test_set.csv'
         test_df.to_csv(test_file, index=False)
 
-
 def preprocess(data_path: Path, output_folder: Path) -> None:
     dataset = TennisDataProcessor(data_path)
     dataset.preprocess(output_folder)
-
 
 def tennis_data(
         data_type: str = 'torch'
@@ -204,7 +202,6 @@ def tennis_data(
         return (X_train, y_train), (X_test, y_test)
     else:
         raise ValueError(f'Unsupported data_type: {data_type}.')
-
 
 if __name__ == "__main__":
     typer.run(preprocess)
