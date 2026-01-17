@@ -11,7 +11,9 @@ from project99.data import tennis_data
 from project99.model import model
 
 
-@hydra.main(version_base=None, config_path="../../configs", config_name="config")
+CONFIGS_DIR = Path(__file__).resolve().parents[2] / "configs"
+
+@hydra.main(version_base=None, config_path=str(CONFIGS_DIR), config_name="config")
 def train(cfg: DictConfig):
     """Train a XGBoost model on tennis data"""
     print("Started training...")
