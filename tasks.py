@@ -1,12 +1,10 @@
 import os
-
 from invoke import Context, task
 
 WINDOWS = os.name == "nt"
 PROJECT_NAME = "project99"
 PYTHON_VERSION = "3.12"
 
-# Setup commands
 @task
 def create_environment(ctx: Context) -> None:
     """Create a new conda environment for project."""
@@ -23,13 +21,11 @@ def requirements(ctx: Context) -> None:
     ctx.run("pip install -r requirements.txt", echo=True, pty=not WINDOWS)
     ctx.run("pip install -e .", echo=True, pty=not WINDOWS)
 
-
 @task(requirements)
 def dev_requirements(ctx: Context) -> None:
     """Install development requirements."""
     ctx.run('pip install -e .["dev"]', echo=True, pty=not WINDOWS)
 
-# Project commands
 @task
 def preprocess_data(ctx: Context) -> None:
     """Preprocess data."""
@@ -64,15 +60,3 @@ def docker_build(ctx: Context, progress: str = "plain") -> None:
         echo=True,
         pty=not WINDOWS
     )
-
-# Documentation commands
-@task(dev_requirements)
-def build_docs(ctx: Context) -> None:
-    """Build documentation."""
-    ctx.run("mkdocs build --config-file docs/mkdocs.yaml --site-dir build", echo=True, pty=not WINDOWS)
-
-
-@task(dev_requirements)
-def serve_docs(ctx: Context) -> None:
-    """Serve documentation."""
-    ctx.run("mkdocs serve --config-file docs/mkdocs.yaml", echo=True, pty=not WINDOWS)

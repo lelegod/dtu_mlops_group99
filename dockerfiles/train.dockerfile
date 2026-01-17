@@ -1,23 +1,24 @@
 FROM python:3.12-slim AS base
-
 WORKDIR /app
 
 RUN apt update && \
-    apt install --no-install-recommends -y build-essential gcc && \
+    apt install --no-install-recommends -y build-essential gcc curl && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-COPY src src/
-COPY requirements.txt requirements.txt
-COPY requirements_dev.txt requirements_dev.txt
-COPY README.md README.md
-COPY pyproject.toml pyproject.toml
+COPY .dvc .dvc
+COPY data/raw.dvc data/raw.dvc
+COPY data/processed.dvc data/processed.dvc
+COPY pyproject.toml requirements.txt ./
+
+RUN pip install --no-cache-dir "dvc[gs]" && \
+    dvc init --no-scm -f
+
+RUN pip install -r requirements.txt --no-cache-dir
+
+COPY src/ src/
 COPY configs/ configs/
+COPY tests/ tests/
 
-# Copy data (later with gcp)
-COPY data/processed/train_set.csv data/processed/train_set.csv
-COPY data/processed/test_set.csv data/processed/test_set.csv
+RUN pip install . --no-deps --no-cache-dir
 
-RUN pip install -r requirements.txt --no-cache-dir --verbose
-RUN pip install . --no-deps --no-cache-dir --verbose
-
-ENTRYPOINT ["python", "-u", "src/project99/train.py"]
+ENTRYPOINT ["sh", "-c", "dvc pull && python -u src/project99/train.py"]
