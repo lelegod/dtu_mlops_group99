@@ -2,9 +2,7 @@ import os
 from pathlib import Path
 
 import hydra
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from omegaconf import DictConfig
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
@@ -12,8 +10,16 @@ from sklearn.model_selection import train_test_split
 from project99.data import tennis_data
 from project99.model import model
 
+<<<<<<< HEAD
 @hydra.main(version_base=None, config_path="../../configs", config_name="config")
+=======
+
+CONFIGS_DIR = Path(__file__).resolve().parents[2] / "configs"
+
+@hydra.main(version_base=None, config_path=str(CONFIGS_DIR), config_name="config")
+>>>>>>> origin/main
 def train(cfg: DictConfig):
+    """Train a XGBoost model on tennis data"""
     print("Started training...")
 
     (X_train, y_train), (X_test, y_test) = tennis_data(data_type='numpy')

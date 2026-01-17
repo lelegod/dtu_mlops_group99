@@ -1,8 +1,11 @@
 *.csv
 outputs/
+venv/
 multirun/
 __pycache__/
+.pytest_cache/
 .ipynb_checkpoints/
+.coverage
 
 # Models
 models/*.json
