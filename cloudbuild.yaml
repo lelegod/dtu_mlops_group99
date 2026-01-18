@@ -1,0 +1,28 @@
+steps:
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Training Image'
+    args: [
+      'build', 
+      '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest',
+      '-f', 'dockerfiles/train.dockerfile', 
+      '.'
+    ]
+
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build API Image'
+    args: [
+      'build', 
+      '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest',
+      '-f', 'dockerfiles/api.dockerfile', 
+      '.'
+    ]
+
+
+images:
+  - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
+  - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
+
+substitutions:
+  _REGION: europe-west1 
