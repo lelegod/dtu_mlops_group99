@@ -1,4 +1,4 @@
-from hydra import initialize, compose
+from hydra import compose, initialize
 from omegaconf import OmegaConf
 
 

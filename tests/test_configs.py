@@ -1,4 +1,4 @@
-from hydra import initialize, compose
+from hydra import compose, initialize
 
 
 def test_config_composes_and_has_expected_fields():

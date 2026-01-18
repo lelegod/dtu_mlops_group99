@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
+
 import pytest
 
-from tests import _PATH_DATA
 from project99.data import TennisDataProcessor
-
+from tests import _PATH_DATA
 
 RAW_DIR = Path(_PATH_DATA) / "raw"
 

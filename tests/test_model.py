@@ -1,7 +1,7 @@
-import pytest
 import numpy as np
-from hydra import initialize, compose
+import pytest
 import xgboost as xgb
+from hydra import compose, initialize
 
 from project99.model import model
 

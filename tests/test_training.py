@@ -1,5 +1,6 @@
 import numpy as np
-from hydra import initialize, compose
+from hydra import compose, initialize
+
 from project99.model import model
 
 
