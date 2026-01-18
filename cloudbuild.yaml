@@ -1,5 +1,5 @@
 steps:
-
+  # Step 1: Build & Push the Training Image
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build Training Image'
     args: [
@@ -9,7 +9,7 @@ steps:
       '.'
     ]
 
-
+  # Step 2: Build & Push the API Image
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build API Image'
     args: [
@@ -19,10 +19,14 @@ steps:
       '.'
     ]
 
-
+# The images section
 images:
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
 
+# --- ADD THIS SECTION BELOW ---
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 substitutions:
-  _REGION: europe-west1 
+  _REGION: europe-west1
