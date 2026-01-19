@@ -1,8 +1,11 @@
 import io
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
 from fastapi.testclient import TestClient
+
 import project99.api as api
+
 
 @pytest.fixture(autouse=True)
 def mock_model():
@@ -33,7 +36,7 @@ def test_health_endpoint():
 
 def test_model_info_endpoint():
     response = client.get("/model/info")
-    
+
     if response.status_code == 200:
         data = response.json()
         assert data["model_type"] == "XGBoost"
@@ -61,9 +64,9 @@ def test_predict_endpoint_valid_input():
         "P2PointsWon": 10,
         "P2Momentum": -1
     }
-    
+
     response = client.post("/predict", json=valid_input)
-    
+
     if response.status_code == 200:
         data = response.json()
         assert "prediction" in data
@@ -92,7 +95,7 @@ def test_predict_endpoint_invalid_input():
         "P2PointsWon": 10,
         "P2Momentum": -1
     }
-    
+
     response = client.post("/predict", json=invalid_input)
     assert response.status_code == 422
 
@@ -102,19 +105,24 @@ def test_predict_endpoint_missing_fields():
         "SetNo": 1,
         "GameNo": 3,
     }
-    
+
     response = client.post("/predict", json=incomplete_input)
     assert response.status_code == 422
 
 
 def test_batch_predict_valid_csv():
-    csv_content = """PointServer,P1Score,P2Score,P1GamesWon,P2GamesWon,P1PointsWon,P2PointsWon,P1SetsWon,P2SetsWon,SetNo,GameNo,PointNumber,ServeIndicator,P1Momentum,P2Momentum
+    header = (
+        "PointServer,P1Score,P2Score,P1GamesWon,P2GamesWon,P1PointsWon,"
+        "P2PointsWon,P1SetsWon,P2SetsWon,SetNo,GameNo,PointNumber,"
+        "ServeIndicator,P1Momentum,P2Momentum"
+    )
+    csv_content = f"""{header}
 1,30,15,2,1,12,10,0,0,1,3,15,1,2,-1
 2,40,30,3,2,25,20,1,0,2,6,45,1,5,3"""
-    
+
     files = {"file": ("test.csv", io.BytesIO(csv_content.encode()), "text/csv")}
     response = client.post("/predict/batch", files=files)
-    
+
     if response.status_code == 200:
         data = response.json()
         assert "total_predictions" in data
@@ -136,7 +144,7 @@ def test_batch_predict_missing_columns():
     csv_content = """SetNo,GameNo
 1,3
 2,6"""
-    
+
     files = {"file": ("test.csv", io.BytesIO(csv_content.encode()), "text/csv")}
     response = client.post("/predict/batch", files=files)
     assert response.status_code == 400
