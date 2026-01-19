@@ -68,3 +68,8 @@ class ModelInfoResponse(BaseModel):
     model_path: str | None = None
     feature_count: int
     feature_names: list[str]
+
+
+class BatchPredictionResponse(BaseModel):
+    total_predictions: int = Field(..., description="Total number of predictions made")
+    csv_with_predictions: str = Field(..., description="CSV string with predictions and probabilities added")
