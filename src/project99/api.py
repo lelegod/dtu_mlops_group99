@@ -6,11 +6,13 @@ import numpy as np
 import pandas as pd
 import xgboost as xgb
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from project99.preprocess import input_preprocessing
 from project99.type import BatchPredictionResponse, HealthResponse, ModelInfoResponse, PredictionResponse, RawPointInput
 
+model: xgb.XGBClassifier | None = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -33,8 +35,15 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Edit later
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
-def read_root():
+def root():
     return {"status": "Project 99 API is running"}
 
 @app.post("/predict")
