@@ -34,8 +34,24 @@ steps:
     args:
       - '-c'
       - |
-        MODEL_ID=$(gcloud ai models list --region=$_REGION --filter=display_name=dtu-model --format="value(name)" | head -n 1)
-        gcloud ai endpoints deploy-model $_ENDPOINT_ID --region=$_REGION --model=$$MODEL_ID --display-name=deployed-model-$BUILD_ID --machine-type=n1-standard-2 --traffic-split=0=100
+        set -e
+        echo "Looking for model with display_name=dtu-model..."
+        MODEL_ID=$$(gcloud ai models list --region=$_REGION --filter="displayName=dtu-model" --format="value(name)" --sort-by="~createTime" | head -n 1)
+        
+        if [ -z "$$MODEL_ID" ]; then
+          echo "ERROR: No model found with display name 'dtu-model'"
+          exit 1
+        fi
+        
+        echo "Found model: $$MODEL_ID"
+        echo "Deploying to endpoint: $_ENDPOINT_ID"
+        
+        gcloud ai endpoints deploy-model $_ENDPOINT_ID \
+          --region=$_REGION \
+          --model=$$MODEL_ID \
+          --display-name=deployed-model-$BUILD_ID \
+          --machine-type=n1-standard-2 \
+          --traffic-split=0=100
 
 images:
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
