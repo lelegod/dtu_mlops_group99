@@ -46,4 +46,4 @@ options:
 
 substitutions:
   _REGION: europe-west1
-  _ENDPOINT_ID: 'YOUR_ACTUAL_ENDPOINT_ID'
+  _ENDPOINT_ID: '846555783666597888'
