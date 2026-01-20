@@ -5,33 +5,64 @@ from io import StringIO
 import numpy as np
 import pandas as pd
 import xgboost as xgb
+from google.cloud import storage
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
 from project99.preprocess import input_preprocessing
 from project99.type import BatchPredictionResponse, HealthResponse, ModelInfoResponse, PredictionResponse, RawPointInput
 
 model: xgb.XGBClassifier | None = None
 
+def download_model_from_gcs(gcs_path: str, local_path: str) -> bool:
+    try:
+        path_parts = gcs_path[5:].split("/", 1)
+        bucket_name = path_parts[0]
+        blob_name = path_parts[1] if len(path_parts) > 1 else ""
+        
+        client = storage.Client()
+        bucket = client.bucket(bucket_name)
+        blob = bucket.blob(blob_name)
+        
+        if blob.exists():
+            os.makedirs(os.path.dirname(local_path) or ".", exist_ok=True)
+            blob.download_to_filename(local_path)
+            print(f"Downloaded model from {gcs_path} to {local_path}")
+            return True
+        else:
+            print(f"Model not found in GCS: {gcs_path}")
+            return False
+    except Exception as e:
+        print(f"Error downloading from GCS: {e}")
+        return False
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load and clean up model on startup and shutdown."""
     print("Loading model")
 
     global model
-    model_path = os.getenv("AIP_MODEL_DIR", "models/xgboost_model.json")
-    if not os.path.exists(model_path):
-        print(f"Warning: Model not found at {model_path}. Prediction endpoint will fail.")
+    
+    if not os.path.exists(LOCAL_MODEL_PATH):
+        print(f"Model not found locally at {LOCAL_MODEL_PATH}, trying GCS...")
+        download_model_from_gcs(GCS_MODEL_PATH, LOCAL_MODEL_PATH)
+    
+    if not os.path.exists(LOCAL_MODEL_PATH):
+        print(f"ERROR: Model not found at {LOCAL_MODEL_PATH}. API will start but predictions will fail.")
+        yield
         return
 
     model = xgb.XGBClassifier()
-    model.load_model(model_path)
+    model.load_model(LOCAL_MODEL_PATH)
+    print(f"Model loaded successfully from {LOCAL_MODEL_PATH}")
 
     yield
 
     print("Cleaning up")
-    del model
+    if model is not None:
+        del model
 
 app = FastAPI(lifespan=lifespan)
 
@@ -70,7 +101,7 @@ def health_check(response_model=HealthResponse):
     return HealthResponse(
         status="healthy" if model is not None else "unhealthy",
         model_loaded=model is not None,
-        model_path=os.getenv("AIP_MODEL_DIR", "models/xgboost_model.json") if model is not None else None
+        model_path=LOCAL_MODEL_PATH if model is not None else None
     )
 
 @app.get("/model/info")
@@ -82,7 +113,7 @@ def model_info(response_model=ModelInfoResponse):
     return ModelInfoResponse(
         model_type="XGBoost",
         model_loaded=True,
-        model_path=os.getenv("AIP_MODEL_DIR", "models/xgboost_model.json"),
+        model_path=LOCAL_MODEL_PATH,
         feature_count=len(feature_names),
         feature_names=feature_names
     )

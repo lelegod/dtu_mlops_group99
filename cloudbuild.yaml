@@ -52,11 +52,7 @@ steps:
           --model=$$MODEL_ID \
           --display-name=deployed-model-$BUILD_ID \
           --machine-type=n1-standard-2 \
-          --traffic-split=0=100 \
-          --async
-        
-        echo "Deployment started! It will continue in the background (30-45 min for first deploy)."
-        echo "Check status: gcloud ai endpoints describe $_ENDPOINT_ID --region=$_REGION"
+          --traffic-split=0=100
 
 images:
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
