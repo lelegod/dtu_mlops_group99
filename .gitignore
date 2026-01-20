@@ -1,12 +1,17 @@
 *.csv
 outputs/
+venv/
 multirun/
 __pycache__/
+.pytest_cache/
 .ipynb_checkpoints/
-# macOS
-.DS_Store
-**/.DS_Store
+.coverage
 
-__pycache__/
+# Models
+models/*.json
 
+# Egg info
 *.egg-info/
+
+# MacOS
+.DS_Store

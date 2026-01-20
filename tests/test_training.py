@@ -1,6 +1,5 @@
 import numpy as np
-from hydra import compose, initialize
-
+from hydra import initialize, compose
 from project99.model import model
 
 
@@ -17,4 +16,4 @@ def test_training_like_flow_saves_model(tmp_path):
 
     out = tmp_path / "xgboost_model.json"
     m.save_model(out)
-    assert out.exists(), f"Model file was not saved at expected path: {out}"
+    assert out.exists(), "Expected model artifact to be saved."

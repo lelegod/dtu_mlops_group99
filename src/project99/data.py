@@ -1,5 +1,5 @@
+import os
 from pathlib import Path
-
 import numpy as np
 import pandas as pd
 import torch
@@ -173,7 +173,7 @@ def preprocess(data_path: Path, output_folder: Path) -> None:
 def tennis_data(
         data_type: str = 'torch'
         ) -> tuple[TensorDataset, TensorDataset] |tuple[tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray]]:
-
+    
     train_file = PROJECT_ROOT / 'data' / 'processed' / 'train_set.csv'
     test_file = PROJECT_ROOT / 'data' / 'processed' / 'test_set.csv'
 
@@ -202,7 +202,6 @@ def tennis_data(
         return (X_train, y_train), (X_test, y_test)
     else:
         raise ValueError(f'Unsupported data_type: {data_type}.')
-
 
 if __name__ == "__main__":
     typer.run(preprocess)

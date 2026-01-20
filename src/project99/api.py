@@ -1,176 +1,47 @@
 import os
-from contextlib import asynccontextmanager
-from io import StringIO
-
-import numpy as np
-import pandas as pd
+from fastapi import FastAPI, HTTPException
 import xgboost as xgb
-from google.cloud import storage
-from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
+import numpy as np
 from pydantic import BaseModel
 
-from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
-from project99.preprocess import input_preprocessing
-from project99.type import BatchPredictionResponse, HealthResponse, ModelInfoResponse, PredictionResponse, RawPointInput
+app = FastAPI()
 
-model: xgb.XGBClassifier | None = None
+# Global variable to hold the model
+model = None
 
-def download_model_from_gcs(gcs_path: str, local_path: str) -> bool:
-    try:
-        path_parts = gcs_path[5:].split("/", 1)
-        bucket_name = path_parts[0]
-        blob_name = path_parts[1] if len(path_parts) > 1 else ""
-        
-        client = storage.Client()
-        bucket = client.bucket(bucket_name)
-        blob = bucket.blob(blob_name)
-        
-        if blob.exists():
-            os.makedirs(os.path.dirname(local_path) or ".", exist_ok=True)
-            blob.download_to_filename(local_path)
-            print(f"Downloaded model from {gcs_path} to {local_path}")
-            return True
-        else:
-            print(f"Model not found in GCS: {gcs_path}")
-            return False
-    except Exception as e:
-        print(f"Error downloading from GCS: {e}")
-        return False
+class PredictionInput(BaseModel):
+    features: list[float]
 
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("Loading model")
-
+@app.on_event("startup")
+def load_model():
     global model
-    
-    if not os.path.exists(LOCAL_MODEL_PATH):
-        print(f"Model not found locally at {LOCAL_MODEL_PATH}, trying GCS...")
-        download_model_from_gcs(GCS_MODEL_PATH, LOCAL_MODEL_PATH)
-    
-    if not os.path.exists(LOCAL_MODEL_PATH):
-        print(f"ERROR: Model not found at {LOCAL_MODEL_PATH}. API will start but predictions will fail.")
-        yield
+    # Check GCP path first, then local fallback
+    model_path = os.getenv("AIP_MODEL_DIR", "models/xgboost_model.json")
+    if not os.path.exists(model_path):
+        print(f"Warning: Model not found at {model_path}. Prediction endpoint will fail.")
         return
-
+    
     model = xgb.XGBClassifier()
-    model.load_model(LOCAL_MODEL_PATH)
-    print(f"Model loaded successfully from {LOCAL_MODEL_PATH}")
-
-    yield
-
-    print("Cleaning up")
-    if model is not None:
-        del model
-
-app = FastAPI(lifespan=lifespan)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], # Edit later
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    model.load_model(model_path)
+    print(f"Model loaded successfully from {model_path}")
 
 @app.get("/")
-def root():
+def read_root():
     return {"status": "Project 99 API is running"}
 
 @app.post("/predict")
-def predict(input_data: RawPointInput, response_model=PredictionResponse):
+def predict(input_data: PredictionInput):
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
-
+    
     try:
-        raw_point = input_data.model_dump()
-        features = input_preprocessing(raw_point)
-
-        prediction = model.predict(features)
-        probability = model.predict_proba(features)
-
-        return PredictionResponse(
-            prediction=int(prediction[0]),
-            probability=float(probability[0][1])
-        )
+        data = np.array(input_data.features).reshape(1, -1)
+        prediction = model.predict(data)
+        probability = model.predict_proba(data)
+        
+        return {
+            "prediction": int(prediction[0]),
+            "probability": float(probability[0][1])
+        }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-@app.get("/health")
-def health_check(response_model=HealthResponse):
-    return HealthResponse(
-        status="healthy" if model is not None else "unhealthy",
-        model_loaded=model is not None,
-        model_path=LOCAL_MODEL_PATH if model is not None else None
-    )
-
-@app.get("/model/info")
-def model_info(response_model=ModelInfoResponse):
-    if model is None:
-        raise HTTPException(status_code=503, detail="Model not loaded")
-
-    feature_names = model.get_booster().feature_names
-    return ModelInfoResponse(
-        model_type="XGBoost",
-        model_loaded=True,
-        model_path=LOCAL_MODEL_PATH,
-        feature_count=len(feature_names),
-        feature_names=feature_names
-    )
-
-@app.post("/predict/batch", response_model=BatchPredictionResponse)
-async def predict_batch(file: UploadFile = File(...)):
-    if model is None:
-        raise HTTPException(status_code=503, detail="Model not loaded")
-
-    if not file.filename.endswith('.csv'):
-        raise HTTPException(status_code=400, detail="File must be a CSV")
-
-    required_columns = [
-        'PointServer', 'P1Score', 'P2Score', 'P1GamesWon', 'P2GamesWon',
-        'P1PointsWon', 'P2PointsWon', 'P1SetsWon', 'P2SetsWon',
-        'SetNo', 'GameNo', 'PointNumber', 'ServeIndicator',
-        'P1Momentum', 'P2Momentum'
-    ]
-
-    try:
-        contents = await file.read()
-        df = pd.read_csv(StringIO(contents.decode('utf-8')))
-
-        missing_cols = [col for col in required_columns if col not in df.columns]
-        if missing_cols:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Missing required columns: {', '.join(missing_cols)}"
-            )
-
-        prediction_values = []
-        probability_values = []
-
-        for _, row in df.iterrows():
-            raw_point = row.to_dict()
-            features = input_preprocessing(raw_point)
-
-            prediction = model.predict(features)
-            probability = model.predict_proba(features)
-
-            pred_val = int(prediction[0])
-            prob_val = float(probability[0][1])
-
-            prediction_values.append(pred_val)
-            probability_values.append(prob_val)
-
-        df_with_predictions = df.copy()
-        df_with_predictions['Prediction'] = prediction_values
-        df_with_predictions['Probability'] = probability_values
-
-        csv_output = StringIO()
-        df_with_predictions.to_csv(csv_output, index=False)
-        csv_string = csv_output.getvalue()
-
-        return BatchPredictionResponse(
-            total_predictions=len(prediction_values),
-            csv_with_predictions=csv_string
-        )
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error processing CSV: {str(e)}")

@@ -17,10 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Install dependencies (macOS)
-        if: runner.os == 'macOS'
-        run: brew install libomp
-
       - name: Set up Python
         uses: actions/setup-python@v6
         with:

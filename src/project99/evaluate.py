@@ -1,12 +1,9 @@
 import os
 from pathlib import Path
-
 import typer
 import xgboost as xgb
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
-
 from project99.data import tennis_data
-
 
 def evaluate(model_checkpoint: str = None) -> None:
     print("Started evaluation...")

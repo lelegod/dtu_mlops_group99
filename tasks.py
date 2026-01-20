@@ -1,5 +1,4 @@
 import os
-
 from invoke import Context, task
 
 WINDOWS = os.name == "nt"
