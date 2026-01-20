@@ -2,16 +2,17 @@
 invoke==2.2.0
 
 # pre-commit
-pre-commit==4.1.0
+pre-commit==4.5.1
 
 # testing
 pytest==8.3.4
 coverage==7.8.0
+httpx==0.28.1
 
 # linting
 ruff==0.11.6
 
 # docs
 mkdocs==1.6.1
-mkdocs-material==9.6.1
+mkdocs-material==9.7.1
 mkdocstrings-python==1.16.10
