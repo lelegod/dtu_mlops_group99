@@ -32,7 +32,8 @@ def upload_to_gcs(local_path: str, gcs_path: str):
         blob.upload_from_filename(local_path)
         logger.info(f"Model uploaded to {gcs_path}")
     except Exception as e:
-        logger.warning(f"Failed to upload model to GCS: {e}")
+        logger.error(f"Failed to upload model to GCS: {e}")
+        raise e
 
 @hydra.main(version_base=None, config_path=str(CONFIGS_DIR), config_name="config")
 def train(cfg: DictConfig):
