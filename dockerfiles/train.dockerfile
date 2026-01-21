@@ -8,7 +8,6 @@ RUN apt update && \
 RUN pip install --no-cache-dir "dvc[gs]"
 
 RUN dvc init --no-scm -f
-RUN dvc remote add -d storage gs://dtu-mlops-group99-data
 
 COPY data/raw.dvc data/raw.dvc
 COPY data/processed.dvc data/processed.dvc
@@ -22,4 +21,4 @@ COPY tests/ tests/
 
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["sh", "-c", "dvc pull -r storage && python -u src/project99/train.py"]
+ENTRYPOINT ["sh", "-c", "dvc remote add -d storage gs://dtu-mlops-group99-data --local && dvc pull -r storage && python -u src/project99/train.py"]
