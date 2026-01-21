@@ -9,13 +9,46 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Trigger Training'
-    entrypoint: 'gcloud'
-    args: [
-      'ai', 'custom-jobs', 'create',
-      '--region=$_REGION',
-      '--display-name=train-$BUILD_ID',
-      '--worker-pool-spec=machine-type=n1-standard-4,container-image-uri=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
-    ]
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        set -e
+        echo "Starting training job..."
+        JOB_NAME=$$(gcloud ai custom-jobs create \
+          --region=$_REGION \
+          --display-name=train-$BUILD_ID \
+          --worker-pool-spec=machine-type=n1-standard-4,container-image-uri=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest \
+          --format="value(name)")
+        
+        echo "Training job created: $$JOB_NAME"
+        echo "Waiting for training to complete..."
+        
+        # Poll until job completes
+        while true; do
+          STATE=$$(gcloud ai custom-jobs describe $$JOB_NAME --region=$_REGION --format="value(state)")
+          echo "Job state: $$STATE"
+          
+          if [ "$$STATE" = "JOB_STATE_SUCCEEDED" ]; then
+            echo "Training completed successfully!"
+            break
+          elif [ "$$STATE" = "JOB_STATE_FAILED" ] || [ "$$STATE" = "JOB_STATE_CANCELLED" ]; then
+            echo "ERROR: Training failed with state: $$STATE"
+            gcloud ai custom-jobs describe $$JOB_NAME --region=$_REGION
+            exit 1
+          fi
+          
+          sleep 30
+        done
+        
+        # Verify model was uploaded to GCS
+        echo "Verifying model exists in GCS..."
+        if gsutil ls gs://dtu-mlops-group99-data/models/xgboost_model.json; then
+          echo "Model found in GCS!"
+        else
+          echo "ERROR: Model not found in GCS after training completed"
+          exit 1
+        fi
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Upload Model'
