@@ -1,12 +1,13 @@
 from pathlib import Path
-from loguru import logger
 
 import numpy as np
 import pandas as pd
 import torch
 import typer
+from loguru import logger
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset
+
 from project99.logging_utils import setup_logging
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

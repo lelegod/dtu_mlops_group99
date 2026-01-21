@@ -1,15 +1,15 @@
 from pathlib import Path
-from loguru import logger
 
 import hydra
+from loguru import logger
 from omegaconf import DictConfig
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
 
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
 from project99.data import tennis_data
-from project99.model import model
 from project99.logging_utils import setup_logging
+from project99.model import model
 
 setup_logging(log_file="reports/app.log")
 

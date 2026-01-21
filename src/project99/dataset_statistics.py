@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import torch
 import typer
 
-from project99.dataset import TennisDataset
 from project99.data import PROJECT_ROOT
+from project99.dataset import TennisDataset
 
 
 def dataset_statistics(datadir: str = "data/processed") -> None:

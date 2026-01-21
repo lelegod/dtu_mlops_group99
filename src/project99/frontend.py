@@ -81,14 +81,18 @@ def main():
 
     with col1:
         st.subheader("📊 Match State")
-        
+
         set_no = st.number_input("Set Number", min_value=1, max_value=5, value=1)
         game_no = st.number_input("Game Number", min_value=1, max_value=20, value=3)
         point_number = st.number_input("Point Number in Match", min_value=1, value=15)
-        
+
         st.subheader("🎯 Serve Info")
         point_server = st.radio("Who is Serving?", options=[1, 2], format_func=lambda x: f"Player {x}")
-        serve_indicator = st.radio("Serve Type", options=[1, 2], format_func=lambda x: "First Serve" if x == 1 else "Second Serve")
+        serve_indicator = st.radio(
+            "Serve Type",
+            options=[1, 2],
+            format_func=lambda x: "First Serve" if x == 1 else "Second Serve"
+        )
 
     with col2:
         st.subheader("👤 Player 1")
@@ -133,11 +137,11 @@ def main():
         if result:
             prediction = result.get("prediction", 0)
             probability = result.get("probability", 0.5)
-            
+
             st.subheader("📈 Prediction Result")
-            
+
             col_result1, col_result2, col_result3 = st.columns([1, 2, 1])
-            
+
             with col_result2:
                 if prediction == 1:
                     st.success(f"🎾 **SERVER WINS** (Player {point_server})")
@@ -146,7 +150,7 @@ def main():
                     receiver = 2 if point_server == 1 else 1
                     st.error(f"🎾 **RECEIVER WINS** (Player {receiver})")
                     st.metric("Confidence", f"{(1 - probability) * 100:.1f}%")
-                
+
                 st.progress(probability)
                 st.caption(f"Server win probability: {probability * 100:.1f}%")
 
@@ -154,23 +158,23 @@ def main():
         st.header("ℹ️ About")
         st.markdown("""
         This app predicts the outcome of a tennis point based on the current match state.
-        
-        **Model**: XGBoost Classifier  
-        **Features**: 20 engineered features  
+
+        **Model**: XGBoost Classifier
+        **Features**: 20 engineered features
         **Training Data**: Professional tennis matches
-        
+
         ---
-        
+
         **How to use:**
         1. Enter the current match state
         2. Set player scores and statistics
         3. Click "Predict" to see the outcome
-        
+
         ---
-        
+
         **Backend Status:**
         """)
-        
+
         try:
             health = requests.get(f"{BACKEND_URL}/health", timeout=5)
             if health.status_code == 200:
