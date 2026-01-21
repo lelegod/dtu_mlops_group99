@@ -27,5 +27,5 @@ images:
 substitutions:
   _REGION: europe-west1 
 
-  options:
+options:
   logging: CLOUD_LOGGING_ONLY
