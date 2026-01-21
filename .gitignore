@@ -7,6 +7,9 @@ __pycache__/
 .ipynb_checkpoints/
 .coverage
 
+# Logs
+reports/*.log
+
 # Models
 models/*.json
 
