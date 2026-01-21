@@ -10,8 +10,7 @@ COPY data/raw.dvc data/raw.dvc
 COPY data/processed.dvc data/processed.dvc
 COPY pyproject.toml requirements.txt ./
 
-RUN pip install --no-cache-dir "dvc[gs]" && \
-    dvc init --no-scm -f
+RUN pip install --no-cache-dir "dvc[gs]"
 
 RUN pip install -r requirements.txt --no-cache-dir
 
