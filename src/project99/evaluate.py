@@ -1,13 +1,13 @@
 import os
-from loguru import logger
 from pathlib import Path
 
 import typer
 import xgboost as xgb
+from loguru import logger
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
 
-from project99.logging_utils import setup_logging
 from project99.data import tennis_data
+from project99.logging_utils import setup_logging
 
 setup_logging(log_file="reports/eval.log")
 

@@ -1,20 +1,20 @@
 import os
-from loguru import logger
 from contextlib import asynccontextmanager
 from io import StringIO
 
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from google.cloud import storage
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from google.cloud import storage
+from loguru import logger
 from pydantic import BaseModel
 
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
+from project99.logging_utils import setup_logging
 from project99.preprocess import input_preprocessing
 from project99.type import BatchPredictionResponse, HealthResponse, ModelInfoResponse, PredictionResponse, RawPointInput
-from project99.logging_utils import setup_logging
 
 model: xgb.XGBClassifier | None = None
 
