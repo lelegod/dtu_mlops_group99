@@ -29,9 +29,17 @@ jobs:
 
       - name: Install dependencies
         run: |
+          # Ensure pip/setuptools/wheel are up-to-date so build isolation works correctly
+          python -m pip install --upgrade pip setuptools wheel
+
+          # Install matplotlib early and prefer binary wheels (avoids building from source)
+          # Pin if you want a specific version (example: matplotlib==3.7.2)
+          pip install --prefer-binary matplotlib
+
+          # Now install repo requirements and dvc; installing matplotlib first avoids a source build
           pip install -r requirements.txt
           pip install -r requirements_dev.txt
-          pip install dvc[gs] matplotlib typer cml
+          pip install --prefer-binary dvc[gs] typer cml
 
       - name: Auth with GCP
         uses: google-github-actions/auth@v2
