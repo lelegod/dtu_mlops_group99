@@ -17,6 +17,9 @@ on:
 jobs:
   run_data_checker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
