@@ -16,6 +16,7 @@ def mock_model():
     api.model = fake_model
     yield fake_model
 
+
 client = TestClient(api.app)
 
 
@@ -62,7 +63,7 @@ def test_predict_endpoint_valid_input():
         "P2SetsWon": 0,
         "P2Score": "15",
         "P2PointsWon": 10,
-        "P2Momentum": -1
+        "P2Momentum": -1,
     }
 
     response = client.post("/predict", json=valid_input)
@@ -93,7 +94,7 @@ def test_predict_endpoint_invalid_input():
         "P2SetsWon": 0,
         "P2Score": "15",
         "P2PointsWon": 10,
-        "P2Momentum": -1
+        "P2Momentum": -1,
     }
 
     response = client.post("/predict", json=invalid_input)

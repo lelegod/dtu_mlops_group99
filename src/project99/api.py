@@ -20,6 +20,7 @@ model: xgb.XGBClassifier | None = None
 
 setup_logging(log_file="reports/api.log")
 
+
 def download_model_from_gcs(gcs_path: str, local_path: str) -> bool:
     try:
         path_parts = gcs_path[5:].split("/", 1)
@@ -66,18 +67,21 @@ async def lifespan(app: FastAPI):
     if model is not None:
         del model
 
+
 app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Edit later
+    allow_origins=["*"],  # Edit later
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def root():
     return {"status": "Project 99 API is running"}
+
 
 @app.post("/predict")
 def predict(input_data: RawPointInput, response_model=PredictionResponse):
@@ -91,20 +95,19 @@ def predict(input_data: RawPointInput, response_model=PredictionResponse):
         prediction = model.predict(features)
         probability = model.predict_proba(features)
 
-        return PredictionResponse(
-            prediction=int(prediction[0]),
-            probability=float(probability[0][1])
-        )
+        return PredictionResponse(prediction=int(prediction[0]), probability=float(probability[0][1]))
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @app.get("/health")
 def health_check(response_model=HealthResponse):
     return HealthResponse(
         status="healthy" if model is not None else "unhealthy",
         model_loaded=model is not None,
-        model_path=LOCAL_MODEL_PATH if model is not None else None
+        model_path=LOCAL_MODEL_PATH if model is not None else None,
     )
+
 
 @app.get("/model/info")
 def model_info(response_model=ModelInfoResponse):
@@ -117,34 +120,43 @@ def model_info(response_model=ModelInfoResponse):
         model_loaded=True,
         model_path=LOCAL_MODEL_PATH,
         feature_count=len(feature_names),
-        feature_names=feature_names
+        feature_names=feature_names,
     )
+
 
 @app.post("/predict/batch", response_model=BatchPredictionResponse)
 async def predict_batch(file: UploadFile = File(...)):
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
-    if not file.filename.endswith('.csv'):
+    if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="File must be a CSV")
 
     required_columns = [
-        'PointServer', 'P1Score', 'P2Score', 'P1GamesWon', 'P2GamesWon',
-        'P1PointsWon', 'P2PointsWon', 'P1SetsWon', 'P2SetsWon',
-        'SetNo', 'GameNo', 'PointNumber', 'ServeIndicator',
-        'P1Momentum', 'P2Momentum'
+        "PointServer",
+        "P1Score",
+        "P2Score",
+        "P1GamesWon",
+        "P2GamesWon",
+        "P1PointsWon",
+        "P2PointsWon",
+        "P1SetsWon",
+        "P2SetsWon",
+        "SetNo",
+        "GameNo",
+        "PointNumber",
+        "ServeIndicator",
+        "P1Momentum",
+        "P2Momentum",
     ]
 
     try:
         contents = await file.read()
-        df = pd.read_csv(StringIO(contents.decode('utf-8')))
+        df = pd.read_csv(StringIO(contents.decode("utf-8")))
 
         missing_cols = [col for col in required_columns if col not in df.columns]
         if missing_cols:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Missing required columns: {', '.join(missing_cols)}"
-            )
+            raise HTTPException(status_code=400, detail=f"Missing required columns: {', '.join(missing_cols)}")
 
         prediction_values = []
         probability_values = []
@@ -163,16 +175,13 @@ async def predict_batch(file: UploadFile = File(...)):
             probability_values.append(prob_val)
 
         df_with_predictions = df.copy()
-        df_with_predictions['Prediction'] = prediction_values
-        df_with_predictions['Probability'] = probability_values
+        df_with_predictions["Prediction"] = prediction_values
+        df_with_predictions["Probability"] = probability_values
 
         csv_output = StringIO()
         df_with_predictions.to_csv(csv_output, index=False)
         csv_string = csv_output.getvalue()
 
-        return BatchPredictionResponse(
-            total_predictions=len(prediction_values),
-            csv_with_predictions=csv_string
-        )
+        return BatchPredictionResponse(total_predictions=len(prediction_values), csv_with_predictions=csv_string)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error processing CSV: {str(e)}")

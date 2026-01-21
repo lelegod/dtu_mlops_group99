@@ -9,11 +9,7 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 def get_prediction(point_data: dict) -> dict:
     try:
-        response = requests.post(
-            f"{BACKEND_URL}/predict",
-            json=point_data,
-            timeout=10
-        )
+        response = requests.post(f"{BACKEND_URL}/predict", json=point_data, timeout=10)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.ConnectionError:
@@ -25,13 +21,10 @@ def get_prediction(point_data: dict) -> dict:
 
 
 def main():
-    st.set_page_config(
-        page_title="Tennis Point Predictor",
-        page_icon="🎾",
-        layout="wide"
-    )
+    st.set_page_config(page_title="Tennis Point Predictor", page_icon="🎾", layout="wide")
 
-    st.markdown("""
+    st.markdown(
+        """
         <style>
         .main-header {
             font-size: 3rem;
@@ -72,7 +65,9 @@ def main():
             background: linear-gradient(135deg, #1B5E20, #2E7D32);
         }
         </style>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     st.markdown('<p class="main-header">🎾 Tennis Point Predictor</p>', unsafe_allow_html=True)
     st.markdown('<p class="sub-header">Predict whether the server will win the point</p>', unsafe_allow_html=True)
@@ -89,9 +84,7 @@ def main():
         st.subheader("🎯 Serve Info")
         point_server = st.radio("Who is Serving?", options=[1, 2], format_func=lambda x: f"Player {x}")
         serve_indicator = st.radio(
-            "Serve Type",
-            options=[1, 2],
-            format_func=lambda x: "First Serve" if x == 1 else "Second Serve"
+            "Serve Type", options=[1, 2], format_func=lambda x: "First Serve" if x == 1 else "Second Serve"
         )
 
     with col2:
@@ -128,7 +121,7 @@ def main():
             "P2SetsWon": p2_sets_won,
             "P2Score": p2_score,
             "P2PointsWon": p2_points_won,
-            "P2Momentum": p2_momentum
+            "P2Momentum": p2_momentum,
         }
 
         with st.spinner("Predicting..."):
