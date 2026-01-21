@@ -58,7 +58,12 @@ def train(cfg: DictConfig):
         },
     )
 
-    (X_train, y_train), (X_test, y_test) = tennis_data(data_type='numpy')
+    try:
+        (X_train, y_train), (X_test, y_test) = tennis_data(data_type='numpy')
+        logger.info(f"Data shapes - X_train: {X_train.shape}, X_test: {X_test.shape}")
+    except Exception as e:
+        logger.error(f"Error loading tennis data: {e}")
+        raise
     X_train, X_val, y_train, y_val = train_test_split(
         X_train, y_train,
         test_size=cfg.data.test_size,

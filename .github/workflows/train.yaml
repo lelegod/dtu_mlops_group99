@@ -32,4 +32,5 @@ jobs:
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
           WANDB_PROJECT: project99
         run: |
+          export HYDRA_FULL_ERROR=1
           python3 -m project99.train
