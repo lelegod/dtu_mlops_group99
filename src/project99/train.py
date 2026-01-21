@@ -43,7 +43,7 @@ def train(cfg: DictConfig):
 
     run = wandb.init(
         project=os.getenv("WANDB_PROJECT", "project99"),
-        entity=os.getenv("WANDB_ENTITY"),
+        entity=os.getenv("WANDB_ENTITY", "dtu_mlops_group99"),
         config={
             "data": {
                 "test_size": float(cfg.data.test_size),
