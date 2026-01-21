@@ -27,6 +27,10 @@ jobs:
           pip install -r requirements_dev.txt
           pip install -e .
 
+      - name: Prepare Data
+        run: |
+          python3 -m project99.prepare_data
+
       - name: Train model
         env:
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
