@@ -39,7 +39,6 @@ jobs:
           # Now install repo requirements and dvc; installing matplotlib first avoids a source build
           pip install -r requirements.txt
           pip install -r requirements_dev.txt
-          pip install cml
 
       - name: Auth with GCP
         uses: google-github-actions/auth@v2
