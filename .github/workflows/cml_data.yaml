@@ -1,0 +1,47 @@
+name: CML Data Check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "**/*.dvc"
+      - ".dvc/**"
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "**/*.dvc"
+      - ".dvc/**"
+
+jobs:
+  run_data_checker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements_dev.txt
+          pip install dvc[gs] matplotlib typer cml
+
+      - name: Auth with GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Pull data with DVC
+        run: |
+          dvc pull --no-run-cache
+
+      - name: Run dataset statistics
+        run: |
+          python dataset_statistics.py
