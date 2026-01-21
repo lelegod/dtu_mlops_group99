@@ -5,6 +5,7 @@ RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc curl && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
+COPY .git .git
 COPY .dvc .dvc
 COPY data/raw.dvc data/raw.dvc
 COPY data/processed.dvc data/processed.dvc
