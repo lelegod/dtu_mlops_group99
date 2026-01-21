@@ -32,7 +32,7 @@ jobs:
 
       - name: Pull data with DVC
         run: |
-          dvc pull --no-run-cache
+          dvc pull
 
       - name: Train model
         env:
