@@ -1,0 +1,77 @@
+name: CML Data Check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "**/*.dvc"
+      - ".dvc/**"
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "**/*.dvc"
+      - ".dvc/**"
+
+jobs:
+  run_data_checker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          # Ensure pip/setuptools/wheel are up-to-date so build isolation works correctly
+          python -m pip install --upgrade pip setuptools wheel
+
+          # Install matplotlib early and prefer binary wheels (avoids building from source)
+          # Pin if you want a specific version (example: matplotlib==3.7.2)
+          pip install --prefer-binary matplotlib
+
+          # Now install repo requirements and dvc; installing matplotlib first avoids a source build
+          pip install -r requirements.txt
+          pip install -r requirements_dev.txt
+          pip install -e .
+
+      - name: Auth with GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Pull data with DVC
+        run: |
+          dvc pull --no-run-cache
+
+      - name: Run dataset statistics
+        run: |
+          python -m project99.dataset_statistics
+
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
+
+      - name: Check data statistics & generate report
+        run: |
+          python -m project99.dataset_statistics > report.md
+          echo "" >> report.md
+          echo "## Figures" >> report.md
+          echo "" >> report.md
+          echo '![](./reports/train_label_distribution.png "Train label distribution")' >> report.md
+          echo '![](./reports/test_label_distribution.png "Test label distribution")' >> report.md
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create report.md --watermark-title="Data Checker"
