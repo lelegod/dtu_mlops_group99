@@ -45,3 +45,22 @@ jobs:
       - name: Run dataset statistics
         run: |
           python dataset_statistics.py
+
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
+
+      - name: Check data statistics & generate report
+        run: |
+          python dataset_statistics.py > report.md
+          echo "" >> report.md
+          echo "## Figures" >> report.md
+          echo "" >> report.md
+          echo '![](./reports/train_label_distribution.png "Train label distribution")' >> report.md
+          echo '![](./reports/test_label_distribution.png "Test label distribution")' >> report.md
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create report.md --watermark-title="Data Checker"
