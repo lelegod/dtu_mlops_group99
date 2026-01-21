@@ -21,4 +21,4 @@ COPY tests/ tests/
 
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["sh", "-c", "dvc pull && python -u src/project99/train.py"]
+ENTRYPOINT ["sh", "-c", "dvc remote add -d storage gs://dtu-mlops-group99-data -f && dvc pull && python -u src/project99/train.py"]
