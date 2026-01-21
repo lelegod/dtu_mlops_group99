@@ -7,6 +7,10 @@ steps:
     id: 'Build API Image'
     args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest', '-f', 'dockerfiles/api.dockerfile', '.']
 
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Frontend Image'
+    args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest', '-f', 'dockerfiles/frontend.dockerfile', '.']
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Trigger Training'
     entrypoint: 'bash'
@@ -90,6 +94,7 @@ steps:
 images:
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
+  - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
