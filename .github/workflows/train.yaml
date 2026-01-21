@@ -29,7 +29,7 @@ jobs:
 
       - name: Prepare Data
         run: |
-          python3 -m project99.prepare_data
+          python3 -m project99.preprocess
 
       - name: Train model
         env:
