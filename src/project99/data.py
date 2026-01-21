@@ -7,7 +7,14 @@ import typer
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+# Robust path detection
+# If /app exists, we are in the Docker container
+IF_CONTAINER = Path("/app")
+if IF_CONTAINER.exists():
+    PROJECT_ROOT = IF_CONTAINER
+else:
+    # Fallback for local development (assumes src/project99/data.py)
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 class TennisDataProcessor:
     def __init__(self, data_path: Path) -> None:
@@ -166,19 +173,25 @@ class TennisDataProcessor:
         test_file = output_folder/'test_set.csv'
         test_df.to_csv(test_file, index=False)
 
-def preprocess(data_path: Path, output_folder: Path) -> None:
+def preprocess_cli(data_path: Path, output_folder: Path) -> None:
     dataset = TennisDataProcessor(data_path)
     dataset.preprocess(output_folder)
 
 def tennis_data(
         data_type: str = 'torch'
-        ) -> tuple[TensorDataset, TensorDataset] |tuple[tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray]]:
+    ) -> tuple[TensorDataset, TensorDataset] | tuple[tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray]]:
     
+    # Define primary paths based on detected project root
     train_file = PROJECT_ROOT / 'data' / 'processed' / 'train_set.csv'
     test_file = PROJECT_ROOT / 'data' / 'processed' / 'test_set.csv'
 
+    # Check existence; fall back to relative path if absolute fails (good for local scripts)
     if not train_file.exists() or not test_file.exists():
-        raise FileNotFoundError(f"Processed data files not found at {train_file.absolute()}")
+        train_file = Path("data/processed/train_set.csv")
+        test_file = Path("data/processed/test_set.csv")
+        
+        if not train_file.exists():
+            raise FileNotFoundError(f"Processed data files not found. Checked: {PROJECT_ROOT}/data/processed/")
 
     train_df = pd.read_csv(train_file)
     test_df = pd.read_csv(test_file)
@@ -204,4 +217,4 @@ def tennis_data(
         raise ValueError(f'Unsupported data_type: {data_type}.')
 
 if __name__ == "__main__":
-    typer.run(preprocess)
+    typer.run(preprocess_cli)
