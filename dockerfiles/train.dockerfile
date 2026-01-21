@@ -7,11 +7,11 @@ RUN apt update && \
 
 RUN pip install --no-cache-dir "dvc[gs]"
 
-COPY .dvc/ .dvc/
+RUN dvc init --no-scm -f
+RUN dvc remote add -d storage gs://dtu-mlops-group99-data
+
 COPY data/raw.dvc data/raw.dvc
 COPY data/processed.dvc data/processed.dvc
-
-RUN dvc init --no-scm -f
 
 COPY pyproject.toml requirements.txt ./
 RUN pip install -r requirements.txt --no-cache-dir
