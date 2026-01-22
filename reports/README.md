@@ -414,6 +414,8 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 
 ![Buckets](figures/Buckets.png)
 
+![buckets_2](figures/buckets_2.png)
+
 
 ### Question 20 (akash)
 
