@@ -1,4 +1,4 @@
-from google.cloud import aiplatform
+from google.cloud import aiplatform  # type: ignore
 
 BUCKET_NAME = "gs://dtu-mlops-group99-data"
 

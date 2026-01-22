@@ -22,7 +22,7 @@ CONFIGS_DIR = Path(__file__).resolve().parents[2] / "configs"
 
 def upload_to_gcs(local_path: str, gcs_path: str):
     try:
-        from google.cloud import storage
+        from google.cloud import storage  # type: ignore
 
         path_parts = gcs_path[5:].split("/", 1)
         bucket_name = path_parts[0]
@@ -49,7 +49,7 @@ def train(cfg: DictConfig):
 
     run = wandb.init(
         project=os.getenv("WANDB_PROJECT", "project99"),
-        mode=wandb_mode,
+        mode=str(wandb_mode),
         config={
             "data": {
                 "test_size": float(cfg.data.test_size),
@@ -66,7 +66,7 @@ def train(cfg: DictConfig):
     )
 
     try:
-        (X_train, y_train), (X_test, y_test) = tennis_data(data_type="numpy")
+        (X_train, y_train), (X_test, y_test) = tennis_data(data_type="numpy")  # type: ignore
         logger.info(f"Data shapes - X_train: {X_train.shape}, X_test: {X_test.shape}")
     except Exception as e:
         logger.error(f"Error loading tennis data: {e}")

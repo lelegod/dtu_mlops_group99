@@ -6,7 +6,7 @@ import pandas as pd
 import torch
 import typer
 from loguru import logger
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split  # type: ignore
 from torch.utils.data import TensorDataset
 
 from project99.logging_utils import setup_logging
@@ -69,7 +69,7 @@ class TennisDataProcessor:
         df[f"ServerScore"] = np.where(df["PointServer"] == 1, df["PrevP1Score"], df["PrevP2Score"])
         df[f"ReceiverScore"] = np.where(df["PointServer"] == 1, df["PrevP2Score"], df["PrevP1Score"])
 
-        def map_score(score: str | int) -> int:
+        def map_score(score: str | int) -> int | float:
             regular_score_map = {"0": 0, "15": 1, "30": 2, "40": 3, "AD": 4, 0: 0, 15: 1, 30: 2, 40: 3}
             if score in regular_score_map:
                 return regular_score_map[score]
