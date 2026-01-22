@@ -185,7 +185,7 @@ will check the repositories and the code to verify your answers.
 
 From the cookiecutter template we have filled out the .github/ for CI/CD workflows, configs/ for Hydra model configurations, dockerfiles/ for different docker files, docs/ for project documentation, models/ for model storage, src/project99/ for the main Python modules, tests/ for unit and integration tests. We have removed the notebooks/ because we did not use any jupyter notebooks in our project. We have added .dvc/ and data/ for DVC tracked datasets, reports/ for final exam report, cloudbuild.yaml for GCP cloud build config, requirements_frontend.txt for minimal Streamlit frontend dependencies.
 
-### Question 6 (akash)
+### Question 6 (kyle)
 
 > **Did you implement any rules for code quality and format? What about typing and documentation? Additionally,**
 > **explain with your own words why these concepts matters in larger projects.**
@@ -200,7 +200,12 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 
 Answer:
 
-We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the starndard code format from being committed.
+We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed.
+
+These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability. 
+
+#Todo: docs
+
 
 ## Version control
 
