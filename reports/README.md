@@ -418,9 +418,7 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
-> Answer:
->
-![artifact_registry_1](artifact_registry_1.png)
+> Answer:![artifact_registry_1](figures/artifact_registry_1.png)
 --- question 20 fill here ---
 
 ### Question 21 (akash)
