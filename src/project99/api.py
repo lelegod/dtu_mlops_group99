@@ -18,12 +18,15 @@ from project99.preprocess import input_preprocessing
 from project99.type import BatchPredictionResponse, HealthResponse, ModelInfoResponse, PredictionResponse, RawPointInput
 
 model: xgb.XGBClassifier | None = None
+
+
 class VertexRequest(BaseModel):
     instances: List[RawPointInput]
 
 
 class VertexResponse(BaseModel):
     predictions: List[PredictionResponse]
+
 
 setup_logging(log_file="reports/api.log")
 
