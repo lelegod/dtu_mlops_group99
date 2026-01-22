@@ -53,16 +53,12 @@ jobs:
         run: |
           dvc pull --no-run-cache
 
-      - name: Run dataset statistics
-        run: |
-          python -m project99.dataset_statistics
-
       - name: Setup CML
         uses: iterative/setup-cml@v2
 
-      - name: Check data statistics & generate report
+      - name: Run dataset statistics & generate report
         run: |
-          python -m project99.dataset_statistics > report.md
+          python -m project99.dataset_statistics | tee report.md
           echo "" >> report.md
           echo "## Figures" >> report.md
           echo "" >> report.md
