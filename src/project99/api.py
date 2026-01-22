@@ -95,6 +95,17 @@ def root():
 
 @app.post("/predict", response_model=VertexResponse)
 def predict(request: VertexRequest):
+    """Predict tennis point outcomes.
+
+    Args:
+        request: VertexRequest containing list of point instances.
+
+    Returns:
+        VertexResponse with predictions and probabilities.
+
+    Raises:
+        HTTPException: 503 if model not loaded, 400 if prediction fails.
+    """
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
@@ -117,6 +128,11 @@ def predict(request: VertexRequest):
 
 @app.get("/health", response_model=HealthResponse)
 def health_check():
+    """Check API health status.
+
+    Returns:
+        HealthResponse with status, model_loaded flag, and model_path.
+    """
     return HealthResponse(
         status="healthy" if model is not None else "unhealthy",
         model_loaded=model is not None,
@@ -126,6 +142,14 @@ def health_check():
 
 @app.get("/model/info", response_model=ModelInfoResponse)
 def model_info():
+    """Get information about the loaded model.
+
+    Returns:
+        ModelInfoResponse with model type, feature count, and feature names.
+
+    Raises:
+        HTTPException: 503 if model not loaded.
+    """
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
@@ -141,6 +165,17 @@ def model_info():
 
 @app.post("/predict/batch", response_model=BatchPredictionResponse)
 async def predict_batch(file: UploadFile = File(...)):
+    """Batch predict from uploaded CSV file.
+
+    Args:
+        file: CSV file with required point columns.
+
+    Returns:
+        BatchPredictionResponse with total count and CSV with predictions.
+
+    Raises:
+        HTTPException: 503 if model not loaded, 400 if file invalid.
+    """
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 

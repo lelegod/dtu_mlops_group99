@@ -19,3 +19,4 @@ models/*.json
 
 # MacOS
 .DS_Store
+docs/site/

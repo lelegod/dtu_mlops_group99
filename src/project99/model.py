@@ -3,9 +3,16 @@ from omegaconf import DictConfig
 
 
 def model(cfg: DictConfig) -> xgb.XGBClassifier:
-    """Create XGBoost classifier from config.
+    """Create an XGBoost classifier from a Hydra configuration.
+
+    Initializes an XGBClassifier with hyperparameters specified in the config file.
+
     Args:
-        cfg: Hydra config containing model parameters
+        cfg: Hydra DictConfig containing model parameters under `model.params`.
+            Expected keys: max_depth, learning_rate, n_estimators, objective, eval_metric.
+
+    Returns:
+        Configured XGBClassifier instance ready for training.
     """
     model = xgb.XGBClassifier(
         max_depth=cfg.model.params.max_depth,
