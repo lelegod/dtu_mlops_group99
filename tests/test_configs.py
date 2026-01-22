@@ -9,17 +9,11 @@ def test_config_composes_and_has_expected_fields():
     assert "model" in cfg, "Config missing required top-level section 'model'."
 
     # data section
-    assert cfg.data.test_size == 0.2, (
-        f"Expected cfg.data.test_size == 0.2, got {cfg.data.test_size}"
-    )
-    assert cfg.data.random_state == 42, (
-        f"Expected cfg.data.random_state == 42, got {cfg.data.random_state}"
-    )
+    assert cfg.data.test_size == 0.2, f"Expected cfg.data.test_size == 0.2, got {cfg.data.test_size}"
+    assert cfg.data.random_state == 42, f"Expected cfg.data.random_state == 42, got {cfg.data.random_state}"
 
     # model section
-    assert cfg.model.name == "xgboost", (
-        f"Expected model name 'xgboost', got '{cfg.model.name}'"
-    )
+    assert cfg.model.name == "xgboost", f"Expected model name 'xgboost', got '{cfg.model.name}'"
     assert "params" in cfg.model, "Model config missing 'params' section."
     assert cfg.model.params.objective == "binary:logistic", (
         f"Expected objective 'binary:logistic', got {cfg.model.params.objective}"

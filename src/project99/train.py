@@ -1,18 +1,18 @@
 import os
-import wandb
-from dotenv import load_dotenv
 from pathlib import Path
-from loguru import logger
 
 import hydra
+import wandb
+from dotenv import load_dotenv
+from loguru import logger
 from omegaconf import DictConfig
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
 
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
 from project99.data import tennis_data
-from project99.model import model
 from project99.logging_utils import setup_logging
+from project99.model import model
 
 setup_logging(log_file="reports/app.log")
 load_dotenv()
@@ -35,14 +35,21 @@ def upload_to_gcs(local_path: str, gcs_path: str):
         blob.upload_from_filename(local_path)
         logger.info(f"Model uploaded to {gcs_path}")
     except Exception as e:
-        logger.warning(f"Failed to upload model to GCS: {e}")
+        logger.error(f"Failed to upload model to GCS: {e}")
+        raise e
+
 
 @hydra.main(version_base=None, config_path=str(CONFIGS_DIR), config_name="config")
 def train(cfg: DictConfig):
     logger.info("Started training")
 
+    wandb_mode = "online" if os.getenv("WANDB_API_KEY") else "disabled"
+    if wandb_mode == "disabled":
+        logger.warning("WANDB_API_KEY not found. Running WandB in disabled mode.")
+
     run = wandb.init(
         project=os.getenv("WANDB_PROJECT", "project99"),
+        mode=wandb_mode,
         config={
             "data": {
                 "test_size": float(cfg.data.test_size),
@@ -59,20 +66,19 @@ def train(cfg: DictConfig):
     )
 
     try:
-        (X_train, y_train), (X_test, y_test) = tennis_data(data_type='numpy')
+        (X_train, y_train), (X_test, y_test) = tennis_data(data_type="numpy")
         logger.info(f"Data shapes - X_train: {X_train.shape}, X_test: {X_test.shape}")
     except Exception as e:
         logger.error(f"Error loading tennis data: {e}")
         raise
     X_train, X_val, y_train, y_val = train_test_split(
-        X_train, y_train,
-        test_size=cfg.data.test_size,
-        random_state=cfg.data.random_state
+        X_train, y_train, test_size=cfg.data.test_size, random_state=cfg.data.random_state
     )
     logger.info("Training XGBoost model")
     xgb_model = model(cfg)
     xgb_model.fit(
-        X_train, y_train,
+        X_train,
+        y_train,
         eval_set=[(X_val, y_val)],
         verbose=100,
     )
@@ -102,6 +108,7 @@ def train(cfg: DictConfig):
     run.log_artifact(artifact)
 
     run.finish()
+
 
 if __name__ == "__main__":
     train()
