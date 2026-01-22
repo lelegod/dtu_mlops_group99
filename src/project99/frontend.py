@@ -2,7 +2,7 @@ import os
 
 import google.auth  # type: ignore
 import google.auth.transport.requests  # type: ignore
-import requests
+import requests  # type: ignore
 import streamlit as st  # type: ignore
 
 # Configuration

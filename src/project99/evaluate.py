@@ -4,7 +4,7 @@ from pathlib import Path
 import typer
 import xgboost as xgb
 from loguru import logger
-from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score  # type: ignore
+from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score  # type: ignore  # type: ignore
 
 from project99.data import tennis_data
 from project99.logging_utils import setup_logging

@@ -49,7 +49,7 @@ def train(cfg: DictConfig):
 
     run = wandb.init(
         project=os.getenv("WANDB_PROJECT", "project99"),
-        mode=str(wandb_mode),
+        mode=str(wandb_mode),  # type: ignore
         config={
             "data": {
                 "test_size": float(cfg.data.test_size),

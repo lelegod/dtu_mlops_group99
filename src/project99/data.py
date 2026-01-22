@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore
 import torch
 import typer
 from loguru import logger

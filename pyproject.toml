@@ -34,3 +34,6 @@ ignore = ["N806"] # Allow uppercase variable names
 
 [tool.coverage.run]
 omit = ["tests/*"]
+
+[tool.mypy]
+exclude = ["reports"]

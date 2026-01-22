@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pandas as pd
+import pandas as pd  # type: ignore
 import torch
 from torch import Tensor
 from torch.utils.data import Dataset

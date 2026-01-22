@@ -4,7 +4,7 @@ from io import StringIO
 from typing import List
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore
 import xgboost as xgb
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
