@@ -9,10 +9,24 @@ import streamlit as st  # type: ignore
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 
+def get_auth_headers() -> dict:
+    if "googleapis.com" not in BACKEND_URL:
+        return {}
+
+    try:
+        creds, project = google.auth.default()
+        auth_req = google.auth.transport.requests.Request()
+        creds.refresh(auth_req)
+        return {"Authorization": f"Bearer {creds.token}"}
+    except Exception as e:
+        st.error(f"Auth failed: {e}")
+        return {}
+
+
 def get_prediction(point_data: dict) -> dict | None:
     payload = {"instances": [point_data]}
 
-    headers = {}
+    headers = get_auth_headers()
     is_vertex = "googleapis.com" in BACKEND_URL
     url = str(BACKEND_URL)
 
@@ -198,13 +212,17 @@ def main():
         """)
 
         try:
-            health = requests.get(f"{BACKEND_URL}/health", timeout=5)
-            if health.status_code == 200:
-                st.success("✅ Backend connected")
+            if "googleapis.com" not in BACKEND_URL:
+                health = requests.get(f"{BACKEND_URL}/health", timeout=5)
+                if health.status_code == 200:
+                    st.success("✅ Backend connected")
+                else:
+                    st.warning("⚠️ Backend responding but unhealthy")
             else:
-                st.warning("⚠️ Backend responding but unhealthy")
+                st.info("ℹ️ Using Vertex AI Backend")
         except Exception:
-            st.error("❌ Backend not connected")
+            if "googleapis.com" not in BACKEND_URL:
+                st.error("❌ Backend not connected")
 
 
 if __name__ == "__main__":
