@@ -3,8 +3,6 @@ import datetime
 import json
 from contextlib import asynccontextmanager
 
-import numpy as np
-import pandas as pd
 import xgboost as xgb
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,9 +13,8 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
 from project99.logging_utils import setup_logging
 from project99.preprocess import input_preprocessing
-from project99.type import PredictionResponse, RawPointInput
+from project99.type import PredictionResponse, RawPointInput, HealthResponse
 
-# Prometheus metrics
 REQUEST_COUNT = Counter("http_requests_total", "Total HTTP Requests", ["method", "endpoint", "http_status"])
 PREDICTION_LATENCY = Histogram("prediction_latency_seconds", "Time spent processing prediction")
 MONITORING_BUCKET = "dtumlopsgroup99-monitoring"
@@ -70,7 +67,7 @@ async def lifespan(app: FastAPI):
     if model is not None:
         del model
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, docs_url="/docs", redoc_url="/redoc")
 
 app.add_middleware(
     CORSMiddleware,
@@ -81,13 +78,17 @@ app.add_middleware(
 
 @app.get("/metrics")
 def metrics():
-    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
-@app.get("/")
+@app.get("/", response_model=HealthResponse)
 def root():
-    return {"status": "Project 99 API is running"}
+    return HealthResponse(
+        status="Project 99 API is running",
+        model_loaded=(model is not None),
+        model_path=GCS_MODEL_PATH
+    )
 
-@app.post("/predict")
+@app.post("/predict", response_model=PredictionResponse)
 def predict(input_data: RawPointInput):
     if model is None:
         REQUEST_COUNT.labels(method="POST", endpoint="/predict", http_status="503").inc()
@@ -95,21 +96,16 @@ def predict(input_data: RawPointInput):
     
     with PREDICTION_LATENCY.time():
         try:
-            # Preprocess and Predict
             raw_point = input_data.model_dump()
             features = input_preprocessing(raw_point)
             
-            prediction = model.predict(features)[0]
-            probability = model.predict_proba(features)[0].max()
+            prediction = int(model.predict(features)[0])
+            probability = float(model.predict_proba(features)[0].max())
 
-            # Monitoring
-            log_prediction_data(raw_point, int(prediction), float(probability))
+            log_prediction_data(raw_point, prediction, probability)
             REQUEST_COUNT.labels(method="POST", endpoint="/predict", http_status="200").inc()
             
-            return PredictionResponse(
-                prediction=int(prediction), 
-                probability=float(probability)
-            )
+            return PredictionResponse(prediction=prediction, probability=probability)
         except Exception as e:
             logger.error(f"Prediction error: {e}")
             REQUEST_COUNT.labels(method="POST", endpoint="/predict", http_status="400").inc()
