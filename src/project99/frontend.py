@@ -12,7 +12,7 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 def get_auth_headers() -> dict:
     if "googleapis.com" not in BACKEND_URL:
         return {}
-    
+
     try:
         creds, project = google.auth.default()
         auth_req = google.auth.transport.requests.Request()
@@ -25,7 +25,7 @@ def get_auth_headers() -> dict:
 
 def get_prediction(point_data: dict) -> dict | None:
     payload = {"instances": [point_data]}
-    
+
     headers = get_auth_headers()
     is_vertex = "googleapis.com" in BACKEND_URL
     url = str(BACKEND_URL)
@@ -219,7 +219,7 @@ def main():
                 else:
                     st.warning("⚠️ Backend responding but unhealthy")
             else:
-                 st.info("ℹ️ Using Vertex AI Backend")
+                st.info("ℹ️ Using Vertex AI Backend")
         except Exception:
             if "googleapis.com" not in BACKEND_URL:
                 st.error("❌ Backend not connected")

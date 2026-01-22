@@ -1,7 +1,9 @@
-from locust import HttpUser, task, between
+from urllib.parse import urlparse
+
 import google.auth
 import google.auth.transport.requests
-from urllib.parse import urlparse
+from locust import HttpUser, between, task
+
 
 class TennisUser(HttpUser):
     wait_time = between(1, 3)
@@ -9,11 +11,12 @@ class TennisUser(HttpUser):
     def on_start(self):
         if self.host and "googleapis.com" in self.host:
             import os
+
             access_token = os.environ.get("ACCESS_TOKEN")
             if access_token:
-                 self.client.headers["Authorization"] = f"Bearer {access_token}"
-                 print("Successfully attached Google Cloud credentials from env var.")
-                 return
+                self.client.headers["Authorization"] = f"Bearer {access_token}"
+                print("Successfully attached Google Cloud credentials from env var.")
+                return
 
             try:
                 creds, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
@@ -28,10 +31,10 @@ class TennisUser(HttpUser):
     def predict(self):
         # Local API uses /predict
         # Vertex AI uses POST https://.../endpoints/ID:predict
-        
+
         path = "/predict"
         if self.host and "googleapis.com" in self.host:
-             path = ":predict"
+            path = ":predict"
 
         response = self.client.post(
             path,
@@ -57,6 +60,6 @@ class TennisUser(HttpUser):
                 ]
             },
         )
-        
+
         if response.status_code != 200:
             print(f"Request failed with status {response.status_code}: {response.text}")
