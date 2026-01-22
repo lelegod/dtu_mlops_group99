@@ -418,8 +418,7 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
-> Answer:
-
+> Answer:![artifact_registry_!](artifact_registry_!.png)
 --- question 20 fill here ---
 
 ### Question 21 (akash)
@@ -427,7 +426,8 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 > **Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in**
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 >
-> Answer:
+> Answer:![cloudbuild_1](figures/cloudbuild_1.png)
+         ![cloudbuild_2](figures/cloudbuild_2.png)
 
 --- question 21 fill here ---
 
