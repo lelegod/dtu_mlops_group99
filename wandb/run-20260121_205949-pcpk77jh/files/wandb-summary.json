@@ -1,0 +1,1 @@
+{"_timestamp":1.7690255924591951e+09,"_step":0,"val/log_loss":0.6636457603088544,"val/brier_score":0.2350566525188449,"val/auc":0.5314147354028819,"val/accuracy":0.6245858408276421,"_wandb":{"runtime":5},"_runtime":5}

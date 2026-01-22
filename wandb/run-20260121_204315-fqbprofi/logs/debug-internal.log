@@ -1,0 +1,11 @@
+{"time":"2026-01-21T20:43:15.273022119+01:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-21T20:43:15.660736479+01:00","level":"INFO","msg":"stream: created new stream","id":"fqbprofi"}
+{"time":"2026-01-21T20:43:15.660883219+01:00","level":"INFO","msg":"handler: started","stream_id":"fqbprofi"}
+{"time":"2026-01-21T20:43:15.661716689+01:00","level":"INFO","msg":"stream: started","id":"fqbprofi"}
+{"time":"2026-01-21T20:43:15.661786869+01:00","level":"INFO","msg":"writer: started","stream_id":"fqbprofi"}
+{"time":"2026-01-21T20:43:15.661814039+01:00","level":"INFO","msg":"sender: started","stream_id":"fqbprofi"}
+{"time":"2026-01-21T20:43:16.069045589+01:00","level":"INFO","msg":"stream: closing","id":"fqbprofi"}
+{"time":"2026-01-21T20:43:16.971266469+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-21T20:43:17.220013869+01:00","level":"INFO","msg":"handler: closed","stream_id":"fqbprofi"}
+{"time":"2026-01-21T20:43:17.220160829+01:00","level":"INFO","msg":"sender: closed","stream_id":"fqbprofi"}
+{"time":"2026-01-21T20:43:17.220170729+01:00","level":"INFO","msg":"stream: closed","id":"fqbprofi"}

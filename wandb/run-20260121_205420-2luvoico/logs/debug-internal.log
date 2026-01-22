@@ -1,0 +1,12 @@
+{"time":"2026-01-21T20:54:21.092843265+01:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-21T20:54:21.610217705+01:00","level":"INFO","msg":"stream: created new stream","id":"2luvoico"}
+{"time":"2026-01-21T20:54:21.611202419+01:00","level":"INFO","msg":"handler: started","stream_id":"2luvoico"}
+{"time":"2026-01-21T20:54:21.611285292+01:00","level":"INFO","msg":"stream: started","id":"2luvoico"}
+{"time":"2026-01-21T20:54:21.611336773+01:00","level":"INFO","msg":"writer: started","stream_id":"2luvoico"}
+{"time":"2026-01-21T20:54:21.611376398+01:00","level":"INFO","msg":"sender: started","stream_id":"2luvoico"}
+{"time":"2026-01-21T20:54:31.149924378+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-21T20:54:31.374284228+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-01-21T20:54:31.381220828+01:00","level":"INFO","msg":"stream: closing","id":"2luvoico"}
+{"time":"2026-01-21T20:54:31.381372518+01:00","level":"INFO","msg":"handler: closed","stream_id":"2luvoico"}
+{"time":"2026-01-21T20:54:31.381626068+01:00","level":"INFO","msg":"sender: closed","stream_id":"2luvoico"}
+{"time":"2026-01-21T20:54:31.381646088+01:00","level":"INFO","msg":"stream: closed","id":"2luvoico"}
