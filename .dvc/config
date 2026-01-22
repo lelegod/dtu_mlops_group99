@@ -1,5 +1,5 @@
 [core]
     remote = storage
     autostage = true
-['remote "storage"']
+[remote "storage"]
     url = gs://dtu-mlops-group99-data

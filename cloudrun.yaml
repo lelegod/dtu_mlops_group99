@@ -1,0 +1,121 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Pull Cache'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker pull $_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest || exit 0
+        docker pull $_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest || exit 0
+        docker pull $_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest || exit 0
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Training Image'
+    args: 
+      - 'build'
+      - '-t' 
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
+      - '--cache-from'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
+      - '-f'
+      - 'dockerfiles/train.dockerfile'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build API Image'
+    args: 
+      - 'build'
+      - '-t'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
+      - '--cache-from'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
+      - '-f'
+      - 'dockerfiles/api.dockerfile'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Frontend Image'
+    args: 
+      - 'build'
+      - '-t'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
+      - '--cache-from'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
+      - '-f'
+      - 'dockerfiles/frontend.dockerfile'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Images'
+    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push API'
+    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Frontend'
+    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Trigger Training'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        set -e
+        JOB_NAME=$$(gcloud ai custom-jobs create \
+          --region=$_REGION \
+          --display-name=train-$BUILD_ID \
+          --worker-pool-spec=machine-type=n1-standard-4,container-image-uri=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest \
+          --format="value(name)")
+        
+        while true; do
+          STATE=$$(gcloud ai custom-jobs describe $$JOB_NAME --region=$_REGION --format="value(state)")
+          echo "Current Job State: $$STATE"
+          if [ "$$STATE" = "JOB_STATE_SUCCEEDED" ]; then
+            break
+          elif [ "$$STATE" = "JOB_STATE_FAILED" ] || [ "$$STATE" = "JOB_STATE_CANCELLED" ]; then
+            exit 1
+          fi
+          sleep 30
+        done
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy API'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'dtu-mlops-api'
+      - '--image=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
+      - '--region=$_REGION'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8000'
+      - '--memory=2Gi'
+      - '--cpu=2'
+      - '--timeout=300'
+      - '--cpu-boost'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy Frontend'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'dtu-mlops-frontend'
+      - '--image=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
+      - '--region=$_REGION'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8501'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: 7200s
+
+substitutions:
+  _REGION: europe-west1

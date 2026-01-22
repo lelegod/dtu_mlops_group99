@@ -1,7 +1,5 @@
-from typing import Literal
-
+from typing import Literal, List, Optional
 from pydantic import BaseModel, Field
-
 
 class RawPointInput(BaseModel):
     SetNo: int = Field(..., ge=1, le=5, description="Current set number (1-5)")
@@ -42,11 +40,12 @@ class RawPointInput(BaseModel):
         }
     }
 
+class VertexRequest(BaseModel):
+    instances: List[RawPointInput]
 
 class PredictionResponse(BaseModel):
     prediction: int = Field(..., description="0=Receiver wins, 1=Server wins")
     probability: float = Field(..., ge=0, le=1, description="Probability that server wins")
-
 
 class DetailedPredictionResponse(BaseModel):
     server_win_probability: float = Field(..., ge=0, le=1)
@@ -55,20 +54,17 @@ class DetailedPredictionResponse(BaseModel):
     server_player: Literal["Player 1", "Player 2"]
     processed_features: dict
 
-
 class HealthResponse(BaseModel):
     status: str
     model_loaded: bool
-    model_path: str | None = None
-
+    model_path: Optional[str] = None
 
 class ModelInfoResponse(BaseModel):
     model_type: str
     model_loaded: bool
-    model_path: str | None = None
+    model_path: Optional[str] = None
     feature_count: int
-    feature_names: list[str]
-
+    feature_names: List[str]
 
 class BatchPredictionResponse(BaseModel):
     total_predictions: int = Field(..., description="Total number of predictions made")

@@ -1,4 +1,5 @@
 from pathlib import Path
+from loguru import logger
 
 import numpy as np
 import pandas as pd
@@ -6,8 +7,17 @@ import torch
 import typer
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset
+from project99.logging_utils import setup_logging
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+IF_CONTAINER = Path("/app")
+if IF_CONTAINER.exists():
+    PROJECT_ROOT = IF_CONTAINER
+else:
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+log_path = Path("reports/data.log")
+log_path.parent.mkdir(parents=True, exist_ok=True)
+setup_logging(log_file=str(log_path))
 
 class TennisDataProcessor:
     def __init__(self, data_path: Path) -> None:
@@ -137,7 +147,7 @@ class TennisDataProcessor:
                 processed_df, tournament_name = self._process_single_tournament(match_file)
                 all_processed_dfs.append(processed_df)
             except Exception as e:
-                print(f"Error processing {match_file.stem}: {e}")
+                logger.warning(f"Error processing {match_file.stem}: {e}")
                 continue
 
         if not all_processed_dfs:

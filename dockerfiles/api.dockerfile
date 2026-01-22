@@ -5,17 +5,21 @@ RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc curl && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt requirements.txt
-COPY pyproject.toml pyproject.toml
-COPY README.md README.md
+COPY requirements.txt .
+COPY pyproject.toml .
+COPY README.md .
 
-RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the source code
 COPY src/ src/
 COPY configs/ configs/
 
-RUN pip install . --no-deps --no-cache-dir
+# Install the project in editable mode so project99 is a recognized module
+RUN pip install --no-cache-dir -e .
 
 EXPOSE 8000
 
-ENTRYPOINT ["uvicorn", "project99.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Ensure we point to the correct file name (api.py -> project99.api)
+# We use the $PORT variable provided by Cloud Run, defaulting to 8000
+ENTRYPOINT ["sh", "-c", "uvicorn project99.api:app --host 0.0.0.0 --port ${PORT:-8000}"]

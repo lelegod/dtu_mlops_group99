@@ -3,7 +3,22 @@ outputs/
 multirun/
 __pycache__/
 .ipynb_checkpoints/
+<<<<<<< HEAD
 # macOS
+=======
+.coverage
+
+# Logs
+reports/*.log
+
+# Models
+models/*.json
+
+# Egg info
+*.egg-info/
+
+# MacOS
+>>>>>>> 83f92532bde814889ea5cceaf8bbd210f26b912d
 .DS_Store
 **/.DS_Store
 
