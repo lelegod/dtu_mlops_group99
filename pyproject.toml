@@ -30,7 +30,7 @@ line-length = 120
 
 [tool.ruff.lint]
 select = ["I", "N", "E", "W", ]
-ignore = ["N806"] # Allow uppercase variable names
+ignore = ["N806", "N803"]
 
 [tool.coverage.run]
 omit = ["tests/*"]
