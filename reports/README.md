@@ -198,7 +198,9 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 6 fill here ---
+Answer:
+
+We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the starndard code format from being committed.
 
 ## Version control
 
@@ -401,7 +403,8 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 19 fill here ---
+![Buckets](figures/Buckets.png)
+
 
 ### Question 20 (akash)
 
