@@ -382,7 +382,14 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 > Example:
 > *We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...*
 >
-> Answer:
+> Answer:For this project we used the following services on GCP.
+Cloud Build: It was used for automating the pipeline
+Artifact Registry: It was used to store our Docker Images.
+Cloud Storage (GCS):We used this to store our data files in buckets.
+Vertex AI (Custom Training): We used this service to train our models by provisioning a VM. This service provides the heavy-duty computing power.
+Cloud Run: We used this for deploying our frontend.
+Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
+
 
 --- question 17 fill here ---
 
