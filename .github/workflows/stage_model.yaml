@@ -90,6 +90,12 @@ jobs:
           pip install -e .
           pip list
 
+      - name: Debug project import
+        run: |
+          python -c "import sys; print(sys.path)"
+          python -c "import project99; print('project99 loaded from:', project99.__file__)"
+          python -c "from project99.data import tennis_data; print('tennis_data import OK')"
+
       - name: Add production alias
         run: |
           python link_model.py $MODEL_NAME -a production
