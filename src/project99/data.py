@@ -224,7 +224,7 @@ def tennis_data(
 
         return train_dataset, test_dataset
     elif data_type == "numpy":
-        return (X_train, y_train), (X_test, y_test)
+        return (X_train, y_train), (X_test, y_test)  # type: ignore
     else:
         raise ValueError(f"Unsupported data_type: {data_type}.")
 
