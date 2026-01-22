@@ -42,8 +42,10 @@ def _load_xgb_model(model_file: Path) -> xgb.XGBClassifier:
 
 
 def test_model_speed():
-    model_name = os.getenv("MODEL_NAME", "")
-    assert model_name, "MODEL_NAME env var not set (expected W&B artifact path)"
+    model_name = os.getenv("MODEL_NAME")
+
+    if not model_name:
+        pytest.skip("MODEL_NAME not set (not running in CML context)")
 
     model_file = _download_wandb_artifact(model_name)
     clf = _load_xgb_model(model_file)
