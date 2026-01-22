@@ -30,8 +30,8 @@ def dataset_statistics(datadir: str = "data/processed") -> None:
     reports_dir.mkdir(exist_ok=True)
 
     # Class distribution
-    train_labels = torch.stack([y for _, y in train_ds])
-    test_labels = torch.stack([y for _, y in test_ds])
+    train_labels = torch.stack([y for _, y in train_ds])  # type: ignore
+    test_labels = torch.stack([y for _, y in test_ds])  # type: ignore
 
     plt.bar([0, 1], torch.bincount(train_labels, minlength=2))
     plt.title("Train label distribution")

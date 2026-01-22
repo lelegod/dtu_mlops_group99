@@ -2,11 +2,11 @@ import os
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore
 import torch
 import typer
 from loguru import logger
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split  # type: ignore
 from torch.utils.data import TensorDataset
 
 from project99.logging_utils import setup_logging
@@ -69,7 +69,7 @@ class TennisDataProcessor:
         df[f"ServerScore"] = np.where(df["PointServer"] == 1, df["PrevP1Score"], df["PrevP2Score"])
         df[f"ReceiverScore"] = np.where(df["PointServer"] == 1, df["PrevP2Score"], df["PrevP1Score"])
 
-        def map_score(score: str | int) -> int:
+        def map_score(score: str | int) -> int | float:
             regular_score_map = {"0": 0, "15": 1, "30": 2, "40": 3, "AD": 4, 0: 0, 15: 1, 30: 2, 40: 3}
             if score in regular_score_map:
                 return regular_score_map[score]
@@ -224,7 +224,7 @@ def tennis_data(
 
         return train_dataset, test_dataset
     elif data_type == "numpy":
-        return (X_train, y_train), (X_test, y_test)
+        return (X_train, y_train), (X_test, y_test)  # type: ignore
     else:
         raise ValueError(f"Unsupported data_type: {data_type}.")
 

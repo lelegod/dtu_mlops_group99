@@ -4,7 +4,7 @@ from pathlib import Path
 import typer
 import xgboost as xgb
 from loguru import logger
-from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
+from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score  # type: ignore  # type: ignore
 
 from project99.data import tennis_data
 from project99.logging_utils import setup_logging
@@ -12,7 +12,7 @@ from project99.logging_utils import setup_logging
 setup_logging(log_file="reports/eval.log")
 
 
-def evaluate(model_checkpoint: str = None) -> None:
+def evaluate(model_checkpoint: str | None = None) -> None:
     logger.info("Started evaluation...")
     if model_checkpoint is None:
         storage_path = os.getenv("AIP_MODEL_DIR")
@@ -23,7 +23,7 @@ def evaluate(model_checkpoint: str = None) -> None:
     logger.info(f"Loading model from: {model_checkpoint}")
     xgb_model = xgb.XGBClassifier()
     xgb_model.load_model(model_checkpoint)
-    (_, _), (X_test, y_test) = tennis_data(data_type="numpy")
+    (_, _), (X_test, y_test) = tennis_data(data_type="numpy")  # type: ignore
     y_prob = xgb_model.predict_proba(X_test)[:, 1]
     y_pred = xgb_model.predict(X_test)
     logger.info("Model performance on test set:")

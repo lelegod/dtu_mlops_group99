@@ -20,7 +20,7 @@ def setup_logging(
     level = level or os.getenv("LOGURU_LEVEL", "INFO")
 
     logger.remove()
-    logger.add(sys.stdout, level=level)
+    logger.add(sys.stdout, level=str(level))
 
     if log_file is not None:
         Path(log_file).parent.mkdir(parents=True, exist_ok=True)

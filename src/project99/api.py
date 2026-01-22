@@ -4,11 +4,11 @@ from io import StringIO
 from typing import List
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore
 import xgboost as xgb
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from google.cloud import storage
+from google.cloud import storage  # type: ignore
 from loguru import logger
 from pydantic import BaseModel
 
@@ -144,7 +144,7 @@ async def predict_batch(file: UploadFile = File(...)):
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
-    if not file.filename.endswith(".csv"):
+    if not file.filename or not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="File must be a CSV")
 
     required_columns = [

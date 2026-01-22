@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def map_score(score: str | int) -> int:
+def map_score(score: str | int) -> int | float:
     regular_score_map = {"0": 0, "15": 1, "30": 2, "40": 3, "AD": 4, 0: 0, 15: 1, 30: 2, 40: 3}
     if score in regular_score_map:
         return regular_score_map[score]
