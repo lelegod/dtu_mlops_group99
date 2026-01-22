@@ -1,0 +1,75 @@
+_wandb:
+    value:
+        cli_version: 0.24.0
+        e:
+            rcenl6gss2i0t2h9jh2qjjfgeygbnxrv:
+                cpu_count: 6
+                cpu_count_logical: 12
+                cudaVersion: "12.3"
+                disk:
+                    /:
+                        total: "1081101176832"
+                        used: "33847848960"
+                email: carldanielk@gmail.com
+                executable: /home/carldanielk/MLOps/dtu_mlops_group99/venv/bin/python
+                git:
+                    commit: d0513b82f3cdfe4c6af0f8940760bbe257ccc06f
+                    remote: git@github.com:lelegod/dtu_mlops_group99.git
+                gpu: NVIDIA GeForce RTX 3060 Laptop GPU
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ampere
+                      memoryTotal: "6442450944"
+                      name: NVIDIA GeForce RTX 3060 Laptop GPU
+                      uuid: GPU-f2b29b90-110f-0c26-775a-adf4a12acaf4
+                host: MSI
+                memory:
+                    total: "8232587264"
+                os: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39
+                program: -m project99.train
+                python: CPython 3.12.3
+                root: /home/carldanielk/MLOps/dtu_mlops_group99
+                startedAt: "2026-01-21T19:54:20.818854Z"
+                writerId: rcenl6gss2i0t2h9jh2qjjfgeygbnxrv
+        m: []
+        python_version: 3.12.3
+        t:
+            "1":
+                - 1
+                - 5
+                - 6
+                - 50
+                - 53
+                - 105
+            "2":
+                - 1
+                - 5
+                - 6
+                - 50
+                - 53
+                - 105
+            "3":
+                - 2
+                - 14
+                - 16
+            "4": 3.12.3
+            "5": 0.24.0
+            "12": 0.24.0
+            "13": linux-x86_64
+data:
+    value:
+        random_state: 42
+        test_size: 0.2
+model:
+    value:
+        eval_metric: logloss
+        learning_rate: 0.05
+        max_depth: 6
+        n_estimators: 500
+        objective: binary:logistic
+model.params.learning_rate:
+    value: 0.1
+model.params.max_depth:
+    value: 3
+model.params.n_estimators:
+    value: 200

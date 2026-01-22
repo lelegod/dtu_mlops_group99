@@ -6,6 +6,10 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 .coverage
+.env
+
+# Logs
+reports/*.log
 
 # Models
 models/*.json

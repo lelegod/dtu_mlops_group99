@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import pandas as pd
+import pandas as pd  # type: ignore
 import pytest
 
 from project99.data import TennisDataProcessor
@@ -56,18 +56,29 @@ def test_process_single_tournament_outputs_expected_columns(tmp_path: Path):
 
     # Schema check: these are the columns your code promises
     expected_cols = [
-        "SetNo", "GameNo", "PointNumber",
-        "ServerGamesWon", "ReceiverGamesWon",
-        "ServerScore", "ReceiverScore",
-        "ServerPointsWon", "ReceiverPointsWon",
-        "ServerMomentum", "ReceiverMomentum",
-        "ServerSetsWon", "ReceiverSetsWon",
-        "GameDiff", "SetDiff", "PointDiff", "MomentumDiff",
-        "IsBreakPoint", "SetPressure", "IsSecondServe", "ServerWon",
+        "SetNo",
+        "GameNo",
+        "PointNumber",
+        "ServerGamesWon",
+        "ReceiverGamesWon",
+        "ServerScore",
+        "ReceiverScore",
+        "ServerPointsWon",
+        "ReceiverPointsWon",
+        "ServerMomentum",
+        "ReceiverMomentum",
+        "ServerSetsWon",
+        "ReceiverSetsWon",
+        "GameDiff",
+        "SetDiff",
+        "PointDiff",
+        "MomentumDiff",
+        "IsBreakPoint",
+        "SetPressure",
+        "IsSecondServe",
+        "ServerWon",
     ]
 
     assert list(df.columns) == expected_cols, (
-        "Dataframe schema mismatch.\n"
-        f"Expected columns: {expected_cols}\n"
-        f"Got columns: {list(df.columns)}"
+        f"Dataframe schema mismatch.\nExpected columns: {expected_cols}\nGot columns: {list(df.columns)}"
     )

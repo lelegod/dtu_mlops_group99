@@ -22,23 +22,25 @@ class RawPointInput(BaseModel):
 
     model_config = {
         "json_schema_extra": {
-            "examples": [{
-                "SetNo": 1,
-                "GameNo": 3,
-                "PointNumber": 15,
-                "PointServer": 1,
-                "ServeIndicator": 1,
-                "P1GamesWon": 2,
-                "P1SetsWon": 0,
-                "P1Score": "30",
-                "P1PointsWon": 12,
-                "P1Momentum": 2,
-                "P2GamesWon": 1,
-                "P2SetsWon": 0,
-                "P2Score": "15",
-                "P2PointsWon": 10,
-                "P2Momentum": -1
-            }]
+            "examples": [
+                {
+                    "SetNo": 1,
+                    "GameNo": 3,
+                    "PointNumber": 15,
+                    "PointServer": 1,
+                    "ServeIndicator": 1,
+                    "P1GamesWon": 2,
+                    "P1SetsWon": 0,
+                    "P1Score": "30",
+                    "P1PointsWon": 12,
+                    "P1Momentum": 2,
+                    "P2GamesWon": 1,
+                    "P2SetsWon": 0,
+                    "P2Score": "15",
+                    "P2PointsWon": 10,
+                    "P2Momentum": -1,
+                }
+            ]
         }
     }
 

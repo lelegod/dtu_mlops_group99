@@ -1,6 +1,8 @@
 FROM python:3.12-slim AS base
 WORKDIR /app
 
+ENV PROJECT_ROOT=/app
+
 RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc curl && \
     apt clean && rm -rf /var/lib/apt/lists/*

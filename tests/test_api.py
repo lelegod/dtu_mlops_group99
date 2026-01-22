@@ -16,6 +16,7 @@ def mock_model():
     api.model = fake_model
     yield fake_model
 
+
 client = TestClient(api.app)
 
 
@@ -62,17 +63,22 @@ def test_predict_endpoint_valid_input():
         "P2SetsWon": 0,
         "P2Score": "15",
         "P2PointsWon": 10,
-        "P2Momentum": -1
+        "P2Momentum": -1,
     }
 
-    response = client.post("/predict", json=valid_input)
+    # Vertex AI format
+    request_body = {"instances": [valid_input]}
+    response = client.post("/predict", json=request_body)
 
     if response.status_code == 200:
         data = response.json()
-        assert "prediction" in data
-        assert "probability" in data
-        assert data["prediction"] in [0, 1]
-        assert 0 <= data["probability"] <= 1
+        assert "predictions" in data
+        assert len(data["predictions"]) == 1
+        pred = data["predictions"][0]
+        assert "prediction" in pred
+        assert "probability" in pred
+        assert pred["prediction"] in [0, 1]
+        assert 0 <= pred["probability"] <= 1
     else:
         assert response.status_code == 503
 
@@ -93,7 +99,7 @@ def test_predict_endpoint_invalid_input():
         "P2SetsWon": 0,
         "P2Score": "15",
         "P2PointsWon": 10,
-        "P2Momentum": -1
+        "P2Momentum": -1,
     }
 
     response = client.post("/predict", json=invalid_input)

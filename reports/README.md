@@ -56,7 +56,7 @@ will check the repositories and the code to verify your answers.
 * [x] Make sure that all team members have write access to the GitHub repository (M5)
 * [x] Create a dedicated environment for you project to keep track of your packages (M2)
 * [x] Create the initial file structure using cookiecutter with an appropriate template (M6)
-* [ ] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
+* [x] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
 * [x] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
 * [x] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
@@ -69,8 +69,8 @@ will check the repositories and the code to verify your answers.
 * [x] Write one or multiple configurations files for your experiments (M11)
 * [x] Used Hydra to load the configurations and manage your hyperparameters (M11)
 * [x] Use profiling to optimize your code (M12)
-* [ ] Use logging to log important events in your code (M14)
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
+* [x] Use logging to log important events in your code (M14)
+* [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
 * [ ] Consider running a hyperparameter optimization sweep (M14)
 * [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
@@ -78,30 +78,30 @@ will check the repositories and the code to verify your answers.
 
 * [x] Write unit tests related to the data part of your code (M16)
 * [x] Write unit tests related to model construction and or model training (M16)
-* [ ] Calculate the code coverage (M16)
+* [x] Calculate the code coverage (M16)
 * [x] Get some continuous integration running on the GitHub repository (M17)
-* [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
-* [ ] Add a linting step to your continuous integration (M17)
+* [x] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
+* [x] Add a linting step to your continuous integration (M17)
 * [x] Add pre-commit hooks to your version control setup (M18)
-* [ ] Add a continues workflow that triggers when data changes (M19)
+* [x] Add a continues workflow that triggers when data changes (M19)
 * [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [x] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 * [x] Create a trigger workflow for automatically building your docker images (M21)
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21)
+* [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
 * [x] Create a FastAPI application that can do inference using your model (M22)
-* [ ] Deploy your model in GCP using either Functions or Run as the backend (M23)
+* [x] Deploy your model in GCP using either Functions or Run as the backend (M23)
 * [x] Write API tests for your application and setup continues integration for these (M24)
 * [ ] Load test your application (M24)
 * [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
-* [ ] Create a frontend for your API (M26)
+* [x] Create a frontend for your API (M26)
 
 ### Week 3
 
 * [ ] Check how robust your model is towards data drifting (M27)
 * [ ] Deploy to the cloud a drift detection API (M27)
-* [ ] Instrument your API with a couple of system metrics (M28)
-* [ ] Setup cloud monitoring of your instrumented application (M28)
-* [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
+* [x] Instrument your API with a couple of system metrics (M28)
+* [x] Setup cloud monitoring of your instrumented application (M28)
+* [x] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
 * [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
 * [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
 * [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
@@ -112,8 +112,8 @@ will check the repositories and the code to verify your answers.
 * [ ] Publish the documentation to GitHub Pages (M32)
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Create an architectural diagram over your MLOps pipeline
-* [ ] Make sure all group members have an understanding about all parts of the project
-* [ ] Uploaded all your code to GitHub
+* [x] Make sure all group members have an understanding about all parts of the project
+* [x] Uploaded all your code to GitHub
 
 ## Group information
 
@@ -135,7 +135,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 2 fill here ---
 
-### Question 3
+### Question 3 (anyone)
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
 > **did you choose to work with and did it help you complete the project?**
 >
@@ -154,7 +154,7 @@ will check the repositories and the code to verify your answers.
 > In the following section we are interested in learning more about you local development environment. This includes
 > how you managed dependencies, the structure of your code and how you managed code quality.
 
-### Question 4
+### Question 4 (akash)
 
 > **Explain how you managed dependencies in your project? Explain the process a new team member would have to go**
 > **through to get an exact copy of your environment.**
@@ -169,7 +169,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 4 fill here ---
 
-### Question 5
+### Question 5 (kyle)
 
 > **We expect that you initialized your project using the cookiecutter template. Explain the overall structure of your**
 > **code. What did you fill out? Did you deviate from the template in some way?**
@@ -183,9 +183,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 5 fill here ---
+From the cookiecutter template we have filled out the .github/ for CI/CD workflows, configs/ for Hydra model configurations, dockerfiles/ for different docker files, docs/ for project documentation, models/ for model storage, src/project99/ for the main Python modules, tests/ for unit and integration tests. We have removed the notebooks/ because we did not use any jupyter notebooks in our project. We have added .dvc/ and data/ for DVC tracked datasets, reports/ for final exam report, cloudbuild.yaml for GCP cloud build config, requirements_frontend.txt for minimal Streamlit frontend dependencies.
 
-### Question 6
+### Question 6 (akash)
 
 > **Did you implement any rules for code quality and format? What about typing and documentation? Additionally,**
 > **explain with your own words why these concepts matters in larger projects.**
@@ -205,7 +205,7 @@ will check the repositories and the code to verify your answers.
 > In the following section we are interested in how version control was used in your project during development to
 > corporate and increase the quality of your code.
 
-### Question 7
+### Question 7 (daniel)
 
 > **How many tests did you implement and what are they testing in your code?**
 >
@@ -219,7 +219,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 7 fill here ---
 
-### Question 8
+### Question 8 (daniel)
 
 > **What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close**
 > **to), would you still trust it to be error free? Explain you reasoning.**
@@ -234,7 +234,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 8 fill here ---
 
-### Question 9
+### Question 9 (daniel)
 
 > **Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and**
 > **pull request can help improve version control.**
@@ -249,7 +249,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 9 fill here ---
 
-### Question 10
+### Question 10 (akash)
 
 > **Did you use DVC for managing data in your project? If yes, then how did it improve your project to have version**
 > **control of your data. If no, explain a case where it would be beneficial to have version control of your data.**
@@ -264,7 +264,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 10 fill here ---
 
-### Question 11
+### Question 11 (daniel)
 
 > **Discuss you continuous integration setup. What kind of continuous integration are you running (unittesting,**
 > **linting, etc.)? Do you test multiple operating systems, Python  version etc. Do you make use of caching? Feel free**
@@ -286,7 +286,7 @@ will check the repositories and the code to verify your answers.
 > In the following section we are interested in learning more about the experimental setup for running your code and
 > especially the reproducibility of your experiments.
 
-### Question 12
+### Question 12 (daniel)
 
 > **How did you configure experiments? Did you make use of config files? Explain with coding examples of how you would**
 > **run a experiment.**
@@ -300,7 +300,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 12 fill here ---
 
-### Question 13
+### Question 13 (kyle)
 
 > **Reproducibility of experiments are important. Related to the last question, how did you secure that no information**
 > **is lost when running experiments and that your experiments are reproducible?**
@@ -315,7 +315,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 13 fill here ---
 
-### Question 14
+### Question 14 (daniel)
 
 > **Upload 1 to 3 screenshots that show the experiments that you have done in W&B (or another experiment tracking**
 > **service of your choice). This may include loss graphs, logged images, hyperparameter sweeps etc. You can take**
@@ -332,7 +332,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 14 fill here ---
 
-### Question 15
+### Question 15 (akash)
 
 > **Docker is an important tool for creating containerized applications. Explain how you used docker in your**
 > **experiments/project? Include how you would run your docker images and include a link to one of your docker files.**
@@ -347,7 +347,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 15 fill here ---
 
-### Question 16
+### Question 16 (kyle)
 
 > **When running into bugs while trying to run your experiments, how did you perform debugging? Additionally, did you**
 > **try to profile your code or do you think it is already perfect?**
@@ -366,7 +366,7 @@ will check the repositories and the code to verify your answers.
 
 > In the following section we would like to know more about your experience when developing in the cloud.
 
-### Question 17
+### Question 17 (akash)
 
 > **List all the GCP services that you made use of in your project and shortly explain what each service does?**
 >
@@ -379,7 +379,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 17 fill here ---
 
-### Question 18
+### Question 18 (akash)
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
 > **you used?**
@@ -394,7 +394,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 18 fill here ---
 
-### Question 19
+### Question 19 (akash)
 
 > **Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.**
 > **You can take inspiration from [this figure](figures/bucket.png).**
@@ -403,7 +403,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 19 fill here ---
 
-### Question 20
+### Question 20 (akash)
 
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
@@ -412,7 +412,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 20 fill here ---
 
-### Question 21
+### Question 21 (akash)
 
 > **Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in**
 > **your project. You can take inspiration from [this figure](figures/build.png).**
@@ -421,7 +421,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 21 fill here ---
 
-### Question 22
+### Question 22 (akash)
 
 > **Did you manage to train your model in the cloud using either the Engine or Vertex AI? If yes, explain how you did**
 > **it. If not, describe why.**
@@ -438,7 +438,7 @@ will check the repositories and the code to verify your answers.
 
 ## Deployment
 
-### Question 23
+### Question 23 (kyle)
 
 > **Did you manage to write an API for your model? If yes, explain how you did it and if you did anything special. If**
 > **not, explain how you would do it.**
@@ -453,7 +453,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 23 fill here ---
 
-### Question 24
+### Question 24 (kyle)
 
 > **Did you manage to deploy your API, either in locally or cloud? If not, describe why. If yes, describe how and**
 > **preferably how you invoke your deployed service?**
@@ -469,7 +469,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 24 fill here ---
 
-### Question 25
+### Question 25 (kyle)
 
 > **Did you perform any unit testing and load testing of your API? If yes, explain how you did it and what results for**
 > **the load testing did you get. If not, explain how you would do it.**
@@ -484,7 +484,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 25 fill here ---
 
-### Question 26
+### Question 26 (akash)
 
 > **Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how**
 > **monitoring would help the longevity of your application.**
@@ -503,7 +503,7 @@ will check the repositories and the code to verify your answers.
 
 > In the following section we would like you to think about the general structure of your project.
 
-### Question 27
+### Question 27 (anyone)
 
 > **How many credits did you end up using during the project and what service was most expensive? In general what do**
 > **you think about working in the cloud?**
@@ -518,7 +518,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 27 fill here ---
 
-### Question 28
+### Question 28 (anyone)
 
 > **Did you implement anything extra in your project that is not covered by other questions? Maybe you implemented**
 > **a frontend for your API, use extra version control features, a drift detection service, a kubernetes cluster etc.**
@@ -534,7 +534,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 28 fill here ---
 
-### Question 29
+### Question 29 (kyle)
 
 > **Include a figure that describes the overall architecture of your system and what services that you make use of.**
 > **You can take inspiration from [this figure](figures/overview.png). Additionally, in your own words, explain the**
@@ -551,7 +551,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 29 fill here ---
 
-### Question 30
+### Question 30 (anyone)
 
 > **Discuss the overall struggles of the project. Where did you spend most time and what did you do to overcome these**
 > **challenges?**
@@ -565,7 +565,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 30 fill here ---
 
-### Question 31
+### Question 31 (kyle)
 
 > **State the individual contributions of each team member. This is required information from DTU, because we need to**
 > **make sure all members contributed actively to the project. Additionally, state if/how you have used generative AI**

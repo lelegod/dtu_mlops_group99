@@ -1,0 +1,13 @@
+.git
+.gitignore
+venv
+__pycache__
+wandb
+data
+!data/*.dvc
+reports
+outputs
+logs
+*.pt
+*.ckpt
+*.csv
