@@ -410,6 +410,8 @@ These concepts are not only useful in larger projects but also helped us from ea
 
 ![Buckets](figures/Buckets.png)
 
+![buckets_2](figures/buckets_2.png)
+
 
 ### Question 20 (akash)
 
