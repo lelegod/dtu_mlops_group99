@@ -1,0 +1,18 @@
+method: random
+
+metric:
+  name: val/accuracy
+  goal: maximize
+
+parameters:
+  model.params.max_depth:
+    values: [2, 4, 8, 12]
+  model.params.learning_rate:
+    values: [0.005, 0.05, 0.3]
+  model.params.n_estimators:
+    values: [50, 100, 500]
+
+command:
+  - python
+  - -m
+  - project99.train

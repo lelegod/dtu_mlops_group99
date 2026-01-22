@@ -2,13 +2,13 @@ import os
 from pathlib import Path
 
 import hydra
-import wandb
 from dotenv import load_dotenv
 from loguru import logger
 from omegaconf import DictConfig
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
 
+import wandb
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
 from project99.data import tennis_data
 from project99.logging_utils import setup_logging
