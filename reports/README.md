@@ -442,7 +442,7 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 > *We managed to train our model in the cloud using the Engine. We did this by ... . The reason we choose the Engine*
 > *was because ...*
 >
-> Answer:
+> Answer:We successfully managed to train our xgboost machine learning model in the cloud using Vertex AI. We used docker to containerize our train.script to make sure that all the requirements and dependencies remained constant throughout the pipeline.After that we proceeded to use a Google Cloud Build pipeline, which we triggered via the cloudrun.yaml configuration file, we did it so we can push this container to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed our tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket this allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP,can handle containers on its own ,we just provide the docker files and its cost effective.
 
 --- question 22 fill here ---
 
