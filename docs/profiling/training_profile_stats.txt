@@ -1,0 +1,58 @@
+         83638 function calls (83614 primitive calls) in 0.609 seconds
+
+   Ordered by: cumulative time
+   List reduced from 247 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.609    0.609 /Users/kyleelyk/Documents/DTU/SEM1/dtu_mlops_group99/src/project99/profile_training.py:138(train_model)
+     18/1    0.000    0.000    0.609    0.609 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:755(inner_f)
+        1    0.000    0.000    0.609    0.609 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/sklearn.py:1721(fit)
+        1    0.001    0.001    0.595    0.595 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/training.py:51(train)
+      500    0.462    0.001    0.472    0.001 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2412(update)
+      500    0.001    0.000    0.116    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/callback.py:249(after_iteration)
+      500    0.100    0.000    0.112    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2505(eval_set)
+     1002    0.002    0.000    0.020    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:3384(_assign_dmatrix_features)
+        1    0.000    0.000    0.013    0.013 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/sklearn.py:678(_wrap_evaluation_matrices)
+        2    0.000    0.000    0.013    0.007 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/sklearn.py:1255(_create_dmatrix)
+        2    0.000    0.000    0.013    0.007 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:1709(__init__)
+        2    0.011    0.006    0.013    0.007 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:1785(_init)
+     3006    0.005    0.000    0.008    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2295(_get_feature_info)
+     2004    0.001    0.000    0.006    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2345(feature_names)
+        1    0.005    0.005    0.005    0.005 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2228(reset)
+     7534    0.002    0.000    0.003    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:446(c_str)
+     1002    0.000    0.000    0.003    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:3398(_validate_features)
+     1003    0.002    0.000    0.003    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:1462(feature_names)
+     1002    0.000    0.000    0.003    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2333(feature_types)
+     2004    0.002    0.000    0.003    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2311(_set_feature_info)
+     1002    0.001    0.000    0.002    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:1535(feature_types)
+      500    0.001    0.000    0.002    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/callback.py:219(_update_history)
+     1002    0.000    0.000    0.002    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2353(feature_names)
+     1002    0.000    0.000    0.002    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:2341(feature_types)
+       14    0.000    0.000    0.002    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:630(_next_wrapper)
+    11532    0.001    0.000    0.001    0.000 {built-in method _ctypes.byref}
+     1002    0.001    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:1397(num_row)
+     1001    0.001    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:451(c_array)
+     7534    0.001    0.000    0.001    0.000 {method 'encode' of 'str' objects}
+       23    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:593(_handle_exception)
+      500    0.001    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:141(_parse_eval_str)
+       14    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:685(<lambda>)
+       14    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/data.py:1628(next)
+        7    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:639(input_data)
+     5011    0.001    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:117(from_cstr_to_pystr)
+     9051    0.001    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:311(_check_call)
+        7    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:1056(set_info)
+        7    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:1203(set_label)
+        7    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/data.py:1548(dispatch_meta_backend)
+       16    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/inspect.py:3346(signature)
+       16    0.000    0.000    0.001    0.000 /opt/anaconda3/envs/project99/lib/python3.12/inspect.py:3081(from_callable)
+        7    0.000    0.000    0.000    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/data.py:1500(_meta_from_numpy)
+       16    0.000    0.000    0.000    0.000 /opt/anaconda3/envs/project99/lib/python3.12/inspect.py:2501(_signature_from_callable)
+       14    0.000    0.000    0.000    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/core.py:736(throw_if)
+     5011    0.000    0.000    0.000    0.000 {built-in method _ctypes.POINTER}
+     1001    0.000    0.000    0.000    0.000 {built-in method builtins.any}
+       16    0.000    0.000    0.000    0.000 /opt/anaconda3/envs/project99/lib/python3.12/inspect.py:2397(_signature_from_function)
+      500    0.000    0.000    0.000    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/callback.py:131(_allreduce_metric)
+     1500    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+      500    0.000    0.000    0.000    0.000 /opt/anaconda3/envs/project99/lib/python3.12/site-packages/xgboost/callback.py:207(before_iteration)
+
+
