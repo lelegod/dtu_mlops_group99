@@ -307,7 +307,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 
 --- question 12 fill here ---
 
-### Question 13 (kyle)
+### Question 13 (daniel)
 
 > **Reproducibility of experiments are important. Related to the last question, how did you secure that no information**
 > **is lost when running experiments and that your experiments are reproducible?**
@@ -367,7 +367,11 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 16 fill here ---
+Answer:
+
+For debugging, we primarily relied on print debugging for simple logic errors and the VS Code debugger for more complex issues where inspecting variable states was necessary. We also utilized LLMs to quickly identify the cause of the issue and debug our code.
+
+Regarding profiling, we have set up the necessary infrastructure using cProfile and memory_profiler to the training process of our model. Since our current dataset and model are relatively lightweight, we have not identified any critical bottlenecks. Training is completed within a reasonable timeframe without hitting memory limits or CPU bottlenecks. As we scale up our dataset, then the profiling will be more critical for optimization.
 
 ## Working in the cloud
 
