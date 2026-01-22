@@ -1,15 +1,15 @@
 import os
 
-import google.auth
-import google.auth.transport.requests
+import google.auth  # type: ignore
+import google.auth.transport.requests  # type: ignore
 import requests
-import streamlit as st
+import streamlit as st  # type: ignore
 
 # Configuration
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 
-def get_prediction(point_data: dict) -> dict:
+def get_prediction(point_data: dict) -> dict | None:
     payload = {"instances": [point_data]}
 
     headers = {}

@@ -5,8 +5,8 @@ import hydra
 from dotenv import load_dotenv
 from loguru import logger
 from omegaconf import DictConfig
-from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score  # type: ignore
+from sklearn.model_selection import train_test_split  # type: ignore
 
 import wandb
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
