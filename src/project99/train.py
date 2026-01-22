@@ -43,8 +43,13 @@ def upload_to_gcs(local_path: str, gcs_path: str):
 def train(cfg: DictConfig):
     logger.info("Started training")
 
+    wandb_mode = "online" if os.getenv("WANDB_API_KEY") else "disabled"
+    if wandb_mode == "disabled":
+        logger.warning("WANDB_API_KEY not found. Running WandB in disabled mode.")
+
     run = wandb.init(
         project=os.getenv("WANDB_PROJECT", "project99"),
+        mode=wandb_mode,
         config={
             "data": {
                 "test_size": float(cfg.data.test_size),

@@ -3,17 +3,47 @@ import os
 import requests
 import streamlit as st
 
+import google.auth
+import google.auth.transport.requests
+
 # Configuration
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 
 def get_prediction(point_data: dict) -> dict:
+    payload = {"instances": [point_data]}
+    
+    headers = {}
+    is_vertex = "googleapis.com" in BACKEND_URL
+    url = str(BACKEND_URL)
+
+    if is_vertex:
+        try:
+            creds, project = google.auth.default()
+            auth_req = google.auth.transport.requests.Request()
+            creds.refresh(auth_req)
+            headers["Authorization"] = f"Bearer {creds.token}"
+        except Exception as e:
+            st.error(f"Auth failed: {e}")
+            return None
+        
+        if not url.endswith(":predict"):
+            url = f"{url}:predict"
+    else:
+        if not url.endswith("/predict"):
+            url = f"{url}/predict"
+
     try:
-        response = requests.post(f"{BACKEND_URL}/predict", json=point_data, timeout=10)
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
         response.raise_for_status()
-        return response.json()
+        
+        resp_json = response.json()
+        if "predictions" in resp_json:
+            return resp_json["predictions"][0]
+        return resp_json
+        
     except requests.exceptions.ConnectionError:
-        st.error(f"Could not connect to backend at {BACKEND_URL}")
+        st.error(f"Could not connect to backend at {url}")
         return None
     except requests.exceptions.RequestException as e:
         st.error(f"Error: {e}")

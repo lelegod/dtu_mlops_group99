@@ -67,3 +67,17 @@ def docker_build(ctx: Context, progress: str = "plain") -> None:
     ctx.run(
         f"docker build -t api:latest . -f dockerfiles/api.dockerfile --progress={progress}", echo=True, pty=not WINDOWS
     )
+
+
+@task
+def check(ctx: Context) -> None:
+    """Check report."""
+    with ctx.cd("reports"):
+        ctx.run("python report.py check", echo=True, pty=not WINDOWS)
+
+
+@task
+def html(ctx: Context) -> None:
+    """Convert report to html."""
+    with ctx.cd("reports"):
+        ctx.run("python report.py html", echo=True, pty=not WINDOWS)

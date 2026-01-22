@@ -1,15 +1,51 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build Training Image'
-    args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest', '-f', 'dockerfiles/train.dockerfile', '.']
+    args: 
+      - 'build'
+      - '-t'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
+      - '--cache-from'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
+      - '-f'
+      - 'dockerfiles/train.dockerfile'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Training Image'
+    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build API Image'
-    args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest', '-f', 'dockerfiles/api.dockerfile', '.']
+    args:
+      - 'build'
+      - '-t'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
+      - '--cache-from'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
+      - '-f'
+      - 'dockerfiles/api.dockerfile'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push API Image'
+    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build Frontend Image'
-    args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest', '-f', 'dockerfiles/frontend.dockerfile', '.']
+    args:
+      - 'build'
+      - '-t'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
+      - '--cache-from'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
+      - '-f'
+      - 'dockerfiles/frontend.dockerfile'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Frontend Image'
+    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Trigger Training'
@@ -22,7 +58,7 @@ steps:
         JOB_NAME=$$(gcloud ai custom-jobs create \
           --region=$_REGION \
           --display-name=train-$BUILD_ID \
-          --worker-pool-spec=machine-type=n1-standard-4,container-image-uri=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest \
+          --worker-pool-spec=machine-type=n1-standard-4,replica-count=1,container-image-uri=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest \
           --format="value(name)")
         
         echo "Training job created: $$JOB_NAME"
@@ -62,7 +98,9 @@ steps:
       '--region=$_REGION',
       '--display-name=dtu-model',
       '--container-image-uri=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest',
-      '--container-ports=8000'
+      '--container-ports=8000',
+      '--container-health-route=/health',
+      '--container-predict-route=/predict'
     ]
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -72,6 +110,25 @@ steps:
       - '-c'
       - |
         set -e
+        
+        # 1. Undeploy ALL existing models first to free up resources
+        echo "Checking for existing models to undeploy..."
+        EXISTING_MODELS=$$(gcloud ai endpoints describe $_ENDPOINT_ID --region=$_REGION --format="value(deployedModels.id)")
+        
+        if [ -n "$$EXISTING_MODELS" ]; then
+          # Split by semicolon if multiple models
+          IFS=';' read -ra MODEL_IDS <<< "$$EXISTING_MODELS"
+          for model_id in "$${MODEL_IDS[@]}"; do
+            echo "Undeploying existing model: $$model_id"
+            gcloud ai endpoints undeploy-model $_ENDPOINT_ID \
+              --region=$_REGION \
+              --deployed-model-id=$$model_id
+          done
+        else
+          echo "No existing models found."
+        fi
+
+        # 2. Get the new model ID
         MODEL_ID=$$(gcloud ai models list \
           --region=$_REGION \
           --filter="displayName=dtu-model" \
@@ -91,10 +148,32 @@ steps:
           --machine-type=n1-standard-2 \
           --traffic-split=0=100
 
-images:
-  - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/train-image:latest'
-  - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/api-image:latest'
-  - '$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy Frontend to Cloud Run'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'dtu-mlops-frontend'
+      - '--image=$_REGION-docker.pkg.dev/$PROJECT_ID/dtu-mlops-images/frontend-image:latest'
+      - '--region=$_REGION'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=1Gi'
+      - '--set-env-vars=BACKEND_URL=https://europe-west1-aiplatform.googleapis.com/v1/projects/$PROJECT_ID/locations/$_REGION/endpoints/$_ENDPOINT_ID'
+
+  # Make Frontend publicly accessible
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Make Frontend Public'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'services'
+      - 'add-iam-policy-binding'
+      - 'dtu-mlops-frontend'
+      - '--region=$_REGION'
+      - '--member=allUsers'
+      - '--role=roles/run.invoker'
 
 options:
   logging: CLOUD_LOGGING_ONLY
@@ -102,3 +181,5 @@ options:
 substitutions:
   _REGION: europe-west1
   _ENDPOINT_ID: '846555783666597888'
+
+timeout: 10800s

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import numpy as np
@@ -10,7 +11,7 @@ from torch.utils.data import TensorDataset
 
 from project99.logging_utils import setup_logging
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(os.getenv("PROJECT_ROOT", Path(__file__).resolve().parents[2]))
 
 setup_logging(log_file="reports/data.log")
 

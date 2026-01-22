@@ -1,6 +1,7 @@
 import os
 from contextlib import asynccontextmanager
 from io import StringIO
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -17,6 +18,12 @@ from project99.preprocess import input_preprocessing
 from project99.type import BatchPredictionResponse, HealthResponse, ModelInfoResponse, PredictionResponse, RawPointInput
 
 model: xgb.XGBClassifier | None = None
+class VertexRequest(BaseModel):
+    instances: List[RawPointInput]
+
+
+class VertexResponse(BaseModel):
+    predictions: List[PredictionResponse]
 
 setup_logging(log_file="reports/api.log")
 
@@ -83,25 +90,30 @@ def root():
     return {"status": "Project 99 API is running"}
 
 
-@app.post("/predict")
-def predict(input_data: RawPointInput, response_model=PredictionResponse):
+@app.post("/predict", response_model=VertexResponse)
+def predict(request: VertexRequest):
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
+    results = []
     try:
-        raw_point = input_data.model_dump()
-        features = input_preprocessing(raw_point)
+        for input_data in request.instances:
+            raw_point = input_data.model_dump()
+            features = input_preprocessing(raw_point)
 
-        prediction = model.predict(features)
-        probability = model.predict_proba(features)
+            prediction = model.predict(features)
+            probability = model.predict_proba(features)
 
-        return PredictionResponse(prediction=int(prediction[0]), probability=float(probability[0][1]))
+            results.append(PredictionResponse(prediction=int(prediction[0]), probability=float(probability[0][1])))
+
+        return VertexResponse(predictions=results)
     except Exception as e:
+        logger.exception(f"Prediction error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.get("/health")
-def health_check(response_model=HealthResponse):
+@app.get("/health", response_model=HealthResponse)
+def health_check():
     return HealthResponse(
         status="healthy" if model is not None else "unhealthy",
         model_loaded=model is not None,
@@ -109,8 +121,8 @@ def health_check(response_model=HealthResponse):
     )
 
 
-@app.get("/model/info")
-def model_info(response_model=ModelInfoResponse):
+@app.get("/model/info", response_model=ModelInfoResponse)
+def model_info():
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
