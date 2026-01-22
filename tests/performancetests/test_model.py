@@ -1,11 +1,11 @@
 import os
 import time
-import pytest
 from pathlib import Path
 
-import wandb
+import pytest
 import xgboost as xgb
 
+import wandb
 from project99.data import tennis_data
 
 
@@ -24,7 +24,11 @@ def _download_wandb_artifact(artifact_path: str) -> Path:
 
     # Find a model file in the artifact directory
     # Your training saves via xgb_model.save_model(LOCAL_MODEL_PATH)
-    candidates = list(downloaded_dir.rglob("*.json")) + list(downloaded_dir.rglob("*.ubj")) + list(downloaded_dir.rglob("*.model"))
+    candidates = (
+        list(downloaded_dir.rglob("*.json"))
+        + list(downloaded_dir.rglob("*.ubj"))
+        + list(downloaded_dir.rglob("*.model"))
+    )
     if not candidates:
         # fallback: any single file in artifact
         all_files = [p for p in downloaded_dir.rglob("*") if p.is_file()]
