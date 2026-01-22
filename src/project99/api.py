@@ -28,7 +28,7 @@ class VertexResponse(BaseModel):
     predictions: List[PredictionResponse]
 
 
-setup_logging(log_file="reports/api.log")
+setup_logging(log_file="docs/reports/api.log")
 
 
 def download_model_from_gcs(gcs_path: str, local_path: str) -> bool:

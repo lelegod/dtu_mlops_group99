@@ -198,8 +198,6 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
-Answer:
-
 We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed.
 
 These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability. 
@@ -367,8 +365,6 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
-Answer:
-
 For debugging, we primarily relied on print debugging for simple logic errors and the VS Code debugger for more complex issues where inspecting variable states was necessary. We also utilized LLMs to quickly identify the cause of the issue and debug our code.
 
 Regarding profiling, we have set up the necessary infrastructure using cProfile and memory_profiler to the training process of our model. Since our current dataset and model are relatively lightweight, we have not identified any critical bottlenecks. Training is completed within a reasonable timeframe without hitting memory limits or CPU bottlenecks. As we scale up our dataset, then the profiling will be more critical for optimization.
@@ -465,7 +461,8 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 >
 > Answer:
 
---- question 23 fill here ---
+We did manage to write an API for our model using FastAPI. Using `lifespan`, we created a custom lifecycle manager to handle loading the XGBoost model from Google Cloud Storage on startup. We defined `/predict` endpoint that accepts tennis match state data, that is validated using Pydanctic models, preprocess the data, and return the predictions. We also added `\health` endpoint to check whether the API can load the model successfully.
+
 
 ### Question 24 (kyle)
 
