@@ -89,7 +89,7 @@ jobs:
         run: |
           #pip install -r requirements.txt
           #pip install -e .
-          pip install wandb typer os
+          pip install wandb typer
           pip list
 
       - name: Debug project import
