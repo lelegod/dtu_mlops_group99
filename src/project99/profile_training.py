@@ -8,7 +8,7 @@ from typing import Callable, Any
 
 import numpy as np
 from omegaconf import OmegaConf
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split  # type: ignore
 
 from project99.data import tennis_data, TennisDataProcessor
 from project99.model import model as create_model
@@ -32,7 +32,7 @@ def timing_decorator(func: Callable) -> Callable:
 
 @timing_decorator
 def profile_data_loading() -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    (X_train, y_train), (X_test, y_test) = tennis_data(data_type='numpy')
+    (X_train, y_train), (X_test, y_test) = tennis_data(data_type='numpy')  # type: ignore
     return X_train, y_train, X_test, y_test
 
 
@@ -80,7 +80,7 @@ def save_profile_stats(stats: pstats.Stats, filename: str) -> None:
     PROFILING_DIR.mkdir(parents=True, exist_ok=True)
     
     stream = io.StringIO()
-    stats.stream = stream
+    stats.stream = stream  # type: ignore
     stats.sort_stats('cumulative')
     stats.print_stats(50)
     
@@ -89,7 +89,7 @@ def save_profile_stats(stats: pstats.Stats, filename: str) -> None:
         f.write(stream.getvalue())
 
 
-def create_summary_report(timings: dict, memory_info: dict = None) -> str:
+def create_summary_report(timings: dict, memory_info: dict | None = None) -> str:
     total_time = sum(timings.values())
     
     report = []
