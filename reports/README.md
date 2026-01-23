@@ -645,50 +645,18 @@ We implemented a frontend for our API using Streamlit. We did this to provide an
 >
 > Answer:
 
- (kyle)
-The starting point of the diagram is our local setup, where we integrated `Hydra` for model configuration and do experiments. We then use `Docker` locally to verify our containers are working as expected. We also implemented `Weights & Biases` to track our experiments and do hyperparameter sweeps to optimize our model.
+The starting point of the diagram is our local setup, where we integrated `Hydra` for model configuration and `DVC` for data version control in order to do experiments. We then use `Docker` locally to verify our containers are working as expected, ensuring that `train`, `api` and `frontend` images run properly. We also implemented `Weights & Biases` to track our experiments and do hyperparameter sweeps to optimize our model.
 
 Once codes are pushed to GitHub, GitHub Actions runs unit tests and linters. Using branch protection on main branch, so that only code that passes the CI can be merged to main. On pushed to main branch, the CD pipeline is executed via Google Cloud Build.
 
 The Cloud Build process executes these steps sequentially:
 1.  Containerization: Docker images for training, API, and frontend are built and pushed to the Google Artifact Registry one by one.
-2.  Model Training: A Vertex AI Custom Job is triggered using the training image. This job fetches data, trains the model, logs to `Weights & Biases`, and uploads the artifact to Google Cloud Storage bucket.
+2.  Model Training: A Vertex AI Custom Job is triggered using the training image. This job fetches data, trains the model, and uploads the artifact to Google Cloud Storage bucket.
 3.  Upload model: The trained model is deployed to a Vertex AI Endpoint for production.
 4.  User Interface: The frontend is deployed to Google Cloud Run.
 
 Here is the architectural diagram of the system:
-
-```mermaid
-graph LR
-    subgraph Local["Local Environment"]
-        Dev[Developer] -->|Config| Hydra
-        Dev -->|Run| DockerLocal[Local Docker]
-        Dev -->|Sweep| WandB_Sweep["W&B Sweep"]
-    end
-
-    Dev -->|Push| GitHub[GitHub Actions]
-    GitHub -->|Trigger| CloudBuild[Cloud Build]
-
-    subgraph Cloud["Google Cloud"]
-        CloudBuild -->|1. Build & Push| AR[Artifact Registry]
-
-        AR -.->|Image| VertexTrain
-        AR -.->|Image| VertexServe
-        AR -.->|Image| CloudRun
-
-        CloudBuild -->|2. Train| VertexTrain[Vertex AI Training]
-        CloudBuild -->|3. Deploy Model| VertexServe[Vertex AI Endpoint]
-        CloudBuild -->|4. Deploy App| CloudRun[Cloud Run]
-
-        VertexTrain -->|Log| WandB["W&B Tracker"]
-        VertexTrain -->|Save| GCS[Cloud Storage]
-        GCS -.->|Load| VertexServe
-
-        CloudRun -->|Predict| VertexServe
-    end
-
-    User -->|Access| CloudRun
-```
+![architectural diagram](figures/diagram.png)
 
 
 ### Question 30
@@ -722,7 +690,7 @@ downtime while tests or deployment were finishing, it meant we could not test th
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
-Student s253791 was primarily responsible for the continuous integration. This included implementing the unit test suite, setting up GitHub Actions workflows, integrating Weights & Biases for experiment tracking and continuous machine learning, and implementing logging functionality based on Module 14. They also contributed to maintaining code quality and ensuring reproducibility through CI checks.
+Student s253791 was primarily responsible for the continuous integration. This included implementing the unit test suite, setting up GitHub Actions workflows, integrating Weights & Biases for experiment tracking and continuous machine learning, and implementing logging functionality. They also contributed to maintaining code quality and ensuring reproducibility through CI checks.
 
 Student s252786 developed the majority of the core application code, including the training pipeline, data handling and preprocessing logic, and all components related to the API and frontend. In addition, they contributed to the cloud build and deployment process and supported integration efforts across the project.
 
