@@ -564,7 +564,7 @@ For load testing, we performed a stress test using `Locust` against our deployed
 >
 > Answer:
 
-In this project, we did not manage to implement monitoring completely. We used baked in prometheus mertics in api.py to obtain the model metrics. Consequently, we also generated GCP buckets and completed the path so that when the logs get stored in them as JSON files.The problem arose as we couldnt filter those logs in the GCP Monitoring dashboard. Monitoring is an essential part of any ML Ops life cycle as it prevents our model from becoming redundant or obsolete over time, as it tackles the problem of reducing accuracy. It also acts as an early warning system if something goes wrong in the deployment.
+In this project, we did not manage to implement monitoring completely. We used baked in prometheus mertics in `api.py` to obtain the model metrics. Consequently, we also generated GCP buckets and completed the path so that the logs will get stored in them as JSON files. The problem arose as we couldnt filter those logs in the GCP Monitoring dashboard. Monitoring is an essential part of any ML Ops life cycle as it prevents our model from becoming redundant or obsolete over time, as it tackles the problem of reducing accuracy. It also acts as an early warning system if something goes wrong in the deployment.
 
 ## Overall discussion of project
 
@@ -583,8 +583,9 @@ In this project, we did not manage to implement monitoring completely. We used b
 >
 > Answer:
 
- (anyone)
---- question 27 fill here ---
+We used a total of around \$13.01 in credits for our project. Since it is an education project, Google provided us with some free credits, resulting in a net cost of \$0. The service costing the most was Vertex AI, costing us around \$4.14, due to the compute resources required for training models and hosting the API, alongside Artifact Registry for storing multiple Docker images.
+
+Working in the cloud was annoying at first but became easier towards the end. It introduced complexity regarding IAM permissions and debugging remote execution errors compared to local development. Additionally, waiting for each build to finish took a long time, which made the debugging process slow. However, once the pipeline was working, it provided options to scale our resources easily.
 
 ### Question 28
 
