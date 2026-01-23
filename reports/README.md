@@ -637,8 +637,7 @@ We implemented a frontend for our API using Streamlit. We did this to provide an
 >
 > Answer:
 
- (kyle)
-The starting point of the diagram is our local setup, where we integrated `Hydra` for model configuration and do experiments. We then use `Docker` locally to verify our containers are working as expected. We also implemented `Weights & Biases` to track our experiments and do hyperparameter sweeps to optimize our model.
+The starting point of the diagram is our local setup, where we integrated `Hydra` for model configuration and `DVC` for data version control in order to do experiments. We then use `Docker` locally to verify our containers are working as expected, ensuring that `train`, `api` and `frontend` images run properly. We also implemented `Weights & Biases` to track our experiments and do hyperparameter sweeps to optimize our model.
 
 Once codes are pushed to GitHub, GitHub Actions runs unit tests and linters. Using branch protection on main branch, so that only code that passes the CI can be merged to main. On pushed to main branch, the CD pipeline is executed via Google Cloud Build.
 
