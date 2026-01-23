@@ -714,15 +714,11 @@ downtime while tests or deployment were finishing, it meant we could not test th
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
- (anyone)
-fewafewubaofewnafioewnifowf ewafw afew afewafewafionewoanf waf ewonfieownaf fewnaiof newio fweanøf wea fewa
- fweafewa fewiagonwa ognwra'g
- wa
- gwreapig ipweroang w rag
- wa grwa
-  g
-  ew
-  gwea g
-  ew ag ioreabnguorwa bg̈́aw
-   wa
-   gew4igioera giroeahgi0wra gwa
+Student s253791 was primarily responsible for the continuous integration. This included implementing the unit test suite, setting up GitHub Actions workflows, integrating Weights & Biases for experiment tracking and continuous machine learning, and implementing logging functionality based on Module 14. They also contributed to maintaining code quality and ensuring reproducibility through CI checks.
+
+Student s252786 developed the majority of the core application code, including the training pipeline, data handling and preprocessing logic, and all components related to the API and frontend. In addition, they contributed to the cloud build and deployment process and supported integration efforts across the project.
+
+Student AKASH was responsible for data version control and configuration management, including the Hydra configuration setup and integration with Google Cloud Storage. They also worked on cloud build and deployment, as well as implementing monitoring components for the deployed system.
+
+All team members contributed actively to discussions, design decisions, and code reviews.
+We made use of generative AI tools, including ChatGPT, Claude Opus, Gemini, and GitHub Copilot, primarily to assist with debugging, code suggestions, and clarifying implementation details.
