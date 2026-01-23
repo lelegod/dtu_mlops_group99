@@ -272,7 +272,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
-Yes, DVC(Data Version Control) was an important part of the project. It helped us to handle a  large dataset as git doesnt work well with big datasets. It nullified the possibility of different people training on different datasets and made sure everyone uses the same data while training.Anyone who cloned the repository can run dvc pull, and they have the same data. If we need the old data we can go back in time if needed and recreate the old experiments if needed. It acted asa  bridge or connection point between GCP buckets, so the heavy data lives on GCP and only the light metadata lives on GitHub.
+Yes, DVC(Data Version Control) was an important part of the project. It helped us to handle a  large dataset as git doesnt work well with big datasets. It nullified the possibility of different people training on different datasets and made sure everyone uses the same data while training. Anyone who cloned the repository can run dvc pull, and they have the same data. If we need the old data we can go back in time if needed and recreate the old experiments if needed. It acted as a bridge or connection point between GCP buckets, so the heavy data lives on GCP and only the light metadata lives on GitHub.
 
 ### Question 11
 
@@ -324,6 +324,7 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
 > *one would have to do ...*
 >
 > Answer:
+
  (daniel)
 --- question 13 fill here --- everything is saved on wandb (check if we use config files)
 
@@ -361,11 +362,15 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
 
 In our project, we used Docker to make sure that we have consistent environments across the entire MLOps cycle and that the files are reproducible. We developed three distinct images— Train, API, and Frontend to organize our computational needs and simplify deployment on Google Cloud Platform.
 
-The train Dockerfile contained important libraries like torch and it also contained the DVC setup. We ran this on Google Compute Engine.
-The api Dockerfile contained the FAST API setup, along with the Prometheus metrics, which were deployed on Cloud Run.
-There was also the frontend Dockerfile, which had a framework like Streamlit. It created a container to serve the webpage.
+The train Dockerfile contained important libraries like torch and it also contained the DVC setup. We ran this on Google Compute Engine. The api Dockerfile contained the FAST API setup, along with the Prometheus metrics, which were deployed on Cloud Run. There was also the frontend Dockerfile, which had a framework like Streamlit. It created a container to serve the webpage.
 
-https://github.com/lelegod/dtu_mlops_group99/blob/main/dockerfiles/train.dockerfile
+Link to docker file: [train.dockerfile](https://github.com/lelegod/dtu_mlops_group99/blob/main/dockerfiles/train.dockerfile)
+
+To run the training docker image, for example, we would build it and then run it:
+```bash
+docker build -f dockerfiles/train.dockerfile -t train_image .
+docker run train_image
+```
 
 
 ### Question 16
@@ -401,14 +406,13 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 >
 > Answer:
 
-
-For this project we used the following services on GCP.
-Cloud Build: It was used for automating the pipeline
-Artifact Registry: It was used to store our Docker Images.
-Cloud Storage (GCS):We used this to store our data files in buckets.
-Vertex AI (Custom Training): We used this service to train our models by provisioning a VM. This service provides the heavy-duty computing power.
-Cloud Run: We used this for deploying our frontend.
-Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
+For this project we used the following services on GCP:
+1. Cloud Build: It was used for automating the pipeline
+2. Artifact Registry: It was used to store our Docker Images.
+3. Cloud Storage (GCS): We used this to store our data files in buckets.
+4. Vertex AI (Custom Training): We used this service to train our models by provisioning a VM. This service provides the heavy-duty computing power.
+5. Cloud Run: We used this for deploying our frontend.
+6. Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
 
 ### Question 18 
 
@@ -437,12 +441,13 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 ![buckets_2](figures/buckets_2.png)
 
 
-### Question 20 (akash)
+### Question 20
 
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
 > Answer:
+
 ![artifact_registry_1](figures/artifact_registry_1.png)
 
 ### Question 21 
@@ -451,6 +456,7 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 >
 > Answer:
+
 ![cloudbuild_1](figures/cloudbuild_1.png)
 ![cloudbuild_2](figures/cloudbuild_2.png)
 
@@ -466,7 +472,8 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 > *was because ...*
 >
 > Answer:
-We successfully managed to train our xgboost machine learning model in the cloud using Vertex AI. We used docker to containerize our train.script to make sure that all the requirements and dependencies remained constant throughout the pipeline.After that we proceeded to use a Google Cloud Build pipeline, which we triggered via the cloudrun.yaml configuration file, we did it so we can push this container to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed our tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket this allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP,can handle containers on its own ,we just provide the docker files and its cost effective.
+
+We successfully managed to train our XGBoost machine learning model in the cloud using Vertex AI. We used docker to containerize our training script to make sure that all the requirements and dependencies remained constant throughout the pipeline. After that we proceeded to use a Google Cloud Build pipeline, which we triggered via the cloudrun.yaml configuration file, we did it so we can push this container to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed our tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket this allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP, can handle containers on its own, we just provide the docker files and its cost effective.
 
 ## Deployment
 
@@ -623,6 +630,38 @@ The Cloud Build process executes these steps sequentially:
 4.  User Interface: The frontend is deployed to Google Cloud Run.
 
 Here is the architectural diagram of the system:
+
+```mermaid
+graph LR
+    subgraph Local["Local Environment"]
+        Dev[Developer] -->|Config| Hydra
+        Dev -->|Run| DockerLocal[Local Docker]
+        Dev -->|Sweep| WandB_Sweep["W&B Sweep"]
+    end
+    
+    Dev -->|Push| GitHub[GitHub Actions]
+    GitHub -->|Trigger| CloudBuild[Cloud Build]
+    
+    subgraph Cloud["Google Cloud"]
+        CloudBuild -->|1. Build & Push| AR[Artifact Registry]
+        
+        AR -.->|Image| VertexTrain
+        AR -.->|Image| VertexServe
+        AR -.->|Image| CloudRun
+        
+        CloudBuild -->|2. Train| VertexTrain[Vertex AI Training]
+        CloudBuild -->|3. Deploy Model| VertexServe[Vertex AI Endpoint]
+        CloudBuild -->|4. Deploy App| CloudRun[Cloud Run]
+        
+        VertexTrain -->|Log| WandB["W&B Tracker"]
+        VertexTrain -->|Save| GCS[Cloud Storage]
+        GCS -.->|Load| VertexServe
+        
+        CloudRun -->|Predict| VertexServe
+    end
+    
+    User -->|Access| CloudRun
+```
 
 
 ### Question 30
