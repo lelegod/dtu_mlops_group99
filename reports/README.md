@@ -359,7 +359,12 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 15 fill here ---
+In our project, we used Docker to make sure that we have consistent environments across the entire MLOps cycle and that the files are reproducible. We developed three distinct images— Train, API, and Frontend to organize our computational needs and simplify deployment on Google Cloud Platform.
+
+The train Dockerfile contained important libraries like torch and it also contained the DVC setup. We ran this on Google Compute Engine.
+The api Dockerfile contained the FAST API setup, along with the Prometheus metrics, which were deployed on Cloud Run.
+There was also the frontend Dockerfile, which had a framework like Streamlit. It created a container to serve the webpage.
+
 
 ### Question 16
 
@@ -392,16 +397,16 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 > Example:
 > *We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...*
 >
-> Answer:For this project we used the following services on GCP.
+> Answer:
+
+
+For this project we used the following services on GCP.
 Cloud Build: It was used for automating the pipeline
 Artifact Registry: It was used to store our Docker Images.
 Cloud Storage (GCS):We used this to store our data files in buckets.
 Vertex AI (Custom Training): We used this service to train our models by provisioning a VM. This service provides the heavy-duty computing power.
 Cloud Run: We used this for deploying our frontend.
 Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
-
-
---- question 17 fill here ---
 
 ### Question 18 (akash)
 
@@ -435,18 +440,17 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
-> Answer:![artifact_registry_1](figures/artifact_registry_1.png)
---- question 20 fill here ---
+> Answer:
+![artifact_registry_1](figures/artifact_registry_1.png)
 
 ### Question 21 (akash)
 
 > **Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in**
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 >
-> Answer:![cloudbuild_1](figures/cloudbuild_1.png)
-         ![cloudbuild_2](figures/cloudbuild_2.png)
-
---- question 21 fill here ---
+> Answer:
+![cloudbuild_1](figures/cloudbuild_1.png)
+![cloudbuild_2](figures/cloudbuild_2.png)
 
 ### Question 22 (akash)
 
@@ -459,9 +463,8 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 > *We managed to train our model in the cloud using the Engine. We did this by ... . The reason we choose the Engine*
 > *was because ...*
 >
-> Answer:We successfully managed to train our xgboost machine learning model in the cloud using Vertex AI. We used docker to containerize our train.script to make sure that all the requirements and dependencies remained constant throughout the pipeline.After that we proceeded to use a Google Cloud Build pipeline, which we triggered via the cloudrun.yaml configuration file, we did it so we can push this container to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed our tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket this allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP,can handle containers on its own ,we just provide the docker files and its cost effective.
-
---- question 22 fill here ---
+> Answer:
+We successfully managed to train our xgboost machine learning model in the cloud using Vertex AI. We used docker to containerize our train.script to make sure that all the requirements and dependencies remained constant throughout the pipeline.After that we proceeded to use a Google Cloud Build pipeline, which we triggered via the cloudrun.yaml configuration file, we did it so we can push this container to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed our tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket this allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP,can handle containers on its own ,we just provide the docker files and its cost effective.
 
 ## Deployment
 
@@ -552,7 +555,7 @@ For load testing, we performed a stress test using `Locust` against our deployed
 >
 > Answer:
 
---- question 26 fill here ---
+In this project, we did not manage to implement monitoring completely. We used baked in prometheus mertics in api.py to obtain the model metrics. Consequently, we also generated GCP buckets and completed the path so that when the logs get stored in them as JSON files.The problem arose as we couldnt filter those logs in the GCP Monitoring dashboard. Monitoring is an essential part of any ML Ops life cycle as it prevents our model from becoming redundant or obsolete over time, as it tackles the problem of reducing accuracy. It also acts as an early warning system if something goes wrong in the deployment.
 
 ## Overall discussion of project
 
