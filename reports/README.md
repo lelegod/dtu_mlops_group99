@@ -71,7 +71,7 @@ will check the repositories and the code to verify your answers.
 * [x] Use profiling to optimize your code (M12)
 * [x] Use logging to log important events in your code (M14)
 * [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
-* [ ] Consider running a hyperparameter optimization sweep (M14)
+* [x] Consider running a hyperparameter optimization sweep (M14)
 * [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
@@ -84,7 +84,7 @@ will check the repositories and the code to verify your answers.
 * [x] Add a linting step to your continuous integration (M17)
 * [x] Add pre-commit hooks to your version control setup (M18)
 * [x] Add a continues workflow that triggers when data changes (M19)
-* [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
+* [x] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [x] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 * [x] Create a trigger workflow for automatically building your docker images (M21)
 * [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
@@ -200,7 +200,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 
 We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed.
 
-These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability. 
+These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability.
 
 #Todo: docs
 
@@ -222,7 +222,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 7 fill here ---
+--- question 7 fill here --- subject to change, might add more unit tests.
 
 ### Question 8 (daniel)
 
@@ -237,7 +237,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 8 fill here ---
+--- question 8 fill here --- need to check how much percentage but if I change above this will change too
 
 ### Question 9 (daniel)
 
@@ -252,7 +252,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 9 fill here ---
+--- question 9 fill here --- many branches, one for each module or at least section, every time we work on something new we create a branch which is removed when completely finished, completely finished refers to having merged it into the main branch using pull requests and completing the module or task. Pull requests were only merged after having successfully passed some tests, unless we deemed the test unnecessary for the moment, which is why we had some tests be required and some be optional.
 
 ### Question 10 (akash)
 
@@ -284,7 +284,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 11 fill here ---
+--- question 11 fill here --- unit testing, linting, test 3 os cause we use different os, only test one python version to reduce time of testing, using caching and did the entire CI-setup explained in the course content.
 
 ## Running code and tracking experiments
 
@@ -303,7 +303,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 12 fill here ---
+--- question 12 fill here --- we used sweep which meant we could test many hyperparamters at the same time, we can also run it from the command line using :
 
 ### Question 13 (daniel)
 
@@ -318,7 +318,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 13 fill here ---
+--- question 13 fill here --- everything is saved on wandb (check if we use config files)
 
 ### Question 14 (daniel)
 
