@@ -259,7 +259,7 @@ These concepts are not only useful in larger projects but also helped us from ea
  (daniel)
 --- question 9 fill here --- many branches, one for each module or at least section, every time we work on something new we create a branch which is removed when completely finished, completely finished refers to having merged it into the main branch using pull requests and completing the module or task. Pull requests were only merged after having successfully passed some tests, unless we deemed the test unnecessary for the moment, which is why we had some tests be required and some be optional.
 
-### Question 10 (akash)
+### Question 10 
 
 > **Did you use DVC for managing data in your project? If yes, then how did it improve your project to have version**
 > **control of your data. If no, explain a case where it would be beneficial to have version control of your data.**
@@ -346,7 +346,7 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
  (daniel)
 --- question 14 fill here ---
 
-### Question 15 (akash)
+### Question 15 
 
 > **Docker is an important tool for creating containerized applications. Explain how you used docker in your**
 > **experiments/project? Include how you would run your docker images and include a link to one of your docker files.**
@@ -388,7 +388,7 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 
 > In the following section we would like to know more about your experience when developing in the cloud.
 
-### Question 17 (akash)
+### Question 17 
 
 > **List all the GCP services that you made use of in your project and shortly explain what each service does?**
 >
@@ -408,7 +408,7 @@ Vertex AI (Custom Training): We used this service to train our models by provisi
 Cloud Run: We used this for deploying our frontend.
 Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
 
-### Question 18 (akash)
+### Question 18 
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
 > **you used?**
@@ -423,7 +423,7 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 
 --- question 18 fill here ---
 
-### Question 19 (akash)
+### Question 19 
 
 > **Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.**
 > **You can take inspiration from [this figure](figures/bucket.png).**
@@ -443,7 +443,7 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 > Answer:
 ![artifact_registry_1](figures/artifact_registry_1.png)
 
-### Question 21 (akash)
+### Question 21 
 
 > **Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in**
 > **your project. You can take inspiration from [this figure](figures/build.png).**
@@ -452,7 +452,7 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 ![cloudbuild_1](figures/cloudbuild_1.png)
 ![cloudbuild_2](figures/cloudbuild_2.png)
 
-### Question 22 (akash)
+### Question 22 
 
 > **Did you manage to train your model in the cloud using either the Engine or Vertex AI? If yes, explain how you did**
 > **it. If not, describe why.**
@@ -542,7 +542,7 @@ For unit testing, we used `pytest` and `fastapi.testclient.TestClient`. We verif
 
 For load testing, we performed a stress test using `Locust` against our deployed Vertex AI Endpoint. We simulated 1000 concurrent users, with a spawn rate of 50 users/second. The API successfully handled 188 requests per second on average without crashing. The average response time increased to 2.1 seconds, compared to only 105 ms under lighter load of 10 users, with a spawn rate of 1 user/second.
 
-### Question 26 (akash)
+### Question 26 
 
 > **Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how**
 > **monitoring would help the longevity of your application.**
