@@ -133,7 +133,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-s252786,
+s252786, s253791
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -147,8 +147,13 @@ s252786,
 >
 > Answer:
 
-(anyone)
---- question 3 fill here ---
+We made use of two third-party packages that were not covered directly in the course: XGBoost and Pydantic, both of which played important roles in completing the project.
+
+XGBoost was used as the core machine-learning framework for our predictive model. It provided an efficient and well-tested implementation of gradient-boosted decision trees, allowing us to train models with strong performance while retaining fine-grained control over hyperparameters. Its support for probability outputs, feature importance, and compatibility with configuration-driven workflows made it well suited for integration into our training, evaluation, and experiment-tracking pipeline.
+
+Pydantic was used for data validation and typing, particularly in the API layer. By defining request and response schemas declaratively, Pydantic ensured that incoming data was validated automatically and consistently. This reduced boilerplate code, improved robustness, and made error handling more explicit.
+
+Together, these frameworks significantly improved reliability, clarity, and development speed, and they enabled us to build a cleaner, more maintainable system than relying solely on standard libraries.
 
 ## Coding environment
 
@@ -691,7 +696,7 @@ graph LR
 > Answer:
 
  (anyone)
---- question 30 fill here ---
+downtime while tests or deployment were finishing, it meant we could not test things as quickly as we are used to when running it locally.
 
 ### Question 31
 
