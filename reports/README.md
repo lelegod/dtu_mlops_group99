@@ -487,7 +487,7 @@ For this project we used the following services on GCP:
 >
 > Answer:
 
-In this project, our team used GCE to train the train dockerfile. We moved the heavy task of training our model on the cloud by allocating a vm.We used GCE as a hub for DVC . We primarily used the E2 series, specifically e2-standard-4 and e2-medium instances.e2-standard-4: With 4 vCPUs and 16 GB of RAM, this was our vm for training, providing enough computational power. We needed our dataset and training need much storage.
+In this project, our team used GCE to train the train dockerfile. We moved the heavy task of training our model on the cloud by allocating a vm.We used GCE as a hub for DVC. We primarily used the E2 series, specifically e2-standard-4 and e2-medium instances.e2-standard-4: With 4 vCPUs and 16 GB of RAM, this was our vm for training, providing enough computational power. We needed our dataset and training need much storage.
 e2-medium: We used this for our lighter task like managing the DVC pipeline, or for api dockerfile or frontend Dockerfile. Used for lighter tasks or as a jump-box to manage other parts of the infrastructure.
 
 ### Question 19
@@ -702,8 +702,7 @@ The architectural diagram of the system:
 >
 > Answer:
 
- (anyone)
-downtime while tests or deployment were finishing, it meant we could not test things as quickly as we are used to when running it locally.
+The biggest struggles we faced while working on the projects were mainly completing the paths for different components work together. Making the Dockerfiles was pretty straightforward, but making them able to talk to each other was the most time-consuming. We also faced problems while deploying the frontend from endpoints; it was due to port issues. In the next phase, while working on mintoring we ran into another obstacle, the net to filter out logs wasn't working and we didn't manage to fix it. While logs are getting stored in the monitoring buckets we created as JSON files, we failed to make a dashboard as we couldn't figure out how to filter out logs with queries . Another issue was the downtime while tests or deployments were finishing, which meant we could not test things as quickly as we are used to when running them locally.
 
 ### Question 31
 
