@@ -13,6 +13,13 @@ setup_logging(log_file="reports/eval.log")
 
 
 def evaluate(model_checkpoint: str | None = None) -> None:
+    """Evaluate a trained XGBoost model on the test set.
+
+    Loads model from checkpoint and computes metrics: log loss, Brier score, AUC, accuracy.
+
+    Args:
+        model_checkpoint: Path to model file. Defaults to AIP_MODEL_DIR env var or 'models/xgboost_model.json'.
+    """
     logger.info("Started evaluation...")
     if model_checkpoint is None:
         storage_path = os.getenv("AIP_MODEL_DIR")

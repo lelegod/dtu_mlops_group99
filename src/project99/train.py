@@ -21,6 +21,15 @@ CONFIGS_DIR = Path(__file__).resolve().parents[2] / "configs"
 
 
 def upload_to_gcs(local_path: str, gcs_path: str):
+    """Upload a file to Google Cloud Storage.
+
+    Args:
+        local_path: Local file path to upload.
+        gcs_path: GCS destination path (gs://bucket/path/to/file).
+
+    Raises:
+        Exception: If upload fails.
+    """
     try:
         from google.cloud import storage  # type: ignore
 
@@ -41,6 +50,13 @@ def upload_to_gcs(local_path: str, gcs_path: str):
 
 @hydra.main(version_base=None, config_path=str(CONFIGS_DIR), config_name="config")
 def train(cfg: DictConfig):
+    """Train an XGBoost model and save to local and GCS.
+
+    Loads data, trains model with config params, logs metrics to W&B, and saves artifacts.
+
+    Args:
+        cfg: Hydra config with data and model parameters.
+    """
     logger.info("Started training")
 
     wandb_mode = "online" if os.getenv("WANDB_API_KEY") else "disabled"

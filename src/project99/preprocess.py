@@ -2,6 +2,18 @@ import numpy as np
 
 
 def map_score(score: str | int) -> int | float:
+    """Convert tennis score to numeric value.
+
+    Maps standard tennis scores ("0", "15", "30", "40", "AD") to integers 0-4.
+    For tiebreak scores, returns the integer value directly.
+
+    Args:
+        score: Tennis score as string or integer.
+
+    Returns:
+        Numeric score value (0-4 for regular games, or higher int for tiebreaks).
+        Returns np.nan if invalid.
+    """
     regular_score_map = {"0": 0, "15": 1, "30": 2, "40": 3, "AD": 4, 0: 0, 15: 1, 30: 2, 40: 3}
     if score in regular_score_map:
         return regular_score_map[score]
@@ -12,6 +24,18 @@ def map_score(score: str | int) -> int | float:
 
 
 def input_preprocessing(raw_point: dict) -> np.ndarray:
+    """Transform raw point data into model features.
+
+    Converts player-centric input (P1/P2) to server/receiver perspective.
+
+    Args:
+        raw_point: Dictionary with keys: SetNo, GameNo, PointNumber, PointServer,
+            ServeIndicator, P1GamesWon, P1SetsWon, P1Score, P1PointsWon, P1Momentum,
+            P2GamesWon, P2SetsWon, P2Score, P2PointsWon, P2Momentum.
+
+    Returns:
+        Feature array of shape (1, 20) ready for model prediction.
+    """
     point_server = raw_point["PointServer"]
     is_p1_serving = point_server == 1
 

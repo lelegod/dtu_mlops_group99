@@ -17,6 +17,15 @@ setup_logging(log_file="reports/data.log")
 
 
 class TennisDataProcessor:
+    """Processes raw tennis match and point data into ML-ready features.
+
+    Loads tournament CSV files, engineers features (lagged stats, server/receiver view),
+    and outputs train/test splits.
+
+    Args:
+        data_path: Directory containing *-matches.csv and *-points.csv files.
+    """
+
     def __init__(self, data_path: Path) -> None:
         self.data_path = data_path
         self.match_files = sorted(data_path.glob("*-matches.csv"))
@@ -192,6 +201,12 @@ class TennisDataProcessor:
 
 
 def preprocess(data_path: Path, output_folder: Path) -> None:
+    """CLI entry point to preprocess tennis data.
+
+    Args:
+        data_path: Path to raw data directory.
+        output_folder: Path to save processed train/test CSVs.
+    """
     dataset = TennisDataProcessor(data_path)
     dataset.preprocess(output_folder)
 
@@ -199,6 +214,18 @@ def preprocess(data_path: Path, output_folder: Path) -> None:
 def tennis_data(
     data_type: str = "torch",
 ) -> tuple[TensorDataset, TensorDataset] | tuple[tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray]]:
+    """Load processed tennis data for training.
+
+    Args:
+        data_type: Return format - 'torch' for TensorDataset, 'numpy' for arrays.
+
+    Returns:
+        Train and test datasets as tuple. Format depends on data_type.
+
+    Raises:
+        FileNotFoundError: If processed data files don't exist.
+        ValueError: If data_type is not 'torch' or 'numpy'.
+    """
     train_file = PROJECT_ROOT / "data" / "processed" / "train_set.csv"
     test_file = PROJECT_ROOT / "data" / "processed" / "test_set.csv"
 
