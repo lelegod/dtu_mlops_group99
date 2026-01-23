@@ -91,7 +91,7 @@ will check the repositories and the code to verify your answers.
 * [x] Create a FastAPI application that can do inference using your model (M22)
 * [x] Deploy your model in GCP using either Functions or Run as the backend (M23)
 * [x] Write API tests for your application and setup continues integration for these (M24)
-* [ ] Load test your application (M24)
+* [x] Load test your application (M24)
 * [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 * [x] Create a frontend for your API (M26)
 
@@ -122,7 +122,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 1 fill here ---
+99
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -133,9 +133,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 2 fill here ---
+s252786,
 
-### Question 3 (anyone)
+### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
 > **did you choose to work with and did it help you complete the project?**
 >
@@ -146,7 +146,7 @@ will check the repositories and the code to verify your answers.
 > *package to do ... and ... in our project*.
 >
 > Answer:
-
+(anyone)
 --- question 3 fill here ---
 
 ## Coding environment
@@ -169,7 +169,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 4 fill here ---
 
-### Question 5 (kyle)
+### Question 5
 
 > **We expect that you initialized your project using the cookiecutter template. Explain the overall structure of your**
 > **code. What did you fill out? Did you deviate from the template in some way?**
@@ -183,9 +183,10 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
+(kyle)
 From the cookiecutter template we have filled out the .github/ for CI/CD workflows, configs/ for Hydra model configurations, dockerfiles/ for different docker files, docs/ for project documentation, models/ for model storage, src/project99/ for the main Python modules, tests/ for unit and integration tests. We have removed the notebooks/ because we did not use any jupyter notebooks in our project. We have added .dvc/ and data/ for DVC tracked datasets, reports/ for final exam report, cloudbuild.yaml for GCP cloud build config, requirements_frontend.txt for minimal Streamlit frontend dependencies.
 
-### Question 6 (kyle)
+### Question 6
 
 > **Did you implement any rules for code quality and format? What about typing and documentation? Additionally,**
 > **explain with your own words why these concepts matters in larger projects.**
@@ -198,6 +199,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
+ (kyle)
 We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed.
 
 These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability.
@@ -210,7 +212,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 > In the following section we are interested in how version control was used in your project during development to
 > corporate and increase the quality of your code.
 
-### Question 7 (daniel)
+### Question 7
 
 > **How many tests did you implement and what are they testing in your code?**
 >
@@ -222,9 +224,10 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
+ (daniel)
 --- question 7 fill here --- subject to change, might add more unit tests.
 
-### Question 8 (daniel)
+### Question 8
 
 > **What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close**
 > **to), would you still trust it to be error free? Explain you reasoning.**
@@ -237,9 +240,10 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
+ (daniel)
 --- question 8 fill here --- need to check how much percentage but if I change above this will change too
 
-### Question 9 (daniel)
+### Question 9
 
 > **Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and**
 > **pull request can help improve version control.**
@@ -252,6 +256,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
+ (daniel)
 --- question 9 fill here --- many branches, one for each module or at least section, every time we work on something new we create a branch which is removed when completely finished, completely finished refers to having merged it into the main branch using pull requests and completing the module or task. Pull requests were only merged after having successfully passed some tests, unless we deemed the test unnecessary for the moment, which is why we had some tests be required and some be optional.
 
 ### Question 10 (akash)
@@ -269,7 +274,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 
 --- question 10 fill here ---
 
-### Question 11 (daniel)
+### Question 11
 
 > **Discuss you continuous integration setup. What kind of continuous integration are you running (unittesting,**
 > **linting, etc.)? Do you test multiple operating systems, Python  version etc. Do you make use of caching? Feel free**
@@ -284,6 +289,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
+ (daniel)
 --- question 11 fill here --- unit testing, linting, test 3 os cause we use different os, only test one python version to reduce time of testing, using caching and did the entire CI-setup explained in the course content.
 
 ## Running code and tracking experiments
@@ -291,7 +297,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 > In the following section we are interested in learning more about the experimental setup for running your code and
 > especially the reproducibility of your experiments.
 
-### Question 12 (daniel)
+### Question 12
 
 > **How did you configure experiments? Did you make use of config files? Explain with coding examples of how you would**
 > **run a experiment.**
@@ -303,9 +309,10 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
+ (daniel)
 --- question 12 fill here --- we used sweep which meant we could test many hyperparamters at the same time, we can also run it from the command line using :
 
-### Question 13 (daniel)
+### Question 13
 
 > **Reproducibility of experiments are important. Related to the last question, how did you secure that no information**
 > **is lost when running experiments and that your experiments are reproducible?**
@@ -317,10 +324,10 @@ These concepts are not only useful in larger projects but also helped us from ea
 > *one would have to do ...*
 >
 > Answer:
-
+ (daniel)
 --- question 13 fill here --- everything is saved on wandb (check if we use config files)
 
-### Question 14 (daniel)
+### Question 14
 
 > **Upload 1 to 3 screenshots that show the experiments that you have done in W&B (or another experiment tracking**
 > **service of your choice). This may include loss graphs, logged images, hyperparameter sweeps etc. You can take**
@@ -334,7 +341,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 > *As seen in the second image we are also tracking ... and ...*
 >
 > Answer:
-
+ (daniel)
 --- question 14 fill here ---
 
 ### Question 15 (akash)
@@ -352,7 +359,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 
 --- question 15 fill here ---
 
-### Question 16 (kyle)
+### Question 16
 
 > **When running into bugs while trying to run your experiments, how did you perform debugging? Additionally, did you**
 > **try to profile your code or do you think it is already perfect?**
@@ -365,6 +372,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
+ (kyle)
 For debugging, we primarily relied on print debugging for simple logic errors and the VS Code debugger for more complex issues where inspecting variable states was necessary. We also utilized LLMs to quickly identify the cause of the issue and debug our code.
 
 Regarding profiling, we have set up the necessary infrastructure using cProfile and memory_profiler to the training process of our model. Since our current dataset and model are relatively lightweight, we have not identified any critical bottlenecks. Training is completed within a reasonable timeframe without hitting memory limits or CPU bottlenecks. As we scale up our dataset, then the profiling will be more critical for optimization.
@@ -455,7 +463,7 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 
 ## Deployment
 
-### Question 23 (kyle)
+### Question 23
 
 > **Did you manage to write an API for your model? If yes, explain how you did it and if you did anything special. If**
 > **not, explain how you would do it.**
@@ -468,10 +476,11 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 >
 > Answer:
 
+ (kyle)
 We did manage to write an API for our model using FastAPI. Using `lifespan`, we created a custom lifecycle manager to handle loading the XGBoost model from Google Cloud Storage on startup. We defined `/predict` endpoint that accepts tennis match state data, that is validated using Pydanctic models, preprocess the data, and return the predictions. We also added `\health` endpoint to check whether the API can load the model successfully.
 
 
-### Question 24 (kyle)
+### Question 24
 
 > **Did you manage to deploy your API, either in locally or cloud? If not, describe why. If yes, describe how and**
 > **preferably how you invoke your deployed service?**
@@ -485,9 +494,10 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 >
 > Answer:
 
+ (kyle)
 --- question 24 fill here ---
 
-### Question 25 (kyle)
+### Question 25
 
 > **Did you perform any unit testing and load testing of your API? If yes, explain how you did it and what results for**
 > **the load testing did you get. If not, explain how you would do it.**
@@ -500,6 +510,7 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 >
 > Answer:
 
+ (kyle)
 --- question 25 fill here ---
 
 ### Question 26 (akash)
@@ -521,7 +532,7 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 
 > In the following section we would like you to think about the general structure of your project.
 
-### Question 27 (anyone)
+### Question 27
 
 > **How many credits did you end up using during the project and what service was most expensive? In general what do**
 > **you think about working in the cloud?**
@@ -534,9 +545,10 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 >
 > Answer:
 
+ (anyone)
 --- question 27 fill here ---
 
-### Question 28 (anyone)
+### Question 28
 
 > **Did you implement anything extra in your project that is not covered by other questions? Maybe you implemented**
 > **a frontend for your API, use extra version control features, a drift detection service, a kubernetes cluster etc.**
@@ -550,9 +562,10 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 >
 > Answer:
 
+ (anyone)
 --- question 28 fill here ---
 
-### Question 29 (kyle)
+### Question 29
 
 > **Include a figure that describes the overall architecture of your system and what services that you make use of.**
 > **You can take inspiration from [this figure](figures/overview.png). Additionally, in your own words, explain the**
@@ -567,9 +580,10 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 >
 > Answer:
 
+ (kyle)
 --- question 29 fill here ---
 
-### Question 30 (anyone)
+### Question 30
 
 > **Discuss the overall struggles of the project. Where did you spend most time and what did you do to overcome these**
 > **challenges?**
@@ -581,9 +595,10 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 >
 > Answer:
 
+ (anyone)
 --- question 30 fill here ---
 
-### Question 31 (kyle)
+### Question 31
 
 > **State the individual contributions of each team member. This is required information from DTU, because we need to**
 > **make sure all members contributed actively to the project. Additionally, state if/how you have used generative AI**
@@ -599,6 +614,7 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
+ (anyone)
 fewafewubaofewnafioewnifowf ewafw afew afewafewafionewoanf waf ewonfieownaf fewnaiof newio fweanøf wea fewa
  fweafewa fewiagonwa ognwra'g
  wa
