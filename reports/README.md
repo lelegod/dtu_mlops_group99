@@ -272,7 +272,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
---- question 10 fill here ---
+Yes, DVC(Data Version Control) was an important part of the project. It helped us to handle a  large dataset as git doesnt work well with big datasets. It nullified the possibility of different people training on different datasets and made sure everyone uses the same data while training.Anyone who cloned the repository can run dvc pull, and they have the same data. If we need the old data we can go back in time if needed and recreate the old experiments if needed. It acted asa  bridge or connection point between GCP buckets, so the heavy data lives on GCP and only the light metadata lives on GitHub.
 
 ### Question 11
 
