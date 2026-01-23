@@ -644,43 +644,12 @@ Once codes are pushed to GitHub, GitHub Actions runs unit tests and linters. Usi
 
 The Cloud Build process executes these steps sequentially:
 1.  Containerization: Docker images for training, API, and frontend are built and pushed to the Google Artifact Registry one by one.
-2.  Model Training: A Vertex AI Custom Job is triggered using the training image. This job fetches data, trains the model, logs to `Weights & Biases`, and uploads the artifact to Google Cloud Storage bucket.
+2.  Model Training: A Vertex AI Custom Job is triggered using the training image. This job fetches data, trains the model, and uploads the artifact to Google Cloud Storage bucket.
 3.  Upload model: The trained model is deployed to a Vertex AI Endpoint for production.
 4.  User Interface: The frontend is deployed to Google Cloud Run.
 
 Here is the architectural diagram of the system:
-
-```mermaid
-graph LR
-    subgraph Local["Local Environment"]
-        Dev[Developer] -->|Config| Hydra
-        Dev -->|Run| DockerLocal[Local Docker]
-        Dev -->|Sweep| WandB_Sweep["W&B Sweep"]
-    end
-
-    Dev -->|Push| GitHub[GitHub Actions]
-    GitHub -->|Trigger| CloudBuild[Cloud Build]
-
-    subgraph Cloud["Google Cloud"]
-        CloudBuild -->|1. Build & Push| AR[Artifact Registry]
-
-        AR -.->|Image| VertexTrain
-        AR -.->|Image| VertexServe
-        AR -.->|Image| CloudRun
-
-        CloudBuild -->|2. Train| VertexTrain[Vertex AI Training]
-        CloudBuild -->|3. Deploy Model| VertexServe[Vertex AI Endpoint]
-        CloudBuild -->|4. Deploy App| CloudRun[Cloud Run]
-
-        VertexTrain -->|Log| WandB["W&B Tracker"]
-        VertexTrain -->|Save| GCS[Cloud Storage]
-        GCS -.->|Load| VertexServe
-
-        CloudRun -->|Predict| VertexServe
-    end
-
-    User -->|Access| CloudRun
-```
+![architectural diagram](figures/diagram.png)
 
 
 ### Question 30
