@@ -87,9 +87,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install pytest
-          pip install -e .
+          #pip install -r requirements.txt
+          #pip install -e .
+          pip install wandb typer
           pip list
 
       - name: Debug project import
@@ -100,4 +100,4 @@ jobs:
 
       - name: Add production alias
         run: |
-          python link_model.py $MODEL_NAME -a production
+          python link_model.py $MODEL_NAME --alias production

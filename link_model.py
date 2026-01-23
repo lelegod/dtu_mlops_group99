@@ -1,31 +1,52 @@
+# link_model.py
+import argparse
 import os
-
-import typer
-
 import wandb
 
 
-def link_model(artifact_path: str, alias: str = "production") -> None:
-    if not artifact_path:
-        raise typer.BadParameter("artifact_path is required")
+def parse_target_path(full_name: str) -> str:
+    """
+    Accepts either:
+      - wandb-registry-REGISTRY/COLLECTION:v0
+      - ENTITY/wandb-registry-REGISTRY/COLLECTION:v0
 
-    # Parse "entity/project/artifact:version"
-    try:
-        entity, project, artifact_name_version = artifact_path.split("/", 2)
-        artifact_name, _version = artifact_name_version.split(":", 1)
-    except ValueError as e:
-        raise typer.BadParameter(f"Unexpected artifact path format: {artifact_path}") from e
+    Returns:
+      - wandb-registry-REGISTRY/COLLECTION
+    """
+    # Drop entity prefix if present
+    if "/wandb-registry-" in full_name:
+        full_name = full_name.split("/wandb-registry-", 1)[1]
+        full_name = "wandb-registry-" + full_name
 
-    api = wandb.Api()  # uses WANDB_API_KEY from env
-    artifact = api.artifact(artifact_path)
+    # Remove :v0 / :latest / etc
+    return full_name.split(":", 1)[0]
 
-    # Link into model registry under the same entity
-    target_path = f"{entity}/model-registry/{artifact_name}"
-    artifact.link(target_path=target_path, aliases=[alias])
-    artifact.save()
 
-    typer.echo(f"Linked {artifact_path} -> {target_path} with alias '{alias}'")
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("model_name", help="Full W&B artifact name, e.g. entity/wandb-registry-REG/COLLECTION:v0")
+    parser.add_argument("--alias", default="production", help="Alias to apply (default: production)")
+    args = parser.parse_args()
+
+    api_key = os.getenv("WANDB_API_KEY")
+    project = os.getenv("WANDB_PROJECT")
+
+    if not api_key:
+        raise RuntimeError("WANDB_API_KEY not set")
+    if not project:
+        raise RuntimeError("WANDB_PROJECT not set")
+
+    api = wandb.Api(api_key=api_key)
+
+    # Get the staged artifact version (MODEL_NAME points to it)
+    artifact = api.artifact(args.model_name)
+
+    # Link to the same registry/collection, but with a new alias (production)
+    target_path = parse_target_path(args.model_name)
+    artifact.link(target_path=target_path, aliases=[args.alias])
+
+    print(f"Linked {args.model_name} to {target_path} with alias '{args.alias}'")
 
 
 if __name__ == "__main__":
-    typer.run(link_model)
+    main()
