@@ -363,8 +363,16 @@ Experiments can be rerun using a single, well-defined entry point (e.g. invoke t
 > Answer:
 >
 
- (daniel)
---- question 14 fill here ---
+![my_image](figures/param_sweep.png)
+We used Weights & Biases (W&B) to track experiments, monitor training behavior, and analyze the impact of hyperparameters through sweeps. The first screenshot shows a hyperparameter sweep overview, where multiple runs with different configurations are compared side by side. This allows us to quickly inspect how choices such as learning rate, number of estimators, and tree depth affect validation performance and runtime. Tracking these parameters together with metrics is essential for systematic model selection and avoiding ad-hoc tuning.
+
+![my_image](figures/val1_error.png)
+The second screenshot shows the validation 1-error (val_1_error) metric, which is logged by default by W&B. This metric helped us identify an unexpected trend: for several runs, the validation error increases over time instead of converging. This immediately indicated that additional training steps were not improving generalization and suggested potential overfitting or misconfigured training dynamics.
+
+![my_image](figures/epoch_accuracy.png)
+To investigate this further, we created a custom epoch accuracy plot (third screenshot). This plot correlates the number of training steps with runtime and validation accuracy. As expected, increasing the number of steps leads to longer runtimes, but importantly, we also observe a decrease in validation accuracy for longer runs. This confirmed the signal from val_1_error and clearly showed that more training was harming performance rather than improving it.
+
+Together, these metrics were critical for diagnosing training issues early, guiding hyperparameter choices, and preventing unnecessary computation on clearly suboptimal configurations.
 
 ### Question 15
 
