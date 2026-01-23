@@ -149,7 +149,7 @@ s252786, s253791, s252577
 
 We made use of two third-party packages that were not covered directly in the course: XGBoost and Pydantic.
 
-XGBoost was used as the core machine-learning framework for our predictive model. It is the standard machine learning package for gradient-boosted decision tree models, which are great for tabular data tasks like ours.
+XGBoost was used as the core machine-learning framework for our predictive model. It is the standard machine learning package for gradient-boosted decision tree models, which are great for tabular data tasks like ours. It also provided feature importance scores, giving us information into which tennis statistics mattered most.
 
 Pydantic was used for data validation and typing, particularly in the API layer. By defining request and response schemas declaratively, Pydantic ensured that incoming data was validated automatically and consistently. This reduced boilerplate code and made error handling more explicit.
 
