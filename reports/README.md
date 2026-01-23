@@ -111,7 +111,7 @@ will check the repositories and the code to verify your answers.
 * [x] Write some documentation for your application (M32)
 * [x] Publish the documentation to GitHub Pages (M32)
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Create an architectural diagram over your MLOps pipeline
+* [x] Create an architectural diagram over your MLOps pipeline
 * [x] Make sure all group members have an understanding about all parts of the project
 * [x] Uploaded all your code to GitHub
 
@@ -133,7 +133,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-s252786,
+s252786, s253791, s252577
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -147,15 +147,18 @@ s252786,
 >
 > Answer:
 
-(anyone)
---- question 3 fill here ---
+We made use of two third-party packages that were not covered directly in the course: XGBoost and Pydantic.
+
+XGBoost was used as the core machine-learning framework for our predictive model. It is the standard machine learning package for gradient-boosted decision tree models, which are great for tabular data tasks like ours. It also provided feature importance scores, giving us information into which tennis statistics mattered most.
+
+Pydantic was used for data validation and typing, particularly in the API layer. By defining request and response schemas declaratively, Pydantic ensured that incoming data was validated automatically and consistently. This reduced boilerplate code and made error handling more explicit.
 
 ## Coding environment
 
 > In the following section we are interested in learning more about you local development environment. This includes
 > how you managed dependencies, the structure of your code and how you managed code quality.
 
-### Question 4 (akash)
+### Question 4
 
 > **Explain how you managed dependencies in your project? Explain the process a new team member would have to go**
 > **through to get an exact copy of your environment.**
@@ -168,7 +171,28 @@ s252786,
 >
 > Answer:
 
---- question 4 fill here ---
+We used three requirement files to manage our Python dependencies. `requirements.txt` has all the core dependencies (numpy, XGBoost, pandas, etc) for the project, `requirements_dev.txt` has the development and testing dependencies (pytest, ruff, mypy, etc) and `requirements_frontend.txt`for minimal frontend dependencies (streamlit, requests, google-auth).
+
+To get a complete copy of our environment, one would have to run tbe following commands:
+1.  Clone the repository from GitHub.
+    ```bash
+    git clone https://github.com/lelegod/dtu_mlops_group99.git
+    ```
+2.  Create a virtual environment with Python 3.12.
+    ```bash
+    conda create -n <PROJECT_NAME> python=3.12
+    conda activate <PROJECT_NAME>
+    ```
+3.  Install the dependencies using:
+    ```bash
+    pip install -r requirements.txt
+    pip install -r requirements_dev.txt
+    pip install -r requirements_frontend.txt
+    ```
+4.  Install the package in editable mode:
+    ```bash
+    pip install -e .
+    ```
 
 ### Question 5
 
@@ -184,7 +208,6 @@ s252786,
 >
 > Answer:
 
-(kyle)
 From the cookiecutter template we have filled out the `.github/` for CI/CD workflows, `configs/` for Hydra model configurations, `dockerfiles/` for different docker files (train, api, and frontend), `docs/` for project documentation and MKDocs configuration, `models/` for model storage for local testing, `src/project99/` for the main Python modules, `tests/` for unit and integration tests.
 
 We have removed the `notebooks/` because we did not use any jupyter notebooks in our project. We have added `.dvc/` and `data/` for DVC tracked datasets, `reports/` for final exam report. We also created root level configurations like `cloudbuild.yaml` for the main GCP cloud build configurations, `requirements_frontend.txt` for minimal Streamlit frontend dependencies.
@@ -202,10 +225,10 @@ We have removed the `notebooks/` because we did not use any jupyter notebooks in
 >
 > Answer:
 
- (kyle)
-We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed. For documentation we use MkDocs to automaticallt generate API references from our code docstrings, build a static documentation website, hosted via GitHub Pages.
 
-These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability. Documentation is useful to describe the purpose and usage of functions clearly to help onboard new members.
+We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed. For documentation we use MkDocs to automatically generate API references from our code docstrings, build a static documentation website, hosted via GitHub Pages.
+
+These concepts are not only useful in larger projects but also helped us easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability. Documentation is useful to describe the purpose and usage of functions clearly to help onboard new members.
 
 ## Version control
 
@@ -224,7 +247,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
-In total we implemented 21 tests. The suite primarily validates our FastAPI service (root/health/model-info, single prediction, and batch CSV prediction), including error handling for invalid inputs, missing fields, wrong file types, and missing columns. We also test configuration integrity (Hydra config composition and XGBoost parameter conversion), data processing (expected output schema), and model correctness/packaging (model construction, importability, and predict_proba output shape). Finally, we include a lightweight training-like flow that saves a model and a basic performance test for inference speed.
+In total we implemented 21 tests. The suite primarily validates our FastAPI service (root/health/model-info, single prediction, and batch CSV prediction), including error handling for invalid inputs, missing fields, wrong file types, and missing columns. We also made tests for configuration files (Hydra config and XGBoost parameter), data processing (expected output schema), and model definition (model construction, importability, and `predict_proba` output shape). Finally, we include a lightweight training-like flow that saves a model and a basic performance test for inference speed.
 
 ### Question 8
 
@@ -239,9 +262,15 @@ In total we implemented 21 tests. The suite primarily validates our FastAPI serv
 >
 > Answer:
 
-The total code coverage of our source code is 72% (measured with coverage report --omit="tests/*"). This indicates that most core paths are exercised, but there are still meaningful untested branches—particularly in the API layer and data processing modules.
+The total code coverage of our source code is 72% measured with this command:
 
-Even with 100% (or near-100%) coverage, I would not consider the system error free. Coverage measures whether lines are executed, not whether the tests assert the correct behavior under all realistic conditions. It does not guarantee that edge cases, integration issues (e.g., dependency versions, file formats, runtime environment), or non-functional requirements (latency, robustness, security) are fully validated. In addition, tests can be weak (e.g., only checking that code runs) and still produce high coverage. Therefore, coverage is a useful signal for test completeness, but trust requires strong assertions, meaningful negative tests, and some end-to-end validation in addition to unit tests.
+```bash
+coverage report --omit="tests/*"
+```
+
+This indicates that most core paths are tested, but there are still meaningful untested branches, particularly in the API layer and data processing modules.
+
+Even with 100% coverage, we would not consider the system error free. Coverage measures whether lines are executed, not whether the tests assert the correct behavior under all realistic conditions. It does not guarantee that edge cases or integration issues (dependency versions, file formats, runtime environment) are fully validated. In addition, tests can be weak (ex. only checking that code runs) and still produce high coverage. Therefore, coverage is a useful signal for test completeness, but trust requires strong assertions, meaningful negative tests, and some end-to-end validation in addition to unit tests.
 
 ### Question 9
 
@@ -256,9 +285,9 @@ Even with 100% (or near-100%) coverage, I would not consider the system error fr
 >
 > Answer:
 
-Yes, our workflow made extensive use of branches and pull requests (PRs). We followed a feature-based branching strategy where new branches were created for each module, section, or task. Whenever work started on a new feature or improvement, it was developed in its own branch rather than directly on main. Once the work was considered complete - meaning the task or module was finished and reviewed - the branch was merged into main via a pull request and then removed.
+Yes, our workflow made extensive use of branches and pull requests (PRs). We followed a feature based branching strategy where new branches were created for each module or task. Whenever we started working on a new feature or improvement, we developed it in its own branch rather than directly on main. Once the work was considered complete, meaning the task or module was finished and reviewed, we merged the branch into main via a pull request and then removed the branch.
 
-Pull requests served as a control and integration point. Before merging, PRs were required to pass the relevant automated checks, such as unit tests and configuration validation. Some tests were marked as required, while others were optional, allowing us to balance development velocity with test coverage during different stages of the project. This workflow improved version control by isolating changes, reducing the risk of breaking main, enabling easier debugging and rollbacks, and ensuring that only tested and reviewed code was merged into the main branch.
+Pull requests served as a control and integration point. Before merging, PRs were required to pass the relevant automated checks, which are unit tests and linting. Some tests were marked as required, while others were optional, allowing us to push changes quickly when tests were redundant. This workflow improved version control by isolating changes, reducing the risk of breaking main, enabling easier debugging and rollbacks, and ensuring that only tested and reviewed code was merged into the main branch.
 
 ### Question 10
 
@@ -273,7 +302,7 @@ Pull requests served as a control and integration point. Before merging, PRs wer
 >
 > Answer:
 
-Yes, DVC(Data Version Control) was an important part of the project. It helped us to handle a large dataset as git doesnt work well with big datasets. It nullified the possibility of different people training on different datasets and made sure everyone uses the same data while training. Anyone who cloned the repository can run dvc pull, and they have the same data. If we need the old data we can go back in time if needed and recreate the old experiments if needed. It acted as a bridge or connection point between GCP buckets, so the heavy data lives on GCP and only the light metadata lives on GitHub.
+Yes, DVC (Data Version Control) was an important part of the project. It helped us to handle a large dataset as git doesnt work well with big datasets. It nullified the possibility of different people training on different datasets and made sure everyone uses the same data while training. Anyone who cloned the repository can execute ```run dvc pull``` and they have the same data. If we need the old data we can go back in time and recreate the old experiments. It acted as a bridge or connection point between GCP buckets, so the heavy data lives on GCP and only the light metadata lives on GitHub.
 
 ### Question 11
 
@@ -290,13 +319,16 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
 >
 > Answer:
 
-Our continuous integration (CI) setup is implemented using GitHub Actions and is organized around automated checks that run on every push and pull request to protect the main branch. The CI pipeline focuses on two main areas: code quality and correctness.
+Our continuous integration (CI) setup is implemented using GitHub Actions and is organized around automated checks that run on every push and pull request to protect the main branch.
 
-For correctness, we run a full pytest unit test suite (including API endpoint tests, config validation, data processing checks, and model/training smoke tests). This ensures that core functionality remains stable as features are merged through pull requests. For code quality, we run linting and formatting checks (via pre-commit-style tooling), so that style issues are caught automatically and do not accumulate in the repository.
+For correctness, we run a full pytest unit test suite (including API endpoint tests, config validation, data processing checks, and model/training smoke tests). This ensures that core functionality remains stable as features are merged through pull requests. For code quality, we run linting and formatting checks (via pre-commit-style tooling), so that style issues are caught automatically in the repository before getting merged to main.
 
-We test across multiple operating systems (Linux, macOS, and Windows) because different group members develop on different platforms, and this reduces platform-specific failures (e.g., path handling, shell differences, file I/O behavior). To keep CI runtime reasonable, we test only one Python version in the workflow, rather than a full version matrix, since the course emphasis is on CI reliability and reproducibility rather than exhaustive interpreter compatibility.
+We test across multiple operating systems (Linux, macOS, and Windows) because different group members develop on different platforms, and this reduces platform-specific failures. To keep CI runtime reasonable, we test only one Python version in the workflow, rather than a full version matrix, since the course emphasis is on CI reliability and reproducibility rather than exhaustive interpreter compatibility.
 
-We also make use of caching to speed up repeated runs, primarily caching Python dependencies (pip/uv wheels and/or the package cache depending on the job) so that subsequent workflow executions avoid reinstalling unchanged dependencies from scratch. This improves iteration speed significantly, especially when the test suite is triggered frequently during active development.
+We also make use of caching to speed up repeated runs, primarily caching Python dependencies (pip wheels and/or the package cache depending on the job) so that subsequent workflow executions avoid reinstalling dependencies from scratch. This improves iteration speed significantly, especially when the test suite is triggered frequently during active development.
+
+An example of a workflow:
+<https://github.com/lelegod/dtu_mlops_group99/blob/main/.github/workflows/cml_data.yaml>
 
 ## Running code and tracking experiments
 
@@ -315,13 +347,22 @@ We also make use of caching to speed up repeated runs, primarily caching Python 
 >
 > Answer:
 
-We configured experiments using Hydra configuration files, where model, data, and training parameters are defined in structured YAML configs. This allows us to run experiments with different setups by composing or overriding configs without changing code. In addition, we used Weights & Biases sweeps to evaluate many hyperparameter combinations automatically.
+We configured experiments using Hydra configuration files, where model, data, and training parameters are defined in structured `configs/config.yaml`. This allows us to run experiments with different setups by composing or overriding configs without changing code. In addition, we used Weights & Biases sweeps to evaluate many hyperparameter combinations automatically.
 
 Experiments can be launched locally from the command line via an Invoke task, for example:
+```bash
 invoke train
+```
 or with parameter overrides such as:
+```bash
 invoke train model.max_depth=6 training.learning_rate=0.05
-This setup ensures reproducibility, flexibility, and scalable experimentation.
+```
+
+For hyperparameter sweeps, we define a sweep configuration and run:
+```bash
+wandb sweep sweep.yaml
+wandb agent <SWEEP_ID>
+```
 
 ### Question 13
 
@@ -336,11 +377,11 @@ This setup ensures reproducibility, flexibility, and scalable experimentation.
 >
 > Answer:
 
-Reproducibility was ensured by externalizing all experiment configuration and systematically logging experiment state. We used Hydra configuration files to define model, data, and training parameters, ensuring that no hyperparameters were hardcoded in the source code. Whenever an experiment is executed, the fully resolved configuration (including any command-line overrides) is captured and used consistently for that run.
+We used Hydra configuration files to define model, data, and training parameters, ensuring that no hyperparameters were hardcoded in the source code. Whenever an experiment is executed, the configuration (including any command-line overrides) is captured and used consistently for that run.
 
-In addition, all experiments were tracked using Weights & Biases (W&B). This allowed us to store hyperparameters, metrics, logs, and relevant artifacts centrally, ensuring that no information is lost even when experiments are run on different machines or at different times. For larger explorations, we used W&B sweeps, which provide a declarative and repeatable way to evaluate multiple hyperparameter combinations.
+In addition, all experiments were tracked using Weights & Biases (W&B). This allowed us to store hyperparameters, metrics, logs, and relevant artifacts, ensuring that no information is lost even when experiments are run on different machines or at different times. For larger explorations, we used W&B sweeps, which provide a declarative and repeatable way to evaluate multiple hyperparameter combinations.
 
-Experiments can be rerun using a single, well-defined entry point (e.g. invoke train) together with the same configuration. Combined with version-controlled code and pinned dependencies, this makes our experiments traceable, comparable, and reproducible.
+Experiments can be reproduced using a single entry point ```invoke train``` together with the same configuration.
 
 ### Question 14
 
@@ -358,8 +399,14 @@ Experiments can be rerun using a single, well-defined entry point (e.g. invoke t
 > Answer:
 >
 
- (daniel)
---- question 14 fill here ---
+![my_image](figures/param_sweep.png)
+We used Weights & Biases (W&B) to track experiments, monitor training behavior, and analyze the impact of hyperparameters through sweeps. This  dashboard made it possible for our team to collaborate effectively, as all members could monitor ongoing experiments in real-time without needing to access the training machine directly. The first screenshot shows a hyperparameter sweep overview, where multiple runs with different configurations are compared side by side. This allows us to quickly inspect how choices such as learning rate, number of estimators, and tree depth affect validation performance and runtime.
+
+![my_image](figures/val1_error.png)
+The second screenshot shows the validation 1-error metric, which is logged by default by W&B. This metric helped us identify an unexpected trend. For several runs, the validation error increases over time instead of converging. This immediately indicated that additional training steps were not improving generalization and suggested potential overfitting or misconfigured training dynamics.
+
+![my_image](figures/epoch_accuracy.png)
+To investigate this further, we created a custom epoch accuracy plot. This plot correlates the number of training steps with runtime and validation accuracy. As expected, increasing the number of steps leads to longer runtimes, but importantly, we also observe a decrease in validation accuracy for longer runs. This confirmed the signal from val_1_error and clearly showed that more training was harming performance rather than improving it.
 
 ### Question 15
 
@@ -374,11 +421,11 @@ Experiments can be rerun using a single, well-defined entry point (e.g. invoke t
 >
 > Answer:
 
-In our project, we used Docker to make sure that we have consistent environments across the entire MLOps cycle and that the files are reproducible. We developed three distinct images— Train, API, and Frontend to organize our computational needs and simplify deployment on Google Cloud Platform.
+In our project, we used Docker to make sure that we have consistent environments across the entire MLOps cycle and that the files are reproducible. We developed three distinct images: train, API, and frontend to organize our computational needs and simplify deployment on the Google Cloud Platform.
 
-The train Dockerfile contained important libraries like torch and it also contained the DVC setup. We ran this on Google Compute Engine. The api Dockerfile contained the FAST API setup, along with the Prometheus metrics, which were deployed on Cloud Run. There was also the frontend Dockerfile, which had a framework like Streamlit. It created a container to serve the webpage.
+The train Dockerfile contains important libraries like XGBoost and it also contains the DVC setup. We ran this on Google Compute Engine. The API Dockerfile contains the FastAPI setup, along with the Prometheus metrics, which were deployed on Cloud Run. The frontend Dockerfile has a framework like Streamlit. It creates a container to serve the webpage.
 
-Link to docker file: [train.dockerfile](https://github.com/lelegod/dtu_mlops_group99/blob/main/dockerfiles/train.dockerfile)
+Link to docker file: https://github.com/lelegod/dtu_mlops_group99/blob/main/dockerfiles/train.dockerfile
 
 To run the training docker image, for example, we would build it and then run it:
 ```bash
@@ -400,7 +447,6 @@ docker run train_image
 >
 > Answer:
 
-(kyle)
 For debugging, we primarily relied on print debugging for simple logic errors and the VS Code debugger for more complex issues where inspecting variable states was necessary. We also utilized LLMs to quickly identify the cause of the issue and debug our code.
 
 Regarding profiling, we have set up the necessary infrastructure using cProfile and memory_profiler to the training process of our model. Since our current dataset and model are relatively lightweight, we have not identified any critical bottlenecks. Training is completed within a reasonable timeframe without hitting memory limits or CPU bottlenecks. As we scale up our dataset, then the profiling will be more critical for optimization.
@@ -421,12 +467,12 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 > Answer:
 
 For this project we used the following services on GCP:
-1. Cloud Build: It was used for automating the pipeline
-2. Artifact Registry: It was used to store our Docker Images.
-3. Cloud Storage (GCS): We used this to store our data files in buckets.
-4. Vertex AI (Custom Training): We used this service to train our models by provisioning a VM. This service provides the heavy-duty computing power.
-5. Cloud Run: We used this for deploying our frontend.
-6. Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
+1. Cloud Build: for automating the pipeline.
+2. Artifact Registry: to store our Docker Images.
+3. Cloud Storage (GCS): to store our data files in buckets.
+4. Vertex AI (Custom Training): to train our models by provisioning a VM. This service provides the heavy-duty computing power.
+5. Cloud Run: for deploying our frontend.
+6. Identity and Access Management (IAM): to allocate permissions for our service accounts.
 
 ### Question 18
 
@@ -441,7 +487,11 @@ For this project we used the following services on GCP:
 >
 > Answer:
 
---- question 18 fill here ---
+In this project, our team used GCE to train the train dockerfile. We moved the heavy task of training our model on the cloud by allocating a VM. We used GCE as a hub for DVC and primarily used the E2 series, specifically e2-standard-4 and e2-medium instances.
+
+e2-standard-4: With 4 vCPUs and 16 GB of RAM, this model is used for training, providing enough computational power. This is useful for our dataset and training for future scaling purposes.
+
+e2-medium: This model is used for our lighter task like managing the DVC pipeline, or for api dockerfile or frontend Dockerfile. Also used as a jump-box to manage other parts of the infrastructure.
 
 ### Question 19
 
@@ -487,7 +537,7 @@ For this project we used the following services on GCP:
 >
 > Answer:
 
-We successfully managed to train our XGBoost machine learning model in the cloud using Vertex AI. We used docker to containerize our training script to make sure that all the requirements and dependencies remained constant throughout the pipeline. After that we proceeded to use a Google Cloud Build pipeline, which we triggered via the cloudrun.yaml configuration file, we did it so we can push this container to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed our tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket this allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP, can handle containers on its own, we just provide the docker files and its cost effective.
+We successfully managed to train our XGBoost machine learning model in the cloud using Vertex AI. We used docker to containerize our training script to make sure that all the requirements and dependencies remained constant throughout the pipeline. After that we proceeded to use a Google Cloud Build pipeline, which was triggered via the ```cloudrun.yaml``` configuration file so the container can be pushed to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed the tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket. This allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP, can handle containers on its own (by being provided the docker files) and it is cost effective.
 
 ## Deployment
 
@@ -504,10 +554,9 @@ We successfully managed to train our XGBoost machine learning model in the cloud
 >
 > Answer:
 
- (kyle)
-We did manage to write an API for our model. We used FastAPI to do this. We defined `/predict` endpoint that accepts tennis match state data, preprocess the data, and return the predictions. We also added `/health` endpoint to check whether the API can load the model successfully. In addition, we created `/predict/batch` endpoint that accecpts CSV files for bulk predictions. Using custom Pydantic models, we validated the input data before processing them.
+We wrote an API for our model using FastAPI. We defined a `/predict` endpoint that accepts tennis match state data, preprocesses the data, and returns the predictions. We also added a `/health` endpoint to check whether the API can load the model successfully. In addition, we created a `/predict/batch` endpoint that accepts CSV files for bulk predictions. Using custom Pydantic models, we validated the input data before processing them. This ensures that the API can only accept valid data and prevent errors quickly.
 
-Using `lifespan`, we created a custom lifecycle manager to handle loading the XGBoost model from Google Cloud Storage bucket on startup. We integrated `loguru` for logging and handled CORS.
+Using `lifespan`, we created a custom lifecycle manager to handle loading the XGBoost model from Google Cloud Storage bucket on startup. We integrated loguru for logging and handled CORS.
 
 ### Question 24
 
@@ -523,8 +572,7 @@ Using `lifespan`, we created a custom lifecycle manager to handle loading the XG
 >
 > Answer:
 
- (kyle)
-For deployment we wrapped our model into a FastAPI application using a Docker container. We first tried locally serving the model, which worked. Afterwards we deployed it in the cloud, using Google Cloud Vertex AI. The deployment process is automated using `cloudbuild.yaml`, where it will build and push the training image, build and push API image, build and push frontend image, submit a custom training job to Vertex AI, register the API image as Vertex AI model, deploy to an endpoint, and deply the frontend to Cloud Run..
+For deployment we wrapped our model into a FastAPI application using a Docker container. We first tried locally serving the model, which worked. Afterwards we deployed it in the cloud, using Google Cloud Vertex AI. The deployment process is automated using `cloudbuild.yaml`, where it will build and push the training image, build and push API image, build and push frontend image, submit a custom training job to Vertex AI, register the API image as Vertex AI model, deploy to an endpoint, and deploy the frontend to Cloud Run.
 
 To invoke the service, an authenticated user (or our deployed frontend) can call the endpoint directly:
 ```bash
@@ -560,7 +608,6 @@ curl -X POST "http://localhost:8000/predict" \
 >
 > Answer:
 
- (kyle)
 For unit testing, we used `pytest` and `fastapi.testclient.TestClient`. We verified that all endpoints (`/`, `/health`, `/predict`, `/predict/batch`) correctly handle both valid and invalid requests. Model loading was mocked using `unittest.mock.MagicMock` as the model will not be loaded during testing.
 
 For load testing, we performed a stress test using `Locust` against our deployed Vertex AI Endpoint. We simulated 1000 concurrent users, with a spawn rate of 50 users/second. The API successfully handled 188 requests per second on average without crashing. The average response time increased to 2.1 seconds, compared to only 105 ms under lighter load of 10 users, with a spawn rate of 1 user/second.
@@ -578,7 +625,7 @@ For load testing, we performed a stress test using `Locust` against our deployed
 >
 > Answer:
 
-In this project, we did not manage to implement monitoring completely. We used baked in prometheus mertics in `api.py` to obtain the model metrics. Consequently, we also generated GCP buckets and completed the path so that the logs will get stored in them as JSON files. The problem arose as we couldnt filter those logs in the GCP Monitoring dashboard. Monitoring is an essential part of any ML Ops life cycle as it prevents our model from becoming redundant or obsolete over time, as it tackles the problem of reducing accuracy. It also acts as an early warning system if something goes wrong in the deployment.
+In this project, we did not manage to implement monitoring completely. We used baked in prometheus metrics in `api.py` to obtain the model metrics. Consequently, we also generated GCP buckets and completed the path so that the logs will get stored in them as JSON files. The problem arose as we could not filter those logs in the GCP Monitoring dashboard. Monitoring is an essential part of any MLOps lifecycle as it prevents our model from becoming redundant or obsolete over time, as it tackles the problem of reducing accuracy. It also acts as an early warning system if something goes wrong in the deployment.
 
 ## Overall discussion of project
 
@@ -632,50 +679,18 @@ We implemented a frontend for our API using Streamlit. We did this to provide an
 >
 > Answer:
 
- (kyle)
-The starting point of the diagram is our local setup, where we integrated `Hydra` for model configuration and do experiments. We then use `Docker` locally to verify our containers are working as expected. We also implemented `Weights & Biases` to track our experiments and do hyperparameter sweeps to optimize our model.
+The starting point of the diagram is our local setup, where we integrated Hydra for model configuration and DVC for data version control in order to do experiments. We then use Docker locally to verify our containers are working as expected, ensuring that train, API and frontend images run properly. We also implemented Weights & Biases to track our experiments and do hyperparameter sweeps to optimize our model.
 
 Once codes are pushed to GitHub, GitHub Actions runs unit tests and linters. Using branch protection on main branch, so that only code that passes the CI can be merged to main. On pushed to main branch, the CD pipeline is executed via Google Cloud Build.
 
 The Cloud Build process executes these steps sequentially:
 1.  Containerization: Docker images for training, API, and frontend are built and pushed to the Google Artifact Registry one by one.
-2.  Model Training: A Vertex AI Custom Job is triggered using the training image. This job fetches data, trains the model, logs to `Weights & Biases`, and uploads the artifact to Google Cloud Storage bucket.
+2.  Model Training: A Vertex AI Custom Job is triggered using the training image. This job fetches data, trains the model, and uploads the artifact to Google Cloud Storage bucket.
 3.  Upload model: The trained model is deployed to a Vertex AI Endpoint for production.
 4.  User Interface: The frontend is deployed to Google Cloud Run.
 
-Here is the architectural diagram of the system:
-
-```mermaid
-graph LR
-    subgraph Local["Local Environment"]
-        Dev[Developer] -->|Config| Hydra
-        Dev -->|Run| DockerLocal[Local Docker]
-        Dev -->|Sweep| WandB_Sweep["W&B Sweep"]
-    end
-
-    Dev -->|Push| GitHub[GitHub Actions]
-    GitHub -->|Trigger| CloudBuild[Cloud Build]
-
-    subgraph Cloud["Google Cloud"]
-        CloudBuild -->|1. Build & Push| AR[Artifact Registry]
-
-        AR -.->|Image| VertexTrain
-        AR -.->|Image| VertexServe
-        AR -.->|Image| CloudRun
-
-        CloudBuild -->|2. Train| VertexTrain[Vertex AI Training]
-        CloudBuild -->|3. Deploy Model| VertexServe[Vertex AI Endpoint]
-        CloudBuild -->|4. Deploy App| CloudRun[Cloud Run]
-
-        VertexTrain -->|Log| WandB["W&B Tracker"]
-        VertexTrain -->|Save| GCS[Cloud Storage]
-        GCS -.->|Load| VertexServe
-
-        CloudRun -->|Predict| VertexServe
-    end
-
-    User -->|Access| CloudRun
-```
+The architectural diagram of the system:
+![architectural diagram](figures/diagram.png)
 
 
 ### Question 30
@@ -690,8 +705,11 @@ graph LR
 >
 > Answer:
 
- (anyone)
---- question 30 fill here ---
+The biggest struggles we faced while working on the project was mainly completing the paths for different components to work together. Making the Dockerfiles was pretty straightforward, but making them able to talk to each other was the most time-consuming. We also faced problems while deploying the frontend from endpoints which was due to port issues.
+
+In the next phase, while working on monitoring we ran into another obstacle, the net to filter out logs was not working, and we did not manage to fix it. While logs are getting stored in the monitoring buckets as JSON files, we failed to make a dashboard as we could not figure out how to filter out logs with queries.
+
+Another issue was the downtime while tests or deployments were finishing, which meant we could not test things as quickly compared to when running them locally. Furthermore, there is an issue with the model itself. The models are not able to learn the data pattern and therefore the validation accuracy does not improve even with different model configurations. We assume it is a data issue or an issue with the problem statement in general. Our goal for this project is to create a working MLOps pipeline and not necessarily the best model as per the project requirements. Therefore,we did not prioritize building a production level model.
 
 ### Question 31
 
@@ -709,15 +727,11 @@ graph LR
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
- (anyone)
-fewafewubaofewnafioewnifowf ewafw afew afewafewafionewoanf waf ewonfieownaf fewnaiof newio fweanøf wea fewa
- fweafewa fewiagonwa ognwra'g
- wa
- gwreapig ipweroang w rag
- wa grwa
-  g
-  ew
-  gwea g
-  ew ag ioreabnguorwa bg̈́aw
-   wa
-   gew4igioera giroeahgi0wra gwa
+Student s253791 was primarily responsible for the continuous integration. This included implementing the unit test suite, setting up GitHub Actions workflows, integrating Weights & Biases for experiment tracking and continuous machine learning, and implementing logging functionality. They also contributed to maintaining code quality and ensuring reproducibility through CI checks.
+
+Student s252786 developed the majority of the core application code, including the training pipeline, data handling and preprocessing logic, and all components related to the API and frontend. In addition, they contributed to the cloud build and deployment process and supported integration efforts across the project.
+
+Student s252577 was responsible for data version control and configuration management, including the Hydra configuration setup and integration with Google Cloud Storage. They also worked on cloud build and deployment, as well as implementing monitoring components for the deployed system.
+
+All team members contributed actively to discussions, design decisions, and code reviews.
+We made use of generative AI tools, including ChatGPT, Claude Opus, Gemini, and GitHub Copilot, primarily to assist with debugging, code suggestions, and clarifying implementation details.
