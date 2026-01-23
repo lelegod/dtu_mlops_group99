@@ -71,7 +71,7 @@ will check the repositories and the code to verify your answers.
 * [x] Use profiling to optimize your code (M12)
 * [x] Use logging to log important events in your code (M14)
 * [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
-* [ ] Consider running a hyperparameter optimization sweep (M14)
+* [x] Consider running a hyperparameter optimization sweep (M14)
 * [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
@@ -84,7 +84,7 @@ will check the repositories and the code to verify your answers.
 * [x] Add a linting step to your continuous integration (M17)
 * [x] Add pre-commit hooks to your version control setup (M18)
 * [x] Add a continues workflow that triggers when data changes (M19)
-* [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
+* [x] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [x] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 * [x] Create a trigger workflow for automatically building your docker images (M21)
 * [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
@@ -185,7 +185,7 @@ will check the repositories and the code to verify your answers.
 
 From the cookiecutter template we have filled out the .github/ for CI/CD workflows, configs/ for Hydra model configurations, dockerfiles/ for different docker files, docs/ for project documentation, models/ for model storage, src/project99/ for the main Python modules, tests/ for unit and integration tests. We have removed the notebooks/ because we did not use any jupyter notebooks in our project. We have added .dvc/ and data/ for DVC tracked datasets, reports/ for final exam report, cloudbuild.yaml for GCP cloud build config, requirements_frontend.txt for minimal Streamlit frontend dependencies.
 
-### Question 6 (akash)
+### Question 6 (kyle)
 
 > **Did you implement any rules for code quality and format? What about typing and documentation? Additionally,**
 > **explain with your own words why these concepts matters in larger projects.**
@@ -198,7 +198,12 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 6 fill here ---
+We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed.
+
+These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability.
+
+#Todo: docs
+
 
 ## Version control
 
@@ -217,7 +222,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 7 fill here ---
+--- question 7 fill here --- subject to change, might add more unit tests.
 
 ### Question 8 (daniel)
 
@@ -232,7 +237,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 8 fill here ---
+--- question 8 fill here --- need to check how much percentage but if I change above this will change too
 
 ### Question 9 (daniel)
 
@@ -247,7 +252,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 9 fill here ---
+--- question 9 fill here --- many branches, one for each module or at least section, every time we work on something new we create a branch which is removed when completely finished, completely finished refers to having merged it into the main branch using pull requests and completing the module or task. Pull requests were only merged after having successfully passed some tests, unless we deemed the test unnecessary for the moment, which is why we had some tests be required and some be optional.
 
 ### Question 10 (akash)
 
@@ -279,7 +284,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 11 fill here ---
+--- question 11 fill here --- unit testing, linting, test 3 os cause we use different os, only test one python version to reduce time of testing, using caching and did the entire CI-setup explained in the course content.
 
 ## Running code and tracking experiments
 
@@ -298,9 +303,9 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 12 fill here ---
+--- question 12 fill here --- we used sweep which meant we could test many hyperparamters at the same time, we can also run it from the command line using :
 
-### Question 13 (kyle)
+### Question 13 (daniel)
 
 > **Reproducibility of experiments are important. Related to the last question, how did you secure that no information**
 > **is lost when running experiments and that your experiments are reproducible?**
@@ -313,7 +318,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 13 fill here ---
+--- question 13 fill here --- everything is saved on wandb (check if we use config files)
 
 ### Question 14 (daniel)
 
@@ -360,7 +365,9 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 16 fill here ---
+For debugging, we primarily relied on print debugging for simple logic errors and the VS Code debugger for more complex issues where inspecting variable states was necessary. We also utilized LLMs to quickly identify the cause of the issue and debug our code.
+
+Regarding profiling, we have set up the necessary infrastructure using cProfile and memory_profiler to the training process of our model. Since our current dataset and model are relatively lightweight, we have not identified any critical bottlenecks. Training is completed within a reasonable timeframe without hitting memory limits or CPU bottlenecks. As we scale up our dataset, then the profiling will be more critical for optimization.
 
 ## Working in the cloud
 
@@ -375,7 +382,14 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 > Example:
 > *We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...*
 >
-> Answer:
+> Answer:For this project we used the following services on GCP.
+Cloud Build: It was used for automating the pipeline
+Artifact Registry: It was used to store our Docker Images.
+Cloud Storage (GCS):We used this to store our data files in buckets.
+Vertex AI (Custom Training): We used this service to train our models by provisioning a VM. This service provides the heavy-duty computing power.
+Cloud Run: We used this for deploying our frontend.
+Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
+
 
 --- question 17 fill here ---
 
@@ -401,15 +415,17 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 19 fill here ---
+![Buckets](figures/Buckets.png)
+
+![buckets_2](figures/buckets_2.png)
+
 
 ### Question 20 (akash)
 
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
-> Answer:
-
+> Answer:![artifact_registry_1](figures/artifact_registry_1.png)
 --- question 20 fill here ---
 
 ### Question 21 (akash)
@@ -417,7 +433,8 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 > **Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in**
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 >
-> Answer:
+> Answer:![cloudbuild_1](figures/cloudbuild_1.png)
+         ![cloudbuild_2](figures/cloudbuild_2.png)
 
 --- question 21 fill here ---
 
@@ -432,7 +449,7 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 > *We managed to train our model in the cloud using the Engine. We did this by ... . The reason we choose the Engine*
 > *was because ...*
 >
-> Answer:
+> Answer:We successfully managed to train our xgboost machine learning model in the cloud using Vertex AI. We used docker to containerize our train.script to make sure that all the requirements and dependencies remained constant throughout the pipeline.After that we proceeded to use a Google Cloud Build pipeline, which we triggered via the cloudrun.yaml configuration file, we did it so we can push this container to the artifact registry. Once in the cloud, Vertex AI ran the training job, processed our tennis dataset, and calculated key performance metrics like accuracy. After training, the script automatically saved the model artifact directly into a GCP bucket this allowed our API on Cloud Run to pull the newest model every time we ran it. We used Vertex AI as its properly integrated in GCP,can handle containers on its own ,we just provide the docker files and its cost effective.
 
 --- question 22 fill here ---
 
@@ -451,7 +468,8 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 >
 > Answer:
 
---- question 23 fill here ---
+We did manage to write an API for our model using FastAPI. Using `lifespan`, we created a custom lifecycle manager to handle loading the XGBoost model from Google Cloud Storage on startup. We defined `/predict` endpoint that accepts tennis match state data, that is validated using Pydanctic models, preprocess the data, and return the predictions. We also added `\health` endpoint to check whether the API can load the model successfully.
+
 
 ### Question 24 (kyle)
 
