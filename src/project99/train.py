@@ -9,11 +9,11 @@ from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_
 from sklearn.model_selection import train_test_split  # type: ignore
 
 import wandb
-from wandb.integration.xgboost import WandbCallback
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
 from project99.data import tennis_data
 from project99.logging_utils import setup_logging
 from project99.model import model
+from wandb.integration.xgboost import WandbCallback
 
 setup_logging(log_file="reports/app.log")
 load_dotenv()
@@ -46,7 +46,7 @@ def upload_to_gcs(local_path: str, gcs_path: str):
         logger.info(f"Model uploaded to {gcs_path}")
     except Exception as e:
         logger.error(f"Failed to upload model to GCS: {e}")
-        #raise e
+        # raise e
 
 
 @hydra.main(version_base=None, config_path=str(CONFIGS_DIR), config_name="config")
