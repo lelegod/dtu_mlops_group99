@@ -42,4 +42,10 @@ ignore = ["N806", "N803"]
 omit = ["tests/*"]
 
 [tool.mypy]
-exclude = ["reports"]
+exclude = ["reports", "tests/performancetests"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "wandb"
+ignore_missing_imports = true
+follow_imports = "skip"
