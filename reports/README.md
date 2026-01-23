@@ -607,6 +607,17 @@ For load testing, we performed a stress test using `Locust` against our deployed
 > Answer:
 
  (kyle)
+The starting point of the diagram is our local setup, where we integrated `Hydra` for model configuration and do experiments. We then use `Docker` locally to verify our containers are working as expected. We also implemented `Weights & Biases` to track our experiments and do hyperparameter sweeps to optimize our model.
+
+Once codes are pushed to GitHub, GitHub Actions runs unit tests and linters. Using branch protection on main branch, so that only code that passes the CI can be merged to main. On pushed to main branch, the CD pipeline is executed via Google Cloud Build.
+
+The Cloud Build process executes these steps sequentially:
+1.  Containerization: Docker images for training, API, and frontend are built and pushed to the Google Artifact Registry one by one.
+2.  Model Training: A Vertex AI Custom Job is triggered using the training image. This job fetches data, trains the model, logs to `Weights & Biases`, and uploads the artifact to Google Cloud Storage bucket.
+3.  Upload model: The trained model is deployed to a Vertex AI Endpoint for production.
+4.  User Interface: The frontend is deployed to Google Cloud Run.
+
+Here is the architectural diagram of the system:
 
 
 ### Question 30
