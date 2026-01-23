@@ -13,6 +13,7 @@ parameters:
     values: [50, 100, 500]
 
 command:
+  - ${env}
   - python
-  - -m
-  - project99.train
+  - src/project99/train.py
+  - ${args_no_hyphens}

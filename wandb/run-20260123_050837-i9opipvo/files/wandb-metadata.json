@@ -1,0 +1,42 @@
+{
+  "os": "macOS-14.6.1-arm64-arm-64bit",
+  "python": "CPython 3.12.12",
+  "startedAt": "2026-01-23T04:08:37.219490Z",
+  "args": [
+    "model.params.learning_rate=0.3",
+    "model.params.max_depth=4",
+    "model.params.n_estimators=100"
+  ],
+  "program": "/Users/kyleelyk/Documents/DTU/SEM1/dtu_mlops_group99/src/project99/train.py",
+  "codePath": "src/project99/train.py",
+  "codePathLocal": "src/project99/train.py",
+  "git": {
+    "remote": "https://github.com/lelegod/dtu_mlops_group99.git",
+    "commit": "e184ac764b9d86bffeeb65c3dc6c61074bb49c4d"
+  },
+  "email": "carldanielk@gmail.com",
+  "root": "/Users/kyleelyk/Documents/DTU/SEM1/dtu_mlops_group99",
+  "host": "00b98c0278.dynamic-ip4.rev.k-net.dk",
+  "executable": "/opt/anaconda3/envs/project99/bin/python",
+  "cpu_count": 8,
+  "cpu_count_logical": 8,
+  "disk": {
+    "/": {
+      "total": "994662584320",
+      "used": "590356164608"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "apple": {
+    "name": "Apple M2",
+    "ecpuCores": 4,
+    "pcpuCores": 4,
+    "gpuCores": 8,
+    "memoryGb": 16,
+    "swapTotalBytes": "10737418240",
+    "ramTotalBytes": "17179869184"
+  },
+  "writerId": "5vm50isa2fvf547yhwl2kcbd6kepqzcs"
+}

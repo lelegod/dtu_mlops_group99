@@ -1,0 +1,12 @@
+{"time":"2026-01-23T05:29:10.151813+01:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-23T05:29:10.478968+01:00","level":"INFO","msg":"stream: created new stream","id":"ffccpros"}
+{"time":"2026-01-23T05:29:10.47903+01:00","level":"INFO","msg":"handler: started","stream_id":"ffccpros"}
+{"time":"2026-01-23T05:29:10.479224+01:00","level":"INFO","msg":"stream: started","id":"ffccpros"}
+{"time":"2026-01-23T05:29:10.479286+01:00","level":"INFO","msg":"sender: started","stream_id":"ffccpros"}
+{"time":"2026-01-23T05:29:10.479253+01:00","level":"INFO","msg":"writer: started","stream_id":"ffccpros"}
+{"time":"2026-01-23T05:29:22.413796+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-23T05:29:22.690839+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-01-23T05:29:22.696528+01:00","level":"INFO","msg":"stream: closing","id":"ffccpros"}
+{"time":"2026-01-23T05:29:22.696568+01:00","level":"INFO","msg":"handler: closed","stream_id":"ffccpros"}
+{"time":"2026-01-23T05:29:22.696865+01:00","level":"INFO","msg":"sender: closed","stream_id":"ffccpros"}
+{"time":"2026-01-23T05:29:22.696901+01:00","level":"INFO","msg":"stream: closed","id":"ffccpros"}

@@ -18,6 +18,6 @@ def test_config_composes_and_has_expected_fields():
     assert cfg.model.params.objective == "binary:logistic", (
         f"Expected objective 'binary:logistic', got {cfg.model.params.objective}"
     )
-    assert cfg.model.params.eval_metric == "logloss", (
-        f"Expected eval_metric 'logloss', got {cfg.model.params.eval_metric}"
+    assert cfg.model.params.eval_metric == ["logloss", "error"], (
+        f"Expected eval_metric ['logloss', 'error'], got {cfg.model.params.eval_metric}"
     )
