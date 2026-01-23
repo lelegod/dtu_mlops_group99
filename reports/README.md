@@ -535,7 +535,9 @@ curl -X POST "http://localhost:8000/predict" \
 > Answer:
 
  (kyle)
---- question 25 fill here ---
+For unit testing, we used `pytest` and `fastapi.testclient.TestClient`. We verified that all endpoints (`/`, `/health`, `/predict`, `/predict/batch`) correctly handle both valid and invalid requests. Model loading was mocked using `unittest.mock.MagicMock` as the model will not be loaded during testing. 
+
+For load testing, we performed a stress test using `Locust` against our deployed Vertex AI Endpoint. We simulated 1000 concurrent users, with a spawn rate of 50 users/second. The API successfully handled 188 requests per second on average without crashing. The average response time increased to 2.1 seconds, compared to only 105 ms under lighter load of 10 users, with a spawn rate of 1 user/second.
 
 ### Question 26 (akash)
 
@@ -605,7 +607,7 @@ curl -X POST "http://localhost:8000/predict" \
 > Answer:
 
  (kyle)
---- question 29 fill here ---
+
 
 ### Question 30
 
