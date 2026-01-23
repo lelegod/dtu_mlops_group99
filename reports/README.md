@@ -479,8 +479,9 @@ Identity and Access Management (IAM): We used it to allocate permissions for our
 > Answer:
 
  (kyle)
-We did manage to write an API for our model using FastAPI. Using `lifespan`, we created a custom lifecycle manager to handle loading the XGBoost model from Google Cloud Storage on startup. We defined `/predict` endpoint that accepts tennis match state data, that is validated using Pydanctic models, preprocess the data, and return the predictions. We also added `\health` endpoint to check whether the API can load the model successfully.
+We did manage to write an API for our model. We used FastAPI to do this. We defined `/predict` endpoint that accepts tennis match state data, preprocess the data, and return the predictions. We also added `/health` endpoint to check whether the API can load the model successfully. In addition, we created `/predict/batch` endpoint that accecpts CSV files for bulk predictions. Using custom Pydantic models, we validated the input data before processing them.
 
+Using `lifespan`, we created a custom lifecycle manager to handle loading the XGBoost model from Google Cloud Storage bucket on startup. We integrated `loguru` for logging and handled CORS.
 
 ### Question 24
 
@@ -497,7 +498,28 @@ We did manage to write an API for our model using FastAPI. Using `lifespan`, we 
 > Answer:
 
  (kyle)
---- question 24 fill here ---
+For deployment we wrapped our model into a FastAPI application using a Docker container. We first tried locally serving the model, which worked. Afterwards we deployed it in the cloud, using Google Cloud Vertex AI. The deployment process is automated using `cloudbuild.yaml`, where it will build and push the training image, build and push API image, build and push frontend image, submit a custom training job to Vertex AI, register the API image as Vertex AI model, deploy to an endpoint, and deply the frontend to Cloud Run.. 
+
+To invoke the service, an authenticated user (or our deployed frontend) can call the endpoint directly:
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  -d '{ "instances": [{ "feature1": value1, "feature2": value2 }] }' \
+  https://europe-west1-aiplatform.googleapis.com/v1/projects/dtumlopsgroup99/locations/europe-west1/endpoints/846555783666597888:predict
+```
+
+To invoke the service locally, we build and run the Docker container:
+```bash
+docker build -f dockerfiles/api.dockerfile -t api-image .
+docker run -p 8000:8000 api-image
+```
+Then send a request to localhost:
+```bash
+curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{ "instances": [{ "feature1": value1 }] }'
+```
 
 ### Question 25
 
