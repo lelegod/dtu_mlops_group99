@@ -1,0 +1,12 @@
+{"time":"2026-01-23T05:13:04.05945+01:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-23T05:13:04.391601+01:00","level":"INFO","msg":"stream: created new stream","id":"innx80py"}
+{"time":"2026-01-23T05:13:04.391781+01:00","level":"INFO","msg":"handler: started","stream_id":"innx80py"}
+{"time":"2026-01-23T05:13:04.391943+01:00","level":"INFO","msg":"stream: started","id":"innx80py"}
+{"time":"2026-01-23T05:13:04.391944+01:00","level":"INFO","msg":"writer: started","stream_id":"innx80py"}
+{"time":"2026-01-23T05:13:04.391966+01:00","level":"INFO","msg":"sender: started","stream_id":"innx80py"}
+{"time":"2026-01-23T05:13:21.095469+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-23T05:13:21.378709+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-01-23T05:13:21.38516+01:00","level":"INFO","msg":"stream: closing","id":"innx80py"}
+{"time":"2026-01-23T05:13:21.385214+01:00","level":"INFO","msg":"handler: closed","stream_id":"innx80py"}
+{"time":"2026-01-23T05:13:21.385798+01:00","level":"INFO","msg":"sender: closed","stream_id":"innx80py"}
+{"time":"2026-01-23T05:13:21.385825+01:00","level":"INFO","msg":"stream: closed","id":"innx80py"}

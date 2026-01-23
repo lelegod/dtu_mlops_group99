@@ -1,0 +1,12 @@
+{"time":"2026-01-23T05:08:53.005254+01:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-23T05:08:53.347074+01:00","level":"INFO","msg":"stream: created new stream","id":"lvun1rfw"}
+{"time":"2026-01-23T05:08:53.347119+01:00","level":"INFO","msg":"handler: started","stream_id":"lvun1rfw"}
+{"time":"2026-01-23T05:08:53.347289+01:00","level":"INFO","msg":"stream: started","id":"lvun1rfw"}
+{"time":"2026-01-23T05:08:53.347298+01:00","level":"INFO","msg":"sender: started","stream_id":"lvun1rfw"}
+{"time":"2026-01-23T05:08:53.347292+01:00","level":"INFO","msg":"writer: started","stream_id":"lvun1rfw"}
+{"time":"2026-01-23T05:09:10.479534+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-23T05:09:10.680771+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-01-23T05:09:10.685186+01:00","level":"INFO","msg":"stream: closing","id":"lvun1rfw"}
+{"time":"2026-01-23T05:09:10.685215+01:00","level":"INFO","msg":"handler: closed","stream_id":"lvun1rfw"}
+{"time":"2026-01-23T05:09:10.685404+01:00","level":"INFO","msg":"sender: closed","stream_id":"lvun1rfw"}
+{"time":"2026-01-23T05:09:10.685421+01:00","level":"INFO","msg":"stream: closed","id":"lvun1rfw"}

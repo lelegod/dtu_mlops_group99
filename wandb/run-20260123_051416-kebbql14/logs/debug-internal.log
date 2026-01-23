@@ -1,0 +1,12 @@
+{"time":"2026-01-23T05:14:17.103438+01:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-23T05:14:17.429063+01:00","level":"INFO","msg":"stream: created new stream","id":"kebbql14"}
+{"time":"2026-01-23T05:14:17.429137+01:00","level":"INFO","msg":"handler: started","stream_id":"kebbql14"}
+{"time":"2026-01-23T05:14:17.4294+01:00","level":"INFO","msg":"stream: started","id":"kebbql14"}
+{"time":"2026-01-23T05:14:17.429405+01:00","level":"INFO","msg":"writer: started","stream_id":"kebbql14"}
+{"time":"2026-01-23T05:14:17.429409+01:00","level":"INFO","msg":"sender: started","stream_id":"kebbql14"}
+{"time":"2026-01-23T05:14:51.824652+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-23T05:14:52.017286+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-01-23T05:14:52.025814+01:00","level":"INFO","msg":"stream: closing","id":"kebbql14"}
+{"time":"2026-01-23T05:14:52.025866+01:00","level":"INFO","msg":"handler: closed","stream_id":"kebbql14"}
+{"time":"2026-01-23T05:14:52.027334+01:00","level":"INFO","msg":"sender: closed","stream_id":"kebbql14"}
+{"time":"2026-01-23T05:14:52.027401+01:00","level":"INFO","msg":"stream: closed","id":"kebbql14"}

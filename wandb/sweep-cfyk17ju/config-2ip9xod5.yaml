@@ -1,0 +1,8 @@
+wandb_version: 1
+
+model.params.learning_rate:
+  value: 0.3
+model.params.max_depth:
+  value: 4
+model.params.n_estimators:
+  value: 50

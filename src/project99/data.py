@@ -38,7 +38,7 @@ class TennisDataProcessor:
             raise FileNotFoundError(f"Points file not found for tournament: {tournament_name}")
 
         df_match_raw = pd.read_csv(match_file)
-        df_point_raw = pd.read_csv(point_file)
+        df_point_raw = pd.read_csv(point_file, low_memory=False)
 
         return df_match_raw, df_point_raw, tournament_name
 

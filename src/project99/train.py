@@ -9,6 +9,7 @@ from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_
 from sklearn.model_selection import train_test_split  # type: ignore
 
 import wandb
+from wandb.integration.xgboost import WandbCallback
 from project99.constants import GCS_MODEL_PATH, LOCAL_MODEL_PATH
 from project99.data import tennis_data
 from project99.logging_utils import setup_logging
@@ -45,7 +46,7 @@ def upload_to_gcs(local_path: str, gcs_path: str):
         logger.info(f"Model uploaded to {gcs_path}")
     except Exception as e:
         logger.error(f"Failed to upload model to GCS: {e}")
-        raise e
+        #raise e
 
 
 @hydra.main(version_base=None, config_path=str(CONFIGS_DIR), config_name="config")
@@ -59,9 +60,9 @@ def train(cfg: DictConfig):
     """
     logger.info("Started training")
 
-    wandb_mode = "online" if os.getenv("WANDB_API_KEY") else "disabled"
+    wandb_mode = os.getenv("WANDB_MODE", "online")
     if wandb_mode == "disabled":
-        logger.warning("WANDB_API_KEY not found. Running WandB in disabled mode.")
+        logger.warning("WandB is disabled via WANDB_MODE environment variable.")
 
     run = wandb.init(
         project=os.getenv("WANDB_PROJECT", "project99"),
@@ -92,10 +93,11 @@ def train(cfg: DictConfig):
     )
     logger.info("Training XGBoost model")
     xgb_model = model(cfg)
+    xgb_model.set_params(callbacks=[WandbCallback(log_model=False)])
     xgb_model.fit(
         X_train,
         y_train,
-        eval_set=[(X_val, y_val)],
+        eval_set=[(X_train, y_train), (X_val, y_val)],
         verbose=100,
     )
     y_prob = xgb_model.predict_proba(X_val)[:, 1]

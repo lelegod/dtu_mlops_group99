@@ -1,0 +1,10 @@
+[32m2026-01-23 05:21:26.675[0m | [1mINFO    [0m | [36m__main__[0m:[36mtrain[0m:[36m87[0m - [1mData shapes - X_train: (1233161, 20), X_test: (308291, 20)[0m
+[32m2026-01-23 05:21:26.837[0m | [1mINFO    [0m | [36m__main__[0m:[36mtrain[0m:[36m94[0m - [1mTraining XGBoost model[0m
+[0]	validation_0-logloss:0.66633	validation_0-error:0.38527	validation_1-logloss:0.66718	validation_1-error:0.38708
+[99]	validation_0-logloss:0.66277	validation_0-error:0.38521	validation_1-logloss:0.66410	validation_1-error:0.38708
+[32m2026-01-23 05:21:30.118[0m | [1mINFO    [0m | [36m__main__[0m:[36mtrain[0m:[36m105[0m - [1mModel performance on validation set[0m
+[32m2026-01-23 05:21:30.135[0m | [1mINFO    [0m | [36m__main__[0m:[36mtrain[0m:[36m106[0m - [1mLog loss: 0.6641[0m
+[32m2026-01-23 05:21:30.140[0m | [1mINFO    [0m | [36m__main__[0m:[36mtrain[0m:[36m107[0m - [1mBrier score: 0.2357[0m
+[32m2026-01-23 05:21:30.173[0m | [1mINFO    [0m | [36m__main__[0m:[36mtrain[0m:[36m108[0m - [1mAUC score: 0.5471[0m
+[32m2026-01-23 05:21:30.175[0m | [1mINFO    [0m | [36m__main__[0m:[36mtrain[0m:[36m109[0m - [1mAccuracy: 0.6129[0m
+[32m2026-01-23 05:21:39.640[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mupload_to_gcs[0m:[36m48[0m - [31m[1mFailed to upload model to GCS: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.[0m
