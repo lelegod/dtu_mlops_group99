@@ -185,7 +185,9 @@ s252786,
 > Answer:
 
 (kyle)
-From the cookiecutter template we have filled out the .github/ for CI/CD workflows, configs/ for Hydra model configurations, dockerfiles/ for different docker files, docs/ for project documentation, models/ for model storage, src/project99/ for the main Python modules, tests/ for unit and integration tests. We have removed the notebooks/ because we did not use any jupyter notebooks in our project. We have added .dvc/ and data/ for DVC tracked datasets, reports/ for final exam report, cloudbuild.yaml for GCP cloud build config, requirements_frontend.txt for minimal Streamlit frontend dependencies.
+From the cookiecutter template we have filled out the `.github/` for CI/CD workflows, `configs/` for Hydra model configurations, `dockerfiles/` for different docker files (train, api, and frontend), `docs/` for project documentation and MKDocs configuration, `models/` for model storage for local testing, `src/project99/` for the main Python modules, `tests/` for unit and integration tests. 
+
+We have removed the `notebooks/` because we did not use any jupyter notebooks in our project. We have added `.dvc/` and `data/` for DVC tracked datasets, `reports/` for final exam report. We also created root level configurations like `cloudbuild.yaml` for the main GCP cloud build configurations, `requirements_frontend.txt` for minimal Streamlit frontend dependencies.
 
 ### Question 6
 
@@ -201,12 +203,9 @@ From the cookiecutter template we have filled out the .github/ for CI/CD workflo
 > Answer:
 
  (kyle)
-We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed.
+We used Ruff for linting and formatting to have consistent code style. For type checking, we used MyPy to catch type related bugs. We also implemented pre-commit hooks to automatically prevent code that does not follow the standard code format from being committed. For documentation we use MkDocs to automaticallt generate API references from our code docstrings, build a static documentation website, hosted via GitHub Pages.
 
-These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability.
-
-#Todo: docs
-
+These concepts are not only useful in larger projects but also helped us from easily understand other members' codes and improve collaboration between members. When multiple members work on the code base, using a standard automation tools like Ruff reduces the effort spent on deciding formatting standard and ensures code readability. Documentation is useful to describe the purpose and usage of functions clearly to help onboard new members.
 
 ## Version control
 
@@ -342,6 +341,8 @@ These concepts are not only useful in larger projects but also helped us from ea
 > *As seen in the second image we are also tracking ... and ...*
 >
 > Answer:
+>
+
  (daniel)
 --- question 14 fill here ---
 
@@ -373,7 +374,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
- (kyle)
+(kyle)
 For debugging, we primarily relied on print debugging for simple logic errors and the VS Code debugger for more complex issues where inspecting variable states was necessary. We also utilized LLMs to quickly identify the cause of the issue and debug our code.
 
 Regarding profiling, we have set up the necessary infrastructure using cProfile and memory_profiler to the training process of our model. Since our current dataset and model are relatively lightweight, we have not identified any critical bottlenecks. Training is completed within a reasonable timeframe without hitting memory limits or CPU bottlenecks. As we scale up our dataset, then the profiling will be more critical for optimization.
