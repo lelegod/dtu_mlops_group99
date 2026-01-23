@@ -487,7 +487,8 @@ For this project we used the following services on GCP:
 >
 > Answer:
 
---- question 18 fill here ---
+In this project, our team used GCE to train the train dockerfile. We moved the heavy task of training our model on the cloud by allocating a vm.We used GCE as a hub for DVC . We primarily used the E2 series, specifically e2-standard-4 and e2-medium instances.e2-standard-4: With 4 vCPUs and 16 GB of RAM, this was our vm for training, providing enough computational power. We needed our dataset and training need much storage.
+e2-medium: We used this for our lighter task like managing the DVC pipeline, or for api dockerfile or frontend Dockerfile. Used for lighter tasks or as a jump-box to manage other parts of the infrastructure.
 
 ### Question 19
 
