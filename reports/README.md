@@ -365,6 +365,8 @@ The train Dockerfile contained important libraries like torch and it also contai
 The api Dockerfile contained the FAST API setup, along with the Prometheus metrics, which were deployed on Cloud Run.
 There was also the frontend Dockerfile, which had a framework like Streamlit. It created a container to serve the webpage.
 
+https://github.com/lelegod/dtu_mlops_group99/blob/main/dockerfiles/train.dockerfile
+
 
 ### Question 16
 
