@@ -160,7 +160,7 @@ Together, these frameworks significantly improved reliability, clarity, and deve
 > In the following section we are interested in learning more about you local development environment. This includes
 > how you managed dependencies, the structure of your code and how you managed code quality.
 
-### Question 4 (akash)
+### Question 4
 
 > **Explain how you managed dependencies in your project? Explain the process a new team member would have to go**
 > **through to get an exact copy of your environment.**
@@ -173,7 +173,28 @@ Together, these frameworks significantly improved reliability, clarity, and deve
 >
 > Answer:
 
---- question 4 fill here ---
+We used three requirement files to manage our Python dependencies. `requirements.txt` has all the core dependencies (numpy, XGBoost, pandas, etc) for the project, `requiremenst_dev.txt` has the development and testing dependencies (pytest, ruff, mypy, etc) and `requirements_frontend.txt`for minimal frontend dependencies (streamlit, requests, google-auth).
+
+To get a complete copy of our environment, one would have to run tbe following commands:
+1.  Clone the repository from GitHub.
+    ```bash
+    https://github.com/lelegod/dtu_mlops_group99.git
+    ```
+2.  Create a virtual environment with Python 3.12 or above.
+    ```bash
+    conda create -n project99 python=3.12
+    conda activate project99
+    ```
+3.  Install the dependencies using:
+    ```bash
+    pip install -r requirements.txt
+    pip install -r requirements_dev.txt
+    pip install -r requirements_frontend.txt
+    ```
+4.  Install the package in editable mode:
+    ```bash
+    pip install -e .
+    ```
 
 ### Question 5
 
