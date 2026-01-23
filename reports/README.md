@@ -601,8 +601,7 @@ Working in the cloud was annoying at first but became easier towards the end. It
 >
 > Answer:
 
- (anyone)
---- question 28 fill here ---
+We implemented a frontend for our API using Streamlit. We did this to provide an easy way for users to use our deployed model, since it requires google cloud authentication to send requests to our API. The frontend is Docker containerized and deployed to Google Cloud Run, communicating with our Vertex AI endpoint.
 
 ### Question 29
 
