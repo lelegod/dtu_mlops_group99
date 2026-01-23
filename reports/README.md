@@ -185,7 +185,7 @@ s252786,
 > Answer:
 
 (kyle)
-From the cookiecutter template we have filled out the `.github/` for CI/CD workflows, `configs/` for Hydra model configurations, `dockerfiles/` for different docker files (train, api, and frontend), `docs/` for project documentation and MKDocs configuration, `models/` for model storage for local testing, `src/project99/` for the main Python modules, `tests/` for unit and integration tests. 
+From the cookiecutter template we have filled out the `.github/` for CI/CD workflows, `configs/` for Hydra model configurations, `dockerfiles/` for different docker files (train, api, and frontend), `docs/` for project documentation and MKDocs configuration, `models/` for model storage for local testing, `src/project99/` for the main Python modules, `tests/` for unit and integration tests.
 
 We have removed the `notebooks/` because we did not use any jupyter notebooks in our project. We have added `.dvc/` and `data/` for DVC tracked datasets, `reports/` for final exam report. We also created root level configurations like `cloudbuild.yaml` for the main GCP cloud build configurations, `requirements_frontend.txt` for minimal Streamlit frontend dependencies.
 
@@ -224,8 +224,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
- (daniel)
---- question 7 fill here --- subject to change, might add more unit tests.
+In total we implemented 21 tests. The suite primarily validates our FastAPI service (root/health/model-info, single prediction, and batch CSV prediction), including error handling for invalid inputs, missing fields, wrong file types, and missing columns. We also test configuration integrity (Hydra config composition and XGBoost parameter conversion), data processing (expected output schema), and model correctness/packaging (model construction, importability, and predict_proba output shape). Finally, we include a lightweight training-like flow that saves a model and a basic performance test for inference speed.
 
 ### Question 8
 
@@ -240,8 +239,9 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
- (daniel)
---- question 8 fill here --- need to check how much percentage but if I change above this will change too
+The total code coverage of our source code is 72% (measured with coverage report --omit="tests/*"). This indicates that most core paths are exercised, but there are still meaningful untested branches—particularly in the API layer and data processing modules.
+
+Even with 100% (or near-100%) coverage, I would not consider the system error free. Coverage measures whether lines are executed, not whether the tests assert the correct behavior under all realistic conditions. It does not guarantee that edge cases, integration issues (e.g., dependency versions, file formats, runtime environment), or non-functional requirements (latency, robustness, security) are fully validated. In addition, tests can be weak (e.g., only checking that code runs) and still produce high coverage. Therefore, coverage is a useful signal for test completeness, but trust requires strong assertions, meaningful negative tests, and some end-to-end validation in addition to unit tests.
 
 ### Question 9
 
@@ -256,10 +256,11 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
- (daniel)
---- question 9 fill here --- many branches, one for each module or at least section, every time we work on something new we create a branch which is removed when completely finished, completely finished refers to having merged it into the main branch using pull requests and completing the module or task. Pull requests were only merged after having successfully passed some tests, unless we deemed the test unnecessary for the moment, which is why we had some tests be required and some be optional.
+Yes, our workflow made extensive use of branches and pull requests (PRs). We followed a feature-based branching strategy where new branches were created for each module, section, or task. Whenever work started on a new feature or improvement, it was developed in its own branch rather than directly on main. Once the work was considered complete - meaning the task or module was finished and reviewed - the branch was merged into main via a pull request and then removed.
 
-### Question 10 
+Pull requests served as a control and integration point. Before merging, PRs were required to pass the relevant automated checks, such as unit tests and configuration validation. Some tests were marked as required, while others were optional, allowing us to balance development velocity with test coverage during different stages of the project. This workflow improved version control by isolating changes, reducing the risk of breaking main, enabling easier debugging and rollbacks, and ensuring that only tested and reviewed code was merged into the main branch.
+
+### Question 10
 
 > **Did you use DVC for managing data in your project? If yes, then how did it improve your project to have version**
 > **control of your data. If no, explain a case where it would be beneficial to have version control of your data.**
@@ -272,7 +273,7 @@ These concepts are not only useful in larger projects but also helped us from ea
 >
 > Answer:
 
-Yes, DVC(Data Version Control) was an important part of the project. It helped us to handle a  large dataset as git doesnt work well with big datasets. It nullified the possibility of different people training on different datasets and made sure everyone uses the same data while training. Anyone who cloned the repository can run dvc pull, and they have the same data. If we need the old data we can go back in time if needed and recreate the old experiments if needed. It acted as a bridge or connection point between GCP buckets, so the heavy data lives on GCP and only the light metadata lives on GitHub.
+Yes, DVC(Data Version Control) was an important part of the project. It helped us to handle a large dataset as git doesnt work well with big datasets. It nullified the possibility of different people training on different datasets and made sure everyone uses the same data while training. Anyone who cloned the repository can run dvc pull, and they have the same data. If we need the old data we can go back in time if needed and recreate the old experiments if needed. It acted as a bridge or connection point between GCP buckets, so the heavy data lives on GCP and only the light metadata lives on GitHub.
 
 ### Question 11
 
@@ -289,8 +290,13 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
 >
 > Answer:
 
- (daniel)
---- question 11 fill here --- unit testing, linting, test 3 os cause we use different os, only test one python version to reduce time of testing, using caching and did the entire CI-setup explained in the course content.
+Our continuous integration (CI) setup is implemented using GitHub Actions and is organized around automated checks that run on every push and pull request to protect the main branch. The CI pipeline focuses on two main areas: code quality and correctness.
+
+For correctness, we run a full pytest unit test suite (including API endpoint tests, config validation, data processing checks, and model/training smoke tests). This ensures that core functionality remains stable as features are merged through pull requests. For code quality, we run linting and formatting checks (via pre-commit-style tooling), so that style issues are caught automatically and do not accumulate in the repository.
+
+We test across multiple operating systems (Linux, macOS, and Windows) because different group members develop on different platforms, and this reduces platform-specific failures (e.g., path handling, shell differences, file I/O behavior). To keep CI runtime reasonable, we test only one Python version in the workflow, rather than a full version matrix, since the course emphasis is on CI reliability and reproducibility rather than exhaustive interpreter compatibility.
+
+We also make use of caching to speed up repeated runs, primarily caching Python dependencies (pip/uv wheels and/or the package cache depending on the job) so that subsequent workflow executions avoid reinstalling unchanged dependencies from scratch. This improves iteration speed significantly, especially when the test suite is triggered frequently during active development.
 
 ## Running code and tracking experiments
 
@@ -309,8 +315,13 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
 >
 > Answer:
 
- (daniel)
---- question 12 fill here --- we used sweep which meant we could test many hyperparamters at the same time, we can also run it from the command line using :
+We configured experiments using Hydra configuration files, where model, data, and training parameters are defined in structured YAML configs. This allows us to run experiments with different setups by composing or overriding configs without changing code. In addition, we used Weights & Biases sweeps to evaluate many hyperparameter combinations automatically.
+
+Experiments can be launched locally from the command line via an Invoke task, for example:
+invoke train
+or with parameter overrides such as:
+invoke train model.max_depth=6 training.learning_rate=0.05
+This setup ensures reproducibility, flexibility, and scalable experimentation.
 
 ### Question 13
 
@@ -325,8 +336,11 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
 >
 > Answer:
 
- (daniel)
---- question 13 fill here --- everything is saved on wandb (check if we use config files)
+Reproducibility was ensured by externalizing all experiment configuration and systematically logging experiment state. We used Hydra configuration files to define model, data, and training parameters, ensuring that no hyperparameters were hardcoded in the source code. Whenever an experiment is executed, the fully resolved configuration (including any command-line overrides) is captured and used consistently for that run.
+
+In addition, all experiments were tracked using Weights & Biases (W&B). This allowed us to store hyperparameters, metrics, logs, and relevant artifacts centrally, ensuring that no information is lost even when experiments are run on different machines or at different times. For larger explorations, we used W&B sweeps, which provide a declarative and repeatable way to evaluate multiple hyperparameter combinations.
+
+Experiments can be rerun using a single, well-defined entry point (e.g. invoke train) together with the same configuration. Combined with version-controlled code and pinned dependencies, this makes our experiments traceable, comparable, and reproducible.
 
 ### Question 14
 
@@ -347,7 +361,7 @@ Yes, DVC(Data Version Control) was an important part of the project. It helped u
  (daniel)
 --- question 14 fill here ---
 
-### Question 15 
+### Question 15
 
 > **Docker is an important tool for creating containerized applications. Explain how you used docker in your**
 > **experiments/project? Include how you would run your docker images and include a link to one of your docker files.**
@@ -395,7 +409,7 @@ Regarding profiling, we have set up the necessary infrastructure using cProfile 
 
 > In the following section we would like to know more about your experience when developing in the cloud.
 
-### Question 17 
+### Question 17
 
 > **List all the GCP services that you made use of in your project and shortly explain what each service does?**
 >
@@ -414,7 +428,7 @@ For this project we used the following services on GCP:
 5. Cloud Run: We used this for deploying our frontend.
 6. Identity and Access Management (IAM): We used it to allocate permissions for our service accounts.
 
-### Question 18 
+### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
 > **you used?**
@@ -429,7 +443,7 @@ For this project we used the following services on GCP:
 
 --- question 18 fill here ---
 
-### Question 19 
+### Question 19
 
 > **Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.**
 > **You can take inspiration from [this figure](figures/bucket.png).**
@@ -450,7 +464,7 @@ For this project we used the following services on GCP:
 
 ![artifact_registry_1](figures/artifact_registry_1.png)
 
-### Question 21 
+### Question 21
 
 > **Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in**
 > **your project. You can take inspiration from [this figure](figures/build.png).**
@@ -460,7 +474,7 @@ For this project we used the following services on GCP:
 ![cloudbuild_1](figures/cloudbuild_1.png)
 ![cloudbuild_2](figures/cloudbuild_2.png)
 
-### Question 22 
+### Question 22
 
 > **Did you manage to train your model in the cloud using either the Engine or Vertex AI? If yes, explain how you did**
 > **it. If not, describe why.**
@@ -510,7 +524,7 @@ Using `lifespan`, we created a custom lifecycle manager to handle loading the XG
 > Answer:
 
  (kyle)
-For deployment we wrapped our model into a FastAPI application using a Docker container. We first tried locally serving the model, which worked. Afterwards we deployed it in the cloud, using Google Cloud Vertex AI. The deployment process is automated using `cloudbuild.yaml`, where it will build and push the training image, build and push API image, build and push frontend image, submit a custom training job to Vertex AI, register the API image as Vertex AI model, deploy to an endpoint, and deply the frontend to Cloud Run.. 
+For deployment we wrapped our model into a FastAPI application using a Docker container. We first tried locally serving the model, which worked. Afterwards we deployed it in the cloud, using Google Cloud Vertex AI. The deployment process is automated using `cloudbuild.yaml`, where it will build and push the training image, build and push API image, build and push frontend image, submit a custom training job to Vertex AI, register the API image as Vertex AI model, deploy to an endpoint, and deply the frontend to Cloud Run..
 
 To invoke the service, an authenticated user (or our deployed frontend) can call the endpoint directly:
 ```bash
@@ -547,11 +561,11 @@ curl -X POST "http://localhost:8000/predict" \
 > Answer:
 
  (kyle)
-For unit testing, we used `pytest` and `fastapi.testclient.TestClient`. We verified that all endpoints (`/`, `/health`, `/predict`, `/predict/batch`) correctly handle both valid and invalid requests. Model loading was mocked using `unittest.mock.MagicMock` as the model will not be loaded during testing. 
+For unit testing, we used `pytest` and `fastapi.testclient.TestClient`. We verified that all endpoints (`/`, `/health`, `/predict`, `/predict/batch`) correctly handle both valid and invalid requests. Model loading was mocked using `unittest.mock.MagicMock` as the model will not be loaded during testing.
 
 For load testing, we performed a stress test using `Locust` against our deployed Vertex AI Endpoint. We simulated 1000 concurrent users, with a spawn rate of 50 users/second. The API successfully handled 188 requests per second on average without crashing. The average response time increased to 2.1 seconds, compared to only 105 ms under lighter load of 10 users, with a spawn rate of 1 user/second.
 
-### Question 26 
+### Question 26
 
 > **Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how**
 > **monitoring would help the longevity of your application.**
@@ -639,28 +653,28 @@ graph LR
         Dev -->|Run| DockerLocal[Local Docker]
         Dev -->|Sweep| WandB_Sweep["W&B Sweep"]
     end
-    
+
     Dev -->|Push| GitHub[GitHub Actions]
     GitHub -->|Trigger| CloudBuild[Cloud Build]
-    
+
     subgraph Cloud["Google Cloud"]
         CloudBuild -->|1. Build & Push| AR[Artifact Registry]
-        
+
         AR -.->|Image| VertexTrain
         AR -.->|Image| VertexServe
         AR -.->|Image| CloudRun
-        
+
         CloudBuild -->|2. Train| VertexTrain[Vertex AI Training]
         CloudBuild -->|3. Deploy Model| VertexServe[Vertex AI Endpoint]
         CloudBuild -->|4. Deploy App| CloudRun[Cloud Run]
-        
+
         VertexTrain -->|Log| WandB["W&B Tracker"]
         VertexTrain -->|Save| GCS[Cloud Storage]
         GCS -.->|Load| VertexServe
-        
+
         CloudRun -->|Predict| VertexServe
     end
-    
+
     User -->|Access| CloudRun
 ```
 
