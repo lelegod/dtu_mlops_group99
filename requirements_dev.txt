@@ -19,7 +19,7 @@ snakeviz>=2.2.0
 
 # linting
 ruff==0.11.6
-mypy==1.14.0
+mypy==1.19.1
 types-Markdown
 types-requests
 pandas-stubs
